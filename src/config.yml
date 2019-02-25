@@ -1,0 +1,22 @@
+# Arquivo de Configuracao
+#		plugin by: Arzio 
+#
+# Esta configuracao funciona por Mundos (worlds).
+# Para adicionar um mundo, basta adicionar uma nova linha
+# e editar o bioma desejado.
+#
+# Biomas disponiveis:
+#
+# 	"Zombie Forest"
+# 	"Zombie Desert"
+# 	"Zombie Plains"
+# 	"Zombie Snow"
+# 	"Zombie Wasteland"
+#
+# ATENCAO: Voce precisa digitar certinho igual esta ali em cima, senao ira dar erro!
+# ATENCAO: Pra recarregar este arquivo de configuracao, basta usar '/biomechanger reload'
+
+mundos:
+  meu_mundo1: "Zombie Forest"
+  meu_mundo2: "Zombie Wasteland"
+  exemplo: "Zombie Desert"

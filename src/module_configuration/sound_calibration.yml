@@ -1,0 +1,245 @@
+guns:
+    m4a1:
+        normal:
+            max: 2
+            min: 0.0145
+            range: 100
+        silenced:
+            max: 1
+            min: 0.035
+            range: 50
+    crossbow:
+        normal:
+            max: 0.01
+            min: 0.01
+            range: 1
+    taser:
+        normal:
+            max: 0.01
+            min: 0.01
+            range: 1
+    m1911:
+        normal:
+            max: 1.35
+            min: 0.025
+            range: 50
+        silenced:
+            max: 1.35
+            min: 0.025
+            range: 50
+    g18:
+        normal:
+            max: 1.55
+            min: 0.035
+            range: 50
+        silenced:
+            max: 1.35
+            min: 0.025
+            range: 50
+    mac-10:
+        normal:
+            max: 1.55
+            min: 0.035
+            range: 50
+        silenced:
+            max: 1.15
+            min: 0.015
+            range: 50
+    p90:
+        normal:
+            max: 0.55
+            min: 0.02
+            range: 65
+        silenced:
+            max: 0.95
+            min: 0.025
+            range: 50     
+    vector:
+        normal:
+            max: 1.45
+            min: 0.035
+            range: 50
+        silenced:
+            max: 1.15
+            min: 0.015
+            range: 50
+    mp5a5:
+        normal:
+            max: 1.45
+            min: 0.01
+            range: 50
+        silenced:
+            max: 0.3
+            min: 0.012
+            range: 50
+    m9:
+        normal:
+            max: 1.45
+            min: 0.035
+            range: 60
+        silenced:
+            max: 1.35
+            min: 0.025
+            range: 50  
+    p250:
+        normal:
+            max: 1.45
+            min: 0.025
+            range: 40
+        silenced:
+            max: 1.15
+            min: 0.015
+            range: 30
+    deserteagle:
+        normal:
+            max: 0.25
+            min: 0.045
+            range: 80
+    magnum:
+        normal:
+            max: 0.25
+            min: 0.045
+            range: 70
+    fiveseven:
+        normal:
+            max: 2
+            min: 0.03
+            range: 70
+        silenced:
+            max: 1
+            min: 0.015
+            range: 40
+    m107:
+        normal:
+            max: 3.25
+            min: 0.035
+            range: 130
+    as50:
+        normal:
+            max: 3.25
+            min: 0.055
+            range: 100 
+    m1garand:
+        normal:
+            max: 2.15
+            min: 0.045
+            range: 100
+    trenchgun:
+        normal:
+            max: 1.85
+            min: 0.045
+            range: 70
+    mossberg:
+        normal:
+            max: 1.85
+            min: 0.095
+            range: 70  
+    dmr:
+        normal:
+            max: 2.15
+            min: 0.035
+            range: 100
+        silenced:
+            max: 1
+            min: 0.025
+            range: 60
+    awp:
+        normal:
+            max: 2.15
+            min: 0.04
+            range: 130
+        silenced:
+            max: 1
+            min: 0.025
+            range: 70  
+    sporter22:
+        normal:
+            max: 1.6
+            min: 0.01
+            range: 30
+        silenced:
+            max: 0.5
+            min: 0.035
+            range: 20
+    scar-h:
+        normal:
+            max: 2
+            min: 0.0145
+            range: 100
+        silenced:
+            max: 1
+            min: 0.035
+            range: 50
+    fnfal:
+        normal:
+            max: 2
+            min: 0.0275
+            range: 60
+        silenced:
+            max: 1
+            min: 0.015
+            range: 50 
+    remingtonacr:
+        normal:
+            max: 1
+            min: 0.0125
+            range: 100
+        silenced:
+            max: 1
+            min: 0.035
+            range: 50
+    m240b:
+        normal:
+            max: 0.45
+            min: 0.0125
+            range: 100
+        silenced:
+            max: 1
+            min: 0.015
+            range: 60   
+    rpk:
+        normal:
+            max: 0.45
+            min: 0.0125
+            range: 100
+        silenced:
+            max: 1
+            min: 0.015
+            range: 60
+    ak47:
+        normal:
+            max: 1
+            min: 0.0165
+            range: 100
+        silenced:
+            max: 1
+            min: 0.02
+            range: 50
+    g36c:
+        normal:
+            max: 2
+            min: 0.0145
+            range: 80
+    hk417:
+        normal:
+            max: 2
+            min: 0.0245
+            range: 80
+        silenced:
+            max: 1
+            min: 0.025
+            range: 50
+    mini-gun:
+        normal:
+            max: 1
+            min: 0.0245
+            range: 120
+    mk48mod1:
+        normal:
+            max: 0.45
+            min: 0.0125
+            range: 100
+        silenced:
+            max: 1
+            min: 0.015
+            range: 60   

@@ -1,0 +1,19 @@
+name: ArzioLib
+main: com.arzio.arziolib.ArzioLib
+version: 1.2
+author: Arzio
+depend: [ProtocolLib, WorldGuard, WGCustomFlags]
+description: Library tools for Crafting Dead servers.
+commands:
+    particle:
+        description: Disables/Enables bullet particles for you
+        usage: /particle
+        aliases: [ particles, particula, particulas ]
+    clothes:
+        description: Disables/Enables other players clothes to increase your FPS
+        usage: /clothes
+        aliases: [ cloth, clothing, roupa, roupas ]
+    arziolib:
+        description: Main command for the plugin
+        usage: /arziolib to see the comands
+        aliases: [ arzio ]
