@@ -148,7 +148,7 @@ public class ArzioLib extends JavaPlugin {
 	public WGCustomFlagsPlugin getWGCustomFlags() {
 		Plugin plugin = getServer().getPluginManager().getPlugin("WGCustomFlags");
 
-		if (plugin == null || !(plugin instanceof WGCustomFlagsPlugin)) {
+		if (!(plugin instanceof WGCustomFlagsPlugin)) {
 			return null;
 		}
 
@@ -156,7 +156,13 @@ public class ArzioLib extends JavaPlugin {
 	}
 
 	public WorldGuardPlugin getWorldGuard() {
-		return WorldGuardPlugin.inst();
+		Plugin plugin = getServer().getPluginManager().getPlugin("WorldGuard");
+
+		if (!(plugin instanceof WorldGuardPlugin)) {
+			return null;
+		}
+
+		return (WorldGuardPlugin) plugin;
 	}
 	
 	public PlayerDataHandler getPlayerDataHandler() {
