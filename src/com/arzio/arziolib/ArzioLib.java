@@ -8,6 +8,7 @@ import com.arzio.arziolib.api.ItemStackHelper;
 import com.arzio.arziolib.api.bases.BaseProvider;
 import com.arzio.arziolib.api.bases.impl.BaseProviderImpl;
 import com.arzio.arziolib.api.impl.ItemStackHelperImpl;
+import com.arzio.arziolib.api.util.reflection.ReflectionHelper;
 import com.arzio.arziolib.api.impl.ForgeBukkitEventManagerImpl;
 import com.arzio.arziolib.api.wrapper.CraftingDead;
 import com.arzio.arziolib.api.wrapper.ItemProvider;
@@ -52,9 +53,11 @@ import com.arzio.arziolib.module.fix.ModuleFixZombieHeight;
 import com.mewin.WGCustomFlags.WGCustomFlagsPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
+import cpw.mods.fml.common.ModContainer;
+
 public class ArzioLib extends JavaPlugin {
 
-	public static final String MOD_ID = "craftingdead";
+	public static final ModContainer MOD_CONTAINER = ReflectionHelper.getCraftingDeadModContainer();
 	
 	private static ArzioLib instance;
 	private ModuleManager moduleManager;
