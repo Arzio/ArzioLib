@@ -50,7 +50,7 @@ public class CDClasses {
 	
 	public static final ReflectedClass commonPlayerTrackerClass = new ReflectedClass(NameClassFinder.find("CommonPlayerTracker"));
 	
-	public static final ReflectedClass craftingDeadMainClass = new ReflectedClass(NameClassFinder.find("CraftingDead"));
+	public static final ReflectedClass craftingDeadMainClass = new ReflectedClass(NameClassFinder.find("CraftingDead", "CDOrigins"));
 		public static final ReflectedField<Object> craftingDeadMainInstanceField = new ReflectedField<>(craftingDeadMainClass, new ContentFinder.FieldBuilder<>().withType(craftingDeadMainClass.getReferencedClass()).build());
 		public static final ReflectedField<Object> craftingDeadMainCommonPlayerTrackerField = new ReflectedField<>(craftingDeadMainClass, new ContentFinder.FieldBuilder<>().withType(commonPlayerTrackerClass.getReferencedClass()).build());
 	
