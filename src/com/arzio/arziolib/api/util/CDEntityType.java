@@ -49,7 +49,7 @@ public enum CDEntityType {
 	}
 	
 	public String getBukkitName() {
-		return ArzioLib.MOD_ID+"_"+this.getName();
+		return ArzioLib.MOD_CONTAINER.getModId()+"_"+this.getName();
 	}
 	
 	public EntityType asBukkitType() {
