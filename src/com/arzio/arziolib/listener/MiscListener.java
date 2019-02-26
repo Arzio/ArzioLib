@@ -38,6 +38,9 @@ public class MiscListener implements ForgeListener{
 				
 				@Override
 				public void onEnd() {
+					if (!player.isValid()) {
+						return;
+					}
 					player.sendMessage(" ");
 					player.sendMessage("§a[ArzioLib] §eCheque todo dia por novas versões em meu GitHub!");
 					player.sendMessage("§a[ArzioLib] §e§oCheck for new releases everyday on my GitHub!");
