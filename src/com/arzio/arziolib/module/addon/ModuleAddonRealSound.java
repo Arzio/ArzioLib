@@ -76,15 +76,14 @@ public class ModuleAddonRealSound extends ListenerModule{
 	public void onTrigger(CDGunTriggerEvent event) {
 		
 		Gun gun = event.getHeldGun();
+		Player player = event.getPlayer();
+		
 		SoundData sound = gunSoundDataMap.get(gun.getName().toLowerCase());
 		
 		if (sound == null) {
 			logger.log(Level.WARNING, "Sound Calibration not found for gun "+gun.getName()+" in "+yml.getFile().getName()+" file. You can add it by yourself.");
 			return;
 		}
-		
-		Player player = event.getPlayer();
-		
 		
 		boolean hasSilencer = ArzioLib.getInstance().getItemStackHelper().hasAttachment(event.getPlayer().getItemInHand(), CDAttachmentType.MUZZLE);
 		SoundType soundType = hasSilencer ? SoundType.SILENCED : SoundType.NORMAL;
