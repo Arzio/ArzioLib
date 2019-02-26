@@ -14,7 +14,6 @@ import com.arzio.arziolib.module.ListenerModule;
 import net.minecraft.server.v1_6_R3.DamageSource;
 import net.minecraft.server.v1_6_R3.EntityDamageSource;
 import net.minecraft.server.v1_6_R3.EntityLiving;
-import net.minecraft.server.v1_6_R3.EntityPlayer;
 import net.minecraftforge.event.EventPriority;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -25,32 +24,31 @@ public class ModuleFixDamageSourceDetection extends ListenerModule{
 	public ModuleFixDamageSourceDetection(ArzioLib plugin) {
 		super(plugin);
 	}
-	
 
 	@ForgeSubscribe(priority = EventPriority.HIGHEST)
 	public void onAttack(LivingAttackEvent event) {
 		DamageSource source = ReflectionHelper.getValueFromEvent(event, DamageSource.class);
 
-		if (!isDamageSourceDetectedByBukkit(source)) {
-			EntityLiving victim = ReflectionHelper.getValueFromEvent(event, EntityLiving.class);
-			if (!(victim instanceof EntityPlayer)) {
-				return;
-			}
-			
-			DamageCause cause = DamageCause.CUSTOM; // The initial cause is CUSTOM in order to reduce
-													// problems in newer versions with new damage types
-													// which aren't covered by the custom damage cause enum below.
-			CDDamageCause customCause = CDDamageCause.getDamageCause(source);
-			if (customCause != null) {
-				cause = customCause.asBukkitDamageCause();
-			}
+		if (isDamageSourceDetectedByBukkit(source)) {
+			return;
+		}
+		
+		EntityLiving victim = ReflectionHelper.getValueFromEvent(event, EntityLiving.class);
+		
+		DamageCause cause = DamageCause.CUSTOM; // The initial cause is CUSTOM to reduce
+												// problems in newer versions with new damage types
+												// which aren't covered by the custom damage cause enum below.
+		CDDamageCause customCause = CDDamageCause.getDamageCause(source);
+		
+		if (customCause != null) {
+			cause = customCause.asBukkitDamageCause();
+		}
 
-			EntityDamageEvent innerEvent = CraftEventFactory.callEntityDamageEvent(source.getEntity(),
-					victim, cause, event.ammount);
+		EntityDamageEvent innerEvent = CraftEventFactory.callEntityDamageEvent(source.getEntity(),
+				victim, cause, event.ammount);
 
-			if (innerEvent.isCancelled() || innerEvent.getDamage() <= 0) {
-				event.setCanceled(true);
-			}
+		if (innerEvent.isCancelled() || innerEvent.getDamage() <= 0) {
+			event.setCanceled(true);
 		}
 	}
 
@@ -62,14 +60,9 @@ public class ModuleFixDamageSourceDetection extends ListenerModule{
 			return;
 		}
 		
-		EntityLiving entity = ReflectionHelper.getValueFromEvent(event, EntityLiving.class);
+		EntityLiving entityLiving = ReflectionHelper.getValueFromEvent(event, EntityLiving.class);
 
-		if (!(entity instanceof EntityPlayer)) {
-			return;
-		}
-
-		EntityPlayer player = (EntityPlayer) entity;
-		EntityDamageEvent lastDamageCause = player.getBukkitEntity().getLastDamageCause();
+		EntityDamageEvent lastDamageCause = entityLiving.getBukkitEntity().getLastDamageCause();
 
 		if (lastDamageCause == null) {
 			ArzioLib.getInstance().getLogger().log(Level.WARNING, "Last damage cause is not present. This is a bug! Please, report it.");
@@ -84,7 +77,6 @@ public class ModuleFixDamageSourceDetection extends ListenerModule{
 		}
 		
 		event.ammount = (float) lastDamageCause.getDamage();
-		
 	}
 
 	public static boolean isDamageSourceDetectedByBukkit(DamageSource source) {
