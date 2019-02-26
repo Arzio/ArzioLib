@@ -62,7 +62,7 @@ public class ModuleAddonRealSound extends ListenerModule{
 					data.set(type, config.getDouble(path+".silenced.max"), config.getDouble(path+".silenced.min"), config.getDouble(path+".silenced.range"));
 				}
 				
-				gunSoundDataMap.put(key, data);
+				gunSoundDataMap.put(key.toLowerCase(), data);
 			}
 		});
 	}
@@ -76,7 +76,7 @@ public class ModuleAddonRealSound extends ListenerModule{
 	public void onTrigger(CDGunTriggerEvent event) {
 		
 		Gun gun = event.getHeldGun();
-		SoundData sound = gunSoundDataMap.get(gun.getName());
+		SoundData sound = gunSoundDataMap.get(gun.getName().toLowerCase());
 		
 		if (sound == null) {
 			logger.log(Level.WARNING, "Sound Calibration not found for gun "+gun.getName()+" in "+yml.getFile().getName()+" file. You can add it by yourself.");
