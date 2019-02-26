@@ -58,6 +58,7 @@ public class ModuleCoreNetworkHandler extends NamedModule implements IPacketHand
 					packetEvent.setCancelled(true);
 				} else {
 					packetEvent.getPacket().getByteArrays().write(0, innerEvent.getData());
+					packetEvent.getPacket().getModifier().write(1, innerEvent.getData().length);
 				}
 			}
 			
