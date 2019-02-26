@@ -2,6 +2,7 @@ package com.arzio.arziolib.api.wrapper.impl;
 
 import org.bukkit.Material;
 
+import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.util.CDMaterial;
 import com.arzio.arziolib.api.util.CauldronUtils;
 import com.arzio.arziolib.api.util.reflection.CDClasses;
@@ -72,12 +73,12 @@ public class GunImpl extends CDItemImpl implements Gun{
 
 	@Override
 	public String getShootSound() {
-		return "craftingdead:"+CDClasses.itemGunFireSoundName.getValue(this.getItemInstance());
+		return ArzioLib.MOD_RESOURCE_NAME+CDClasses.itemGunFireSoundName.getValue(this.getItemInstance());
 	}
 
 	@Override
 	public String getSilencedSound() {
-		return "craftingdead:"+CDClasses.itemGunSuppresedSoundName.getValue(this.getItemInstance());
+		return ArzioLib.MOD_RESOURCE_NAME+CDClasses.itemGunSuppresedSoundName.getValue(this.getItemInstance());
 	}
 
 	@Override
