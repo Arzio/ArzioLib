@@ -28,7 +28,7 @@ import com.comphenix.protocol.reflect.StructureModifier;
 public class ModuleAddonRealSound extends ListenerModule{
 
 	private final YMLFile yml;
-	private Map<Gun, SoundData> gunSoundDataMap = new HashMap<>();
+	private Map<String, SoundData> gunSoundDataMap = new HashMap<>();
 	private Logger logger = Logger.getLogger(ModuleAddonRealSound.class.getSimpleName());
 	
 	public ModuleAddonRealSound(ArzioLib plugin) {
@@ -61,6 +61,8 @@ public class ModuleAddonRealSound extends ListenerModule{
 					
 					data.set(type, config.getDouble(path+".silenced.max"), config.getDouble(path+".silenced.min"), config.getDouble(path+".silenced.range"));
 				}
+				
+				gunSoundDataMap.put(key, data);
 			}
 		});
 	}
@@ -73,14 +75,16 @@ public class ModuleAddonRealSound extends ListenerModule{
 	@EventHandler
 	public void onTrigger(CDGunTriggerEvent event) {
 		
-		SoundData sound = gunSoundDataMap.get(event.getHeldGun());
+		Gun gun = event.getHeldGun();
+		SoundData sound = gunSoundDataMap.get(gun.getName());
 		
 		if (sound == null) {
+			logger.log(Level.WARNING, "Sound Calibration not found for gun "+gun.getName()+" in "+yml.getFile().getName()+" file. You can add it by yourself.");
 			return;
 		}
 		
 		Player player = event.getPlayer();
-		Gun gun = event.getHeldGun();
+		
 		
 		boolean hasSilencer = ArzioLib.getInstance().getItemStackHelper().hasAttachment(event.getPlayer().getItemInHand(), CDAttachmentType.MUZZLE);
 		SoundType soundType = hasSilencer ? SoundType.SILENCED : SoundType.NORMAL;
@@ -88,7 +92,7 @@ public class ModuleAddonRealSound extends ListenerModule{
 		SoundTuple tuple = sound.getSound(soundType);
 		
 		if (tuple == null) {
-			logger.log(Level.WARNING, "Sound Calibration not found for gun "+gun.getName()+" in "+soundType.name()+" mode. Add the gun in "+yml.getFile().getName()+" config file by yourself.");
+			logger.log(Level.WARNING, "Sound Calibration not found for gun "+gun.getName()+" in "+soundType.name()+" mode. Add the mode in "+yml.getFile().getName()+" config file by yourself.");
 			return;
 		}
 		
