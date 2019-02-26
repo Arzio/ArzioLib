@@ -8,7 +8,9 @@ import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.plugin.Plugin;
 
 import com.arzio.arziolib.ArzioLib;
@@ -28,9 +30,20 @@ public class ForgeBukkitEventManagerImpl implements ForgeBukkitEventManager, Lis
 
 	private Multimap<Plugin, ForgeListener> pluginListeners = LinkedListMultimap.create();
 	
+	public ForgeBukkitEventManagerImpl(Plugin plugin) {
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
+	}
+	
+	@EventHandler
+	public void onPluginDisable(PluginDisableEvent event) {
+		this.unregisterEvents(event.getPlugin());
+	}
+	
 	@Override
 	public void registerEvents(Plugin plugin, ForgeListener listener) {
 
+		boolean hasRegistered = false;
+		
 		for (Method m : listener.getClass().getDeclaredMethods()) {
 
 			if (m.isAnnotationPresent(ForgeSubscribe.class)) {
@@ -48,13 +61,17 @@ public class ForgeBukkitEventManagerImpl implements ForgeBukkitEventManager, Lis
 
 				try {
 					registerEventListener(new EventListenerImpl(listener, m));
+					hasRegistered = true;
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		}
 		
-		 pluginListeners.put(plugin, listener);
+		// Put the listener into the cache only if any @ForgeSubscribe have been registered
+		if (hasRegistered) {
+			pluginListeners.put(plugin, listener);
+		}
 	}
 	
 	@Override
@@ -69,13 +86,23 @@ public class ForgeBukkitEventManagerImpl implements ForgeBukkitEventManager, Lis
 	
 	@Override
 	public void unregisterEvents(ForgeListener listener) {
-		this.unregister(listener);
+		
+		// To unregister it, we need to get which plugin this listener has came from.
+		for (Plugin plugin : this.getRegisteredPlugins()) {
+			for (ForgeListener innerListener : this.getListeners(plugin)) {
+				
+				if (innerListener.equals(listener)) {
+					this.unregister(plugin, listener);
+				}
+				
+			}
+		}
 	}
 	
 	@Override
 	public void unregisterEvents(Plugin plugin) {
 		for (ForgeListener listener : this.getListeners(plugin)) {
-			this.unregister(listener);
+			this.unregister(plugin, listener);
 		}
 	}
 	
@@ -86,19 +113,9 @@ public class ForgeBukkitEventManagerImpl implements ForgeBukkitEventManager, Lis
 		}
 	}
 	
-	public void unregister(ForgeListener listener) {
-		
-		for (Plugin plugin : this.getRegisteredPlugins()) {
-			for (ForgeListener innerListener : this.getListeners(plugin)) {
-				
-				if (innerListener.equals(listener)) {
-					pluginListeners.remove(plugin, innerListener);
-					MinecraftForge.EVENT_BUS.unregister(innerListener);
-				}
-				
-			}
-		}
-		
+	public void unregister(Plugin plugin, ForgeListener listener) {
+		pluginListeners.remove(plugin, listener);
+		MinecraftForge.EVENT_BUS.unregister(listener);
 	}
 	
 	public void registerEventListener(EventListenerImpl event) throws Exception {
@@ -169,7 +186,5 @@ public class ForgeBukkitEventManagerImpl implements ForgeBukkitEventManager, Lis
 		}
 		
 	}
-
-
 
 }

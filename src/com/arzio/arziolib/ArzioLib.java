@@ -77,7 +77,7 @@ public class ArzioLib extends JavaPlugin {
 		
 		this.userDataProvider = new UserDataProvider();
 		this.playerDataHandler = new PlayerDataHandlerImpl();
-		this.forgeBukkitEventManager = new ForgeBukkitEventManagerImpl();
+		this.forgeBukkitEventManager = new ForgeBukkitEventManagerImpl(this);
 		this.itemProvider = new ItemProviderImpl();
 		this.craftingDead = new CraftingDeadMainImpl();
 		this.itemStackHelper = new ItemStackHelperImpl();
