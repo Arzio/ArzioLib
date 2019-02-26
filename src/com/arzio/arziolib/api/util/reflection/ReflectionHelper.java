@@ -79,7 +79,8 @@ public class ReflectionHelper {
 		ModContainer modContainer = null;
 		
 		for (ModContainer mod : loader.getModList() ) {
-			if (mod.getModId().equalsIgnoreCase(ArzioLib.MOD_ID)) {
+			String modNameLowerCaseWithoutSpaces = mod.getName().replace(" ", "").toLowerCase();
+			if (modNameLowerCaseWithoutSpaces.contains("craftingdead") || modNameLowerCaseWithoutSpaces.startsWith("cd")) {
 				modContainer = mod;
 				break;
 			}
