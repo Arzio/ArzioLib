@@ -32,6 +32,7 @@ import com.arzio.arziolib.module.addon.ModuleAddonCustomFlags;
 import com.arzio.arziolib.module.addon.ModuleAddonCustomGunsAndAmmos;
 import com.arzio.arziolib.module.addon.ModuleAddonCustomLoots;
 import com.arzio.arziolib.module.addon.ModuleAddonInfinityEnchantCompatiblity;
+import com.arzio.arziolib.module.addon.ModuleAddonProjectileProtectionCompatibility;
 import com.arzio.arziolib.module.addon.ModuleAddonRealSound;
 import com.arzio.arziolib.module.addon.ModuleAddonZombieFollowGrenades;
 import com.arzio.arziolib.module.addon.ModuleAddonZombieHearGuns;
@@ -99,6 +100,7 @@ public class ArzioLib extends JavaPlugin {
 		this.moduleManager.registerModule(new ModuleAddonCustomGunsAndAmmos(this));
 		this.moduleManager.registerModule(new ModuleAddonCustomLoots(this));
 		this.moduleManager.registerModule(new ModuleAddonInfinityEnchantCompatiblity(this));
+		this.moduleManager.registerModule(new ModuleAddonProjectileProtectionCompatibility(this));
 		this.moduleManager.registerModule(new ModuleAddonRealSound(this));
 		this.moduleManager.registerModule(new ModuleAddonZombieFollowGrenades(this));
 		this.moduleManager.registerModule(new ModuleAddonZombieHearGuns(this));
