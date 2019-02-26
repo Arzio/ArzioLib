@@ -27,10 +27,10 @@ public class CountdownTimer{
 		this.tickDelay = updateDelay;
 	}
 	
-	public CountdownTimer(Plugin plugin, long durationSeconds, TimeCallback updateCallback) {
+	public CountdownTimer(Plugin plugin, long durationSeconds, TimeCallback timeCallback) {
 		this.plugin = plugin;
 		this.remainingSeconds = durationSeconds;
-		this.callback = updateCallback;
+		this.callback = timeCallback;
 		this.initialDurationSeconds = durationSeconds;
 	}
 	
