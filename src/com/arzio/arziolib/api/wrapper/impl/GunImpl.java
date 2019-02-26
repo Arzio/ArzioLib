@@ -72,12 +72,12 @@ public class GunImpl extends CDItemImpl implements Gun{
 
 	@Override
 	public String getShootSound() {
-		return CDClasses.itemGunFireSoundName.getValue(this.getItemInstance());
+		return "craftingdead:"+CDClasses.itemGunFireSoundName.getValue(this.getItemInstance());
 	}
 
 	@Override
 	public String getSilencedSound() {
-		return CDClasses.itemGunSuppresedSoundName.getValue(this.getItemInstance());
+		return "craftingdead:"+CDClasses.itemGunSuppresedSoundName.getValue(this.getItemInstance());
 	}
 
 	@Override
