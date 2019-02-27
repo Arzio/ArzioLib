@@ -168,16 +168,21 @@ public class CDClasses {
 		public static final ReflectedMethod playerDataHandlerGetPlayerData = new ReflectedMethod(playerDataHandlerClass, new ContentFinder.MethodBuilder().withReturnType(playerDataClass.getReferencedClass()).withParameterTypes(String.class).build());
 
 	public static final ReflectedClass packetBaseBaseRemovalClass = new ReflectedClass(NameClassFinder.find("CDAPacketBaseRemoval"));
-	public static final ReflectedClass packetBulletCollisionClient = new ReflectedClass(NameClassFinder.find("CDAPacketBulletCollisionClient"));
-	public static final ReflectedClass packetGrenadeThrowing = new ReflectedClass(NameClassFinder.find("CDAPacketGrenadeThrowing"));
-	public static final ReflectedClass packetSwitchItem = new ReflectedClass(NameClassFinder.find("CDAPacketSwitchItem"));
-	public static final ReflectedClass packetGunTrigger = new ReflectedClass(NameClassFinder.find("CDAPacketGunTrigger"));
-	public static final ReflectedClass packetGunReload = new ReflectedClass(NameClassFinder.find("CDAPacketGunReload"));
-	public static final ReflectedClass packetBulletCollision = new ReflectedClass(NameClassFinder.find("CDAPacketBulletCollision"));
-	public static final ReflectedClass packetPlayerDataToPlayer = new ReflectedClass(NameClassFinder.find("CDAPacketPlayerDataToPlayer"));
-	public static final ReflectedClass packetFTTrigger = new ReflectedClass(NameClassFinder.find("CDAPacketFTTrigger"));
-	public static final ReflectedClass packetACLCombat = new ReflectedClass(NameClassFinder.find("CDAPacketACLInCombat"));
+	public static final ReflectedClass packetBulletCollisionClientClass = new ReflectedClass(NameClassFinder.find("CDAPacketBulletCollisionClient"));
+	public static final ReflectedClass packetGrenadeThrowingClass = new ReflectedClass(NameClassFinder.find("CDAPacketGrenadeThrowing"));
+	public static final ReflectedClass packetSwitchItemClass = new ReflectedClass(NameClassFinder.find("CDAPacketSwitchItem"));
+	public static final ReflectedClass packetGunTriggerClass = new ReflectedClass(NameClassFinder.find("CDAPacketGunTrigger"));
+	public static final ReflectedClass packetGunReloadClass = new ReflectedClass(NameClassFinder.find("CDAPacketGunReload"));
+	public static final ReflectedClass packetBulletCollisionClass = new ReflectedClass(NameClassFinder.find("CDAPacketBulletCollision"));
+	public static final ReflectedClass packetPlayerDataToPlayerClass = new ReflectedClass(NameClassFinder.find("CDAPacketPlayerDataToPlayer"));
+	public static final ReflectedClass packetFTTriggerClass = new ReflectedClass(NameClassFinder.find("CDAPacketFTTrigger"));
+	public static final ReflectedClass packetACLCombatClass = new ReflectedClass(NameClassFinder.find("CDAPacketACLInCombat"));
 
+	public static final ReflectedClass inventoryBackpackClass = new ReflectedClass(NameClassFinder.find("InventoryBackpack"));
+	public static final ReflectedClass inventoryFuelTanksClass = new ReflectedClass(NameClassFinder.find("InventoryFuelTanks"));
+	public static final ReflectedClass inventoryTacticalVestClass = new ReflectedClass(NameClassFinder.find("InventoryTacticalVest"));
+	public static final ReflectedClass inventoryShelfLootClass = new ReflectedClass(NameClassFinder.find("InventoryShelfLoot"));
+	public static final ReflectedClass inventoryVendingMachineClass = new ReflectedClass(NameClassFinder.find("InventoryVendingMachine"));
 	
 	
 	public static final ReflectedClass networkManagerClass = new ReflectedClass(NameClassFinder.find("NetworkManager"));
