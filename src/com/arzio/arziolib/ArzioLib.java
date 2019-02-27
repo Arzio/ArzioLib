@@ -21,6 +21,7 @@ import com.arzio.arziolib.api.wrapper.impl.PlayerDataHandlerImpl;
 import com.arzio.arziolib.command.ArzioLibCommand;
 import com.arzio.arziolib.command.ClothesCommand;
 import com.arzio.arziolib.command.ParticlesCommand;
+import com.arzio.arziolib.command.PingCommand;
 import com.arzio.arziolib.config.ArzioModuleManager;
 import com.arzio.arziolib.config.UserDataProvider;
 import com.arzio.arziolib.listener.MiscListener;
@@ -134,6 +135,7 @@ public class ArzioLib extends JavaPlugin {
 		this.getCommand("arziolib").setExecutor(new ArzioLibCommand(this));
 		this.getCommand("particle").setExecutor(new ParticlesCommand());
 		this.getCommand("clothes").setExecutor(new ClothesCommand());
+		this.getCommand("ping").setExecutor(new PingCommand());
 		
 		this.getLogger().info("Loading done! :3");
 		this.getLogger().info("This plugin was made by Arzio <3");
