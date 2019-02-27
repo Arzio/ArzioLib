@@ -50,9 +50,9 @@ public class ModuleAddonProjectileProtectionCompatibility extends ListenerModule
 			Player victim = (Player) event.getEntity();
 			InventoryCDA inventory = this.dataHandler.getPlayerData(victim).getInventory();
 			
-			ItemStack stackHat = inventory.getStackInSpecialSlot(victim, CDSpecialSlot.HAT);
-			ItemStack stackVest = inventory.getStackInSpecialSlot(victim, CDSpecialSlot.VEST);
-			ItemStack stackClothing = inventory.getStackInSpecialSlot(victim, CDSpecialSlot.CLOTHING);
+			ItemStack stackHat = inventory.getStackInSpecialSlot(CDSpecialSlot.HAT);
+			ItemStack stackVest = inventory.getStackInSpecialSlot(CDSpecialSlot.VEST);
+			ItemStack stackClothing = inventory.getStackInSpecialSlot(CDSpecialSlot.CLOTHING);
 		
 			int totalProtectionLevel = stackHat.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE)
 										+ stackVest.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE)
