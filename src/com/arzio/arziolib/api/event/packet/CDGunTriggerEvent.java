@@ -7,6 +7,7 @@ import org.bukkit.event.HandlerList;
 import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.ItemStackHelper;
 import com.arzio.arziolib.api.event.PostEvent;
+import com.arzio.arziolib.api.util.CDPacketDataWrapper;
 import com.arzio.arziolib.api.wrapper.Gun;
 import com.arzio.arziolib.config.UserData;
 
@@ -15,8 +16,8 @@ public class CDGunTriggerEvent extends GunEvent implements PostEvent{
 	private static final HandlerList handlers = new HandlerList();
 	private boolean spendAmmo = true;
 
-	public CDGunTriggerEvent(Player player, Gun gun, byte[] packetData) {
-		super(player, gun, packetData);
+	public CDGunTriggerEvent(Player player, Gun gun, CDPacketDataWrapper dataWrapper) {
+		super(player, gun, dataWrapper);
 	}
 
 	@Override

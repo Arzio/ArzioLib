@@ -1,28 +1,26 @@
 package com.arzio.arziolib.api.event.handler;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 
 import com.arzio.arziolib.api.event.packet.PayloadPacketEvent;
+import com.arzio.arziolib.api.util.CDPacketDataWrapper;
 import com.arzio.arziolib.api.util.CDPacketType;
 
 public abstract class PacketHandlerEvent extends PayloadPacketEvent implements Cancellable{
 	
 	private boolean cancelled;
-	private final int packetId;
 	
-	public PacketHandlerEvent(Player sender, int packetId, byte[] data) {
-		super(sender, data);
-		this.packetId = packetId;
+	public PacketHandlerEvent(Player sender, CDPacketDataWrapper dataWrapper) {
+		super(sender, dataWrapper);
 	}
 	
 	public CDPacketType getPacketType() {
-		return CDPacketType.getById(this.packetId);
+		return CDPacketType.getById(this.getData().getInnerPacketId());
 	}
 	
 	public int getPacketId() {
-		return this.packetId;
+		return this.getData().getInnerPacketId();
 	}
 	
 	@Override
@@ -35,16 +33,4 @@ public abstract class PacketHandlerEvent extends PayloadPacketEvent implements C
 		this.cancelled = cancel;
 	}
 	
-	public void callInnerPacket(PayloadPacketEvent innerEvent) {
-		Bukkit.getPluginManager().callEvent(innerEvent);
-		if (innerEvent.isCancelled()) {
-			this.setCancelled(true);
-		} else {
-			// As the event is not cancelled, we put every data modification into the packet.
-			if (innerEvent instanceof PayloadPacketEvent) {
-				PayloadPacketEvent dataEvent = (PayloadPacketEvent) innerEvent;
-				this.setData(dataEvent.getData());
-			}
-		}
-	}
 }

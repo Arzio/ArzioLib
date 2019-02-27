@@ -12,6 +12,7 @@ import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.event.handler.CDPacketReceivedEvent;
 import com.arzio.arziolib.api.event.handler.CDPacketSentEvent;
 import com.arzio.arziolib.api.exception.CDAReflectionException;
+import com.arzio.arziolib.api.util.CDPacketDataWrapper;
 import com.arzio.arziolib.module.NamedModule;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -44,21 +45,23 @@ public class ModuleCoreNetworkHandler extends NamedModule implements IPacketHand
 			
 			@Override
 			public void onPacketSending(PacketEvent packetEvent) {
-				if (!packetEvent.getPacket().getStrings().read(0).equals("cdaNetworking")) {
+				if (!packetEvent.getPacket().getStrings().read(0).equals(ArzioLib.MOD_NETWORK_ID)) {
 					return;
 				}
 
-				byte[] b = packetEvent.getPacket().getByteArrays().read(0);
-				int packetId = b[0];
+				byte[] bruteBytes = packetEvent.getPacket().getByteArrays().read(0);
 				
-				CDPacketSentEvent innerEvent = new CDPacketSentEvent(packetEvent.getPlayer(), packetId, b);
+				CDPacketSentEvent innerEvent = new CDPacketSentEvent(packetEvent.getPlayer(), new CDPacketDataWrapper(bruteBytes));
 				Bukkit.getPluginManager().callEvent(innerEvent);
 				
 				if (innerEvent.isCancelled()) {
 					packetEvent.setCancelled(true);
 				} else {
-					packetEvent.getPacket().getByteArrays().write(0, innerEvent.getData());
-					packetEvent.getPacket().getModifier().write(1, innerEvent.getData().length);
+					CDPacketDataWrapper dataWrapper = innerEvent.getData();
+					byte[] result = dataWrapper.buildCustomPayloadData();
+					
+					packetEvent.getPacket().getByteArrays().write(0, result);
+					packetEvent.getPacket().getModifier().write(1, result.length);
 				}
 			}
 			
@@ -91,17 +94,17 @@ public class ModuleCoreNetworkHandler extends NamedModule implements IPacketHand
 	
 	private void injectWrapper() throws Exception {
 		@SuppressWarnings("unchecked")
-		Collection<IPacketHandler> handlers = (Collection<IPacketHandler>) getMethod.invoke(serverPacketHandlers, "cdaNetworking");
+		Collection<IPacketHandler> handlers = (Collection<IPacketHandler>) getMethod.invoke(serverPacketHandlers, ArzioLib.MOD_NETWORK_ID);
 		serverHandlers.clear();
 		serverHandlers.addAll(handlers);
 		
-		removeAllMethod.invoke(serverPacketHandlers, "cdaNetworking");
-		putMethod.invoke(serverPacketHandlers, "cdaNetworking", this);
+		removeAllMethod.invoke(serverPacketHandlers, ArzioLib.MOD_NETWORK_ID);
+		putMethod.invoke(serverPacketHandlers, ArzioLib.MOD_NETWORK_ID, this);
 	}
 	
 	private void removeWrapper() throws Exception {
-		removeAllMethod.invoke(serverPacketHandlers, "cdaNetworking");
-		putMethod.invoke(serverPacketHandlers, "cdaNetworking", serverHandlers);
+		removeAllMethod.invoke(serverPacketHandlers, ArzioLib.MOD_NETWORK_ID);
+		putMethod.invoke(serverPacketHandlers, ArzioLib.MOD_NETWORK_ID, serverHandlers);
 	}
 	
 	@Override
@@ -109,16 +112,14 @@ public class ModuleCoreNetworkHandler extends NamedModule implements IPacketHand
 		try { // We need to try-catch the maximum possible, otherwise some players will lose connection due to plugin bugs.
 			EntityPlayer entityPlayer = (EntityPlayer) player;
 			
-			int packetId = packet.data[0];
-			
-			CDPacketReceivedEvent innerEvent = new CDPacketReceivedEvent(entityPlayer.getBukkitEntity(), packetId, packet.data);
+			CDPacketReceivedEvent innerEvent = new CDPacketReceivedEvent(entityPlayer.getBukkitEntity(), new CDPacketDataWrapper(packet.data));
 			Bukkit.getPluginManager().callEvent(innerEvent);
 			
 			if (innerEvent.isCancelled()) {
 				return; // Drops the packet. Forge will never knows this packet was received.
 			}
 			
-			packet.data = innerEvent.getData();
+			packet.data = innerEvent.getData().buildCustomPayloadData();
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
@@ -153,5 +154,4 @@ public class ModuleCoreNetworkHandler extends NamedModule implements IPacketHand
 	public String getName() {
 		return "core-network-handler";
 	}
-
 }

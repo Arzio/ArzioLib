@@ -4,22 +4,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.player.PlayerEvent;
 
+import com.arzio.arziolib.api.util.CDPacketDataWrapper;
+
 public abstract class PayloadPacketEvent extends PlayerEvent implements Cancellable{
 
-	private byte[] packetData;
+	private final CDPacketDataWrapper dataWrapper;
 	private boolean cancelled;
 	
-	public PayloadPacketEvent(Player player, byte[] packetData) {
+	public PayloadPacketEvent(Player player, CDPacketDataWrapper dataWrapper) {
 		super(player);
-		this.packetData = packetData;
+		this.dataWrapper = dataWrapper;
 	}
 	
-	public byte[] getData() {
-		return this.packetData;
-	}
-	
-	public void setData(byte[] data) {
-		this.packetData = data;
+	public CDPacketDataWrapper getData() {
+		return this.dataWrapper;
 	}
 	
 	@Override

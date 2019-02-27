@@ -27,6 +27,7 @@ import com.arzio.arziolib.api.event.packet.CDRequestBaseDestroyEvent;
 import com.arzio.arziolib.api.event.packet.CDShowBulletHitEvent;
 import com.arzio.arziolib.api.event.packet.CDSwapGunEvent;
 import com.arzio.arziolib.api.event.packet.PayloadPacketEvent;
+import com.arzio.arziolib.api.util.CDPacketDataWrapper;
 import com.arzio.arziolib.api.util.CDPacketType;
 import com.arzio.arziolib.api.wrapper.Gun;
 import com.arzio.arziolib.module.ListenerModule;
@@ -45,14 +46,13 @@ public class ModuleCoreCDPacketEventCaller extends ListenerModule{
 		
 		PayloadPacketEvent innerEvent = null;
 		
-		try(DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(event.getData()))) {
+		try(DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(event.getData().getInnerPacketData()))) {
 			
 			switch (type) {
 				case SHOW_PARTICLE:
 					innerEvent = new CDShowBulletHitEvent(event.getPlayer(), event.getData());
 					break;
 				case PLAYER_DATA:
-					inputStream.read(); // Skips the first byte
 					Player from = Bukkit.getPlayerExact(inputStream.readUTF());
 					
 					innerEvent = new CDPlayerDataSendEvent(from, event.getPlayer(), event.getData());
@@ -69,9 +69,13 @@ public class ModuleCoreCDPacketEventCaller extends ListenerModule{
 		}
 		
 		if (innerEvent != null) {
-			event.callInnerPacket(innerEvent);
+			Bukkit.getPluginManager().callEvent(innerEvent);
+			if (innerEvent.isCancelled()) {
+				event.setCancelled(true);
+				return;
+			}
 			
-			if (!innerEvent.isCancelled() && (innerEvent instanceof PostEvent)) {
+			if (innerEvent instanceof PostEvent) {
 				((PostEvent) innerEvent).afterPost();
 			}
 		}
@@ -83,22 +87,20 @@ public class ModuleCoreCDPacketEventCaller extends ListenerModule{
 		Player sender = event.getPlayer();
 		
 		CDPacketType type = event.getPacketType();
-		byte[] data = event.getData();
+		CDPacketDataWrapper dataWrapper = event.getData();
 		
 		PayloadPacketEvent innerEvent = null;
 		
-		try(DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(data))) {
+		try(DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(dataWrapper.getInnerPacketData()))) {
 			
-			@SuppressWarnings("unused")
-			int ignoredByte = inputStream.read(); // Not used. DO NOT ERASE IT.
 			Gun heldGun = plugin.getItemProvider().getStackAs(Gun.class, sender.getItemInHand());
 			
 			switch(type) {
 				case GUN_RELOAD:
-					innerEvent = new CDGunReloadEvent(sender, heldGun, data);
+					innerEvent = new CDGunReloadEvent(sender, heldGun, dataWrapper);
 					break;
 				case THROW_GRENADE:
-					innerEvent = new CDGrenadeThrowEvent(sender, data);
+					innerEvent = new CDGrenadeThrowEvent(sender, dataWrapper);
 					break;
 				case BASE_DESTROY:
 					Base base = plugin.getBaseProvider().getBaseFromPlayer(sender);
@@ -108,7 +110,7 @@ public class ModuleCoreCDPacketEventCaller extends ListenerModule{
 						return;
 					}
 					
-					innerEvent = new CDRequestBaseDestroyEvent(sender, base, data);
+					innerEvent = new CDRequestBaseDestroyEvent(sender, base, dataWrapper);
 					
 					break;
 				case GUN_BULLET_HIT:
@@ -132,7 +134,7 @@ public class ModuleCoreCDPacketEventCaller extends ListenerModule{
 				        Entity entityHit = ((CraftPlayer) sender).getHandle().world.getEntity(entity);
 				        
 				        if (entityHit != null) {
-				        	innerEvent = new CDBulletHitEvent(sender, heldGun, entityHit.getBukkitEntity(), isHeadshot, data);
+				        	innerEvent = new CDBulletHitEvent(sender, heldGun, entityHit.getBukkitEntity(), isHeadshot, dataWrapper);
 				        }
 			        } else {
 			            @SuppressWarnings("unused")
@@ -146,7 +148,7 @@ public class ModuleCoreCDPacketEventCaller extends ListenerModule{
 			            double vectorY = inputStream.readDouble();
 			            double vectorZ = inputStream.readDouble();
 			            
-			            innerEvent = new CDBulletHitEvent(sender, heldGun, new Location(sender.getWorld(), vectorX, vectorY, vectorZ), sender.getWorld().getBlockAt((int) x, (int) y, (int) z), data);
+			            innerEvent = new CDBulletHitEvent(sender, heldGun, new Location(sender.getWorld(), vectorX, vectorY, vectorZ), sender.getWorld().getBlockAt((int) x, (int) y, (int) z), dataWrapper);
 			        }
 					
 					break;
@@ -156,7 +158,7 @@ public class ModuleCoreCDPacketEventCaller extends ListenerModule{
 						return;
 					}
 					
-					innerEvent = new CDGunTriggerEvent(sender, heldGun, data);
+					innerEvent = new CDGunTriggerEvent(sender, heldGun, dataWrapper);
 					break;
 				case SWAP_GUN:
 					if (heldGun == null) {
@@ -164,10 +166,10 @@ public class ModuleCoreCDPacketEventCaller extends ListenerModule{
 						return;
 					}
 					
-					innerEvent = new CDSwapGunEvent(sender, heldGun, data);
+					innerEvent = new CDSwapGunEvent(sender, heldGun, dataWrapper);
 					break;
 				case FLAMETHROWER_TRIGGER:
-					innerEvent = new CDFlamethrowerTriggerEvent(sender, data);
+					innerEvent = new CDFlamethrowerTriggerEvent(sender, dataWrapper);
 					break;
 				default:
 					break;
@@ -177,9 +179,13 @@ public class ModuleCoreCDPacketEventCaller extends ListenerModule{
 		}
 		
 		if (innerEvent != null) {
-			event.callInnerPacket(innerEvent);
+			Bukkit.getPluginManager().callEvent(innerEvent);
+			if (innerEvent.isCancelled()) {
+				event.setCancelled(true);
+				return;
+			}
 			
-			if (!innerEvent.isCancelled() && (innerEvent instanceof PostEvent)) {
+			if (innerEvent instanceof PostEvent) {
 				((PostEvent) innerEvent).afterPost();
 			}
 		}

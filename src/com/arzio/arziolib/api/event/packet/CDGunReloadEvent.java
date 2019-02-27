@@ -3,6 +3,7 @@ package com.arzio.arziolib.api.event.packet;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
+import com.arzio.arziolib.api.util.CDPacketDataWrapper;
 import com.arzio.arziolib.api.wrapper.Gun;
 
 public class CDGunReloadEvent extends GunEvent{
@@ -10,8 +11,8 @@ public class CDGunReloadEvent extends GunEvent{
 	private static final HandlerList handlers = new HandlerList();
 	private boolean spendAmmo = true;
 
-	public CDGunReloadEvent(Player player, Gun gun, byte[] packetData) {
-		super(player, gun, packetData);
+	public CDGunReloadEvent(Player player, Gun gun, CDPacketDataWrapper dataWrapper) {
+		super(player, gun, dataWrapper);
 	}
 
 	@Override

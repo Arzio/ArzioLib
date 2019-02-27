@@ -3,12 +3,14 @@ package com.arzio.arziolib.api.event.packet;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
+import com.arzio.arziolib.api.util.CDPacketDataWrapper;
+
 public class CDShowBulletHitEvent extends PayloadPacketEvent{
 
 	private static final HandlerList handlers = new HandlerList();
 	
-	public CDShowBulletHitEvent(Player player, byte[] packetData) {
-		super(player, packetData);
+	public CDShowBulletHitEvent(Player player, CDPacketDataWrapper dataWrapper) {
+		super(player, dataWrapper);
 	}
 
 	@Override

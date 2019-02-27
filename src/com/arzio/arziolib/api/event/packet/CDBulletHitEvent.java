@@ -11,6 +11,7 @@ import org.bukkit.event.HandlerList;
 import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.ItemStackHelper;
 import com.arzio.arziolib.api.event.PostEvent;
+import com.arzio.arziolib.api.util.CDPacketDataWrapper;
 import com.arzio.arziolib.api.wrapper.Gun;
 import com.arzio.arziolib.config.UserData;
 
@@ -24,16 +25,16 @@ public class CDBulletHitEvent extends GunEvent implements PostEvent {
 	private Location exactHitLocation;
 	private boolean spendAmmo = false;
 	
-	public CDBulletHitEvent(Player shooter, Gun gun, Entity entityHit, boolean isHeadshot, byte[] packetData) {
-		super(shooter, gun, packetData);
+	public CDBulletHitEvent(Player shooter, Gun gun, Entity entityHit, boolean isHeadshot, CDPacketDataWrapper dataWrapper) {
+		super(shooter, gun, dataWrapper);
 		this.hitType = HitType.ENTITY;
 		this.entityHit = entityHit;
 		this.isHeadshot = isHeadshot;
 		this.exactHitLocation = (entityHit instanceof LivingEntity && isHeadshot) ? ((LivingEntity) entityHit).getEyeLocation() : entityHit.getLocation();
 	}
 	
-	public CDBulletHitEvent(Player shooter, Gun gun, Location exactHitLocation, Block blockHit, byte[] packetData) {
-		super(shooter, gun, packetData);
+	public CDBulletHitEvent(Player shooter, Gun gun, Location exactHitLocation, Block blockHit, CDPacketDataWrapper dataWrapper) {
+		super(shooter, gun, dataWrapper);
 		this.hitType = HitType.BLOCK;
 		this.blockHit = blockHit;
 		this.exactHitLocation = exactHitLocation;
