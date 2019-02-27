@@ -1,10 +1,9 @@
 package com.arzio.arziolib.api.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_6_R3.inventory.CraftItemStack;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.arzio.arziolib.ArzioLib;
@@ -27,58 +26,35 @@ public class ItemStackHelperImpl implements ItemStackHelper {
 		return itemById.getClass().equals(item.getClass());
 	}
 	
-	@Override
-	public List<ItemStack> getStacksFromBag(ItemStack stack){
-		List<ItemStack> listStacks = new ArrayList<ItemStack>();
+	private NBTTagCompound getItemContainerTagCompound(ItemStack stack) {
+		if (stack == null) {
+			return null;
+		}
 		
-		for (String invName : STACK_INVENTORY_NAMES) {
-			NBTTagCompound firstTag = CraftItemStack.asNMSCopy(stack).getTag();
-			
-			if (firstTag != null) {
+		NBTTagCompound firstTag = CraftItemStack.asNMSCopy(stack).tag;
+		
+		if (firstTag != null) {
+			for (String invName : STACK_INVENTORY_NAMES) {
+				
 				NBTTagCompound inventoryCompound = firstTag.getCompound(invName);
 				
 				if (inventoryCompound != null) {
-					NBTTagList content = inventoryCompound.getList("content");
-					
-					if (content != null) {
-						for (int i = 0; i < content.size(); i++) {
-							NBTTagCompound compound = (NBTTagCompound) content.get(i);
-							listStacks.add(CraftItemStack.asBukkitCopy(net.minecraft.server.v1_6_R3.ItemStack.createStack(compound)));
-						}
-					}
+					return inventoryCompound;
 				}
 			}
 		}
 		
-		return listStacks;
-	}
-
-	@Override
-	public void setAmmoInGun(ItemStack itemstack, int amount) {
-		NBTTagCompound tag = getGunTagCompound(itemstack);
-		if (tag != null) {
-			tag.setInt("gunAmmo", amount);
-		}
-	}
-
-	@Override
-	public int getAmmoInGun(ItemStack itemstack) {
-		NBTTagCompound tag = getGunTagCompound(itemstack);
-		int amount = 0;
-		if (tag != null) {
-			amount = tag.getInt("gunAmmo");
-		}
-		return amount;
+		return null;
 	}
 	
-	private NBTTagCompound getGunTagCompound(ItemStack paramItemStack) {
-		Gun gun = ArzioLib.getInstance().getItemProvider().getStackAs(Gun.class, paramItemStack);
+	private NBTTagCompound getGunTagCompound(ItemStack stack) {
+		Gun gun = ArzioLib.getInstance().getItemProvider().getStackAs(Gun.class, stack);
 		
 		if (gun == null) {
 			return null; // Returns null if it is not a Gun
 		}
 		
-		NBTTagCompound compound = CauldronUtils.getTagCompound(paramItemStack);
+		NBTTagCompound compound = CauldronUtils.getTagCompound(stack);
 		
 		if (compound == null) {
 			return null;
@@ -128,6 +104,84 @@ public class ItemStackHelperImpl implements ItemStackHelper {
 		}
 		
 		compound.setInt("attachmentSlot"+type.getId(), attach.getId());
+	}
+
+	@Override
+	public boolean isContainer(ItemStack stack) {
+		NBTTagCompound compound = this.getItemContainerTagCompound(stack);
+		return compound != null;
+	}
+
+	@Override
+	public void setGunAmmo(ItemStack stack, int amount) {
+		NBTTagCompound tag = getGunTagCompound(stack);
+		if (tag != null) {
+			tag.setInt("gunAmmo", amount);
+		}
+	}
+
+	@Override
+	public int getGunAmmo(ItemStack stack) {
+		NBTTagCompound tag = getGunTagCompound(stack);
+		int amount = 0;
+		if (tag != null) {
+			amount = tag.getInt("gunAmmo");
+		}
+		return amount;
+	}
+
+	@Override
+	public <T, R> Result<R> accessItemInventory(ItemInventoryNavigatorReturnable<R> navigator) {
+		if (this.isContainer(navigator.getItemStack())) {
+			NBTTagCompound inventoryCompound = this.getItemContainerTagCompound(navigator.getItemStack());
+			NBTTagList content = inventoryCompound.getList("content");
+			
+			if (content != null) {
+				
+				int outerMostSlot = -1;
+				
+				// Get the outmost slot position from the item collection
+				for (int i = 0; i < content.size(); i++) {
+					NBTTagCompound compound = (NBTTagCompound) content.get(i);
+					byte slot = compound.getByte("slot");
+					if (slot > outerMostSlot) {
+						outerMostSlot = slot;
+					}
+				}
+				
+				// Create the temporary inventory
+				int rows = 1 + ((outerMostSlot - 1) / 9);
+				Inventory inventory = Bukkit.createInventory(null, rows * 9);
+				
+				// Load the items into the temporary inventory
+				for (int i = 0; i < content.size(); i++) {
+					NBTTagCompound compound = (NBTTagCompound) content.get(i);
+					byte slot = compound.getByte("slot");
+					inventory.setItem(slot, CraftItemStack.asBukkitCopy(net.minecraft.server.v1_6_R3.ItemStack.createStack(compound)));
+				}
+				
+				// Navigate through the temporary inventory
+				R result = navigator.accessAndReturn(inventory);
+				
+				// After applied, we need to save the inventory in a NEW itemstack
+				NBTTagList itemList = new NBTTagList();
+				
+				for (int i = 0; i < inventory.getContents().length; i++) {
+					ItemStack stack = inventory.getContents()[i];
+					if (stack != null) {
+						NBTTagCompound itemCompound = new NBTTagCompound();
+						itemCompound.setByte("slot", (byte) i);
+						CauldronUtils.getNMSStack(stack).save(itemCompound);
+						itemList.add(itemCompound);
+					}
+				}
+
+				inventoryCompound.set("content", itemList);
+				
+				return new Result<R>(navigator.getItemStack(), result);
+			}
+		}
+		return null;
 	}
 
 }
