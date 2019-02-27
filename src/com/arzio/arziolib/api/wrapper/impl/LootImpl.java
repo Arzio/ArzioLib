@@ -65,6 +65,7 @@ public class LootImpl implements Loot{
 		CDClasses.lootTypeContent.getValue(instance).remove(lootInstance);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void addChance(Material material, double chance) {
 		try {
