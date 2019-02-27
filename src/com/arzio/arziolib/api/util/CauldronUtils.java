@@ -5,14 +5,52 @@ import java.lang.reflect.Modifier;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_6_R3.inventory.CraftItemStack;
+import org.bukkit.inventory.ItemStack;
 
 import guava10.com.google.common.primitives.Ints;
 import net.minecraft.server.v1_6_R3.Entity;
 import net.minecraft.server.v1_6_R3.EntityTypes;
 import net.minecraft.server.v1_6_R3.Item;
+import net.minecraft.server.v1_6_R3.NBTTagCompound;
 
 public class CauldronUtils {
 
+	private static Field handleField = null;
+	
+	public static NBTTagCompound getTagCompound(ItemStack stack) {
+		net.minecraft.server.v1_6_R3.ItemStack resultStack = getNMSStack(stack);
+		
+		if (resultStack == null) {
+			return null;
+		}
+		
+		return resultStack.tag;
+	}
+	
+	public static net.minecraft.server.v1_6_R3.ItemStack getNMSStack(ItemStack stack){
+		if (!(stack instanceof CraftItemStack)) {
+			return null;
+		}
+		
+		CraftItemStack craftStack = (CraftItemStack) stack;
+		
+		try {
+			if (handleField == null) {
+				handleField = CraftItemStack.class.getDeclaredField("handle");
+				handleField.setAccessible(true);
+			}
+
+			net.minecraft.server.v1_6_R3.ItemStack nmsStack = (net.minecraft.server.v1_6_R3.ItemStack) handleField.get(craftStack);
+			
+			return nmsStack;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
 	public static int getEntityTypeIDfromClass(Entity entity) {
 		int entityClassToIdValue = EntityTypes.a(entity);
 		
