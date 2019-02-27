@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.ForgeListener;
 import com.arzio.arziolib.api.event.packet.CDPlayerDataSendEvent;
 import com.arzio.arziolib.api.event.packet.CDShowBulletHitEvent;
@@ -31,7 +32,7 @@ public class MiscListener implements ForgeListener{
 		if (event.getPlayer().isOp()){
 			final Player player = event.getPlayer();
 			
-			CountdownTimer timer = new CountdownTimer(null, 5L, new CountdownTimer.TimeCallback() {
+			CountdownTimer timer = new CountdownTimer(ArzioLib.getInstance(), 5L, new CountdownTimer.TimeCallback() {
 				
 				@Override
 				public void onStart(long durationMillis) { }
@@ -58,9 +59,8 @@ public class MiscListener implements ForgeListener{
 		if (UserData.getFrom(event.getPlayer()).isClothesHidden()) {
 			if (!event.getPlayer().equals(event.getFrom())) {
 				
-				try(DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(event.getData()))) {
+				try(DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(event.getData().getInnerPacketData()))) {
 					
-					inputStream.read(); // skips the first byte
 					String playerName = inputStream.readUTF();
 					boolean isAiming = inputStream.readBoolean();
 					
@@ -69,9 +69,9 @@ public class MiscListener implements ForgeListener{
 						
 						dos.writeUTF(playerName);
 						dos.writeBoolean(isAiming);
-						dos.write(new byte[event.getData().length]); // writring an array full of zeros.
-																	 // we don't need to care about the remaining array size.
-						event.setData(baos.toByteArray());
+						dos.write(new byte[event.getData().getInnerPacketData().length]); // writring an array full of zeros.
+																	 					// we don't need to care about the remaining array size.
+						event.getData().setInnerPacketData(baos.toByteArray());
 					}
 					
 				} catch (IOException e) {
