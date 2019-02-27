@@ -18,27 +18,33 @@ public class InventoryCDAImpl implements InventoryCDA{
 	}
 
 	@Override
-	public void clearSpecialSlots(Player player) {
+	public void clearSpecialSlots() {
 		
 		for (CDSpecialSlot slot : CDSpecialSlot.values()) {
-			this.setStackInSpecialSlot(player, slot, null);
+			this.setStackInSpecialSlot(slot, null);
 		}
 
 	}
 
 	@Override
-	public void setStackInSpecialSlot(Player player, CDSpecialSlot slot, ItemStack item) {
+	public void setStackInSpecialSlot(CDSpecialSlot slot, ItemStack item) {
 		try {
+			Player player = playerData.getPlayer();
+			
 			net.minecraft.server.v1_6_R3.ItemStack[] items = CDClasses.inventoryCDAInventory.getValue(
 					CDClasses.playerDataInventoryCDA.getValue(playerData.getPlayerDataInstance()));
 			items[slot.getSlotIndex()] = CraftItemStack.asNMSCopy(item);
+			
+			if (slot.isOpenFor(player)) {
+				player.closeInventory(); // Closes the inventory if the Item GUI is being viewed
+			}
 		} catch (Exception e) {
 			throw new CDAReflectionException(e);
 		}
 	}
 
 	@Override
-	public ItemStack getStackInSpecialSlot(Player player, CDSpecialSlot slot) {
+	public ItemStack getStackInSpecialSlot(CDSpecialSlot slot) {
 		try {
 			net.minecraft.server.v1_6_R3.ItemStack[] items = CDClasses.inventoryCDAInventory.getValue(CDClasses.playerDataInventoryCDA.getValue(playerData.getPlayerDataInstance()));
 			return CraftItemStack.asBukkitCopy(items[slot.getSlotIndex()]);
