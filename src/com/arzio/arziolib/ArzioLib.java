@@ -61,6 +61,7 @@ public class ArzioLib extends JavaPlugin {
 
 	public static final ModContainer MOD_CONTAINER = ReflectionHelper.getCraftingDeadModContainer();
 	public static final String MOD_RESOURCE_NAME = "craftingdead:";
+	public static final String MOD_NETWORK_ID = "cdaNetworking";
 	
 	private static ArzioLib instance;
 	private ModuleManager moduleManager;
