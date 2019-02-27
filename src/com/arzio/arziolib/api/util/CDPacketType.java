@@ -7,16 +7,16 @@ import com.arzio.arziolib.api.util.reflection.CDClasses;
 
 public enum CDPacketType {
 
-	GUN_RELOAD(packetGunReload),
+	GUN_RELOAD(packetGunReloadClass),
 	BASE_DESTROY(packetBaseBaseRemovalClass),
-	SHOW_PARTICLE(packetBulletCollisionClient),
-	THROW_GRENADE(packetGrenadeThrowing),
-	SWAP_GUN(packetSwitchItem),
-	GUN_TRIGGER(packetGunTrigger),
-	GUN_BULLET_HIT(packetBulletCollision),
-	PLAYER_DATA(packetPlayerDataToPlayer),
-	FLAMETHROWER_TRIGGER(packetFTTrigger),
-	COMBATLOG_SHOW_TIMER(packetACLCombat),
+	SHOW_PARTICLE(packetBulletCollisionClientClass),
+	THROW_GRENADE(packetGrenadeThrowingClass),
+	SWAP_GUN(packetSwitchItemClass),
+	GUN_TRIGGER(packetGunTriggerClass),
+	GUN_BULLET_HIT(packetBulletCollisionClass),
+	PLAYER_DATA(packetPlayerDataToPlayerClass),
+	FLAMETHROWER_TRIGGER(packetFTTriggerClass),
+	COMBATLOG_SHOW_TIMER(packetACLCombatClass),
 	UNDEFINED(null);
 	
 	private int id;
