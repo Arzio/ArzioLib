@@ -7,9 +7,12 @@ import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_6_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 
+import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.ItemStackHelper;
 import com.arzio.arziolib.api.util.CDAttachment;
 import com.arzio.arziolib.api.util.CDAttachmentType;
+import com.arzio.arziolib.api.util.CauldronUtils;
+import com.arzio.arziolib.api.wrapper.Gun;
 
 import net.minecraft.server.v1_6_R3.Item;
 import net.minecraft.server.v1_6_R3.NBTTagCompound;
@@ -67,14 +70,26 @@ public class ItemStackHelperImpl implements ItemStackHelper {
 		}
 		return amount;
 	}
-
-	private NBTTagCompound getGunTagCompound(ItemStack itemstack) {
-		net.minecraft.server.v1_6_R3.ItemStack minecraftStack = CraftItemStack.asNMSCopy(itemstack);
+	
+	private NBTTagCompound getGunTagCompound(ItemStack paramItemStack) {
+		Gun gun = ArzioLib.getInstance().getItemProvider().getStackAs(Gun.class, paramItemStack);
 		
-		if (minecraftStack.tag != null) {
-			return (NBTTagCompound) minecraftStack.tag.get("cdagun");
+		if (gun == null) {
+			return null; // Returns null if it is not a Gun
 		}
-		return null;
+		
+		NBTTagCompound compound = CauldronUtils.getTagCompound(paramItemStack);
+		
+		if (compound == null) {
+			return null;
+		}
+		
+		String tagCompoundName = "cdagun";
+		
+		if (!compound.hasKey(tagCompoundName)) {
+			compound.set(tagCompoundName, new NBTTagCompound(tagCompoundName));
+		}
+		return (NBTTagCompound) compound.get(tagCompoundName);
 	}
 
 	@Override
