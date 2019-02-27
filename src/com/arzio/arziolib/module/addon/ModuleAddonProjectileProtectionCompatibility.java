@@ -29,8 +29,13 @@ public class ModuleAddonProjectileProtectionCompatibility extends ListenerModule
 	@Override
 	public void onEnable() {
 		super.onEnable();
+		
+		yml.reload();
+		
 		this.dataHandler = this.getPlugin().getPlayerDataHandler();
-		this.projectileProtectionRatio = this.yml.getValueWithDefault("protection-ratio-per-level", this.projectileProtectionRatio);
+		this.projectileProtectionRatio = this.yml.getValueWithDefault("protection-ratio-per-enchantment-level", this.projectileProtectionRatio);
+		
+		yml.save();
 	}
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
