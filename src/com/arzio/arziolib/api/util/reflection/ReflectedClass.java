@@ -22,5 +22,9 @@ public class ReflectedClass {
 	public Class<?> getReferencedClass() {
 		return clazzFound;
 	}
+	
+	public boolean hasFound() {
+		return this.getReferencedClass() != null;
+	}
 
 }
