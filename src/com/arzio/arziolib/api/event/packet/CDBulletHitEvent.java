@@ -96,8 +96,8 @@ public class CDBulletHitEvent extends GunEvent implements PostEvent {
 					
 					ItemStackHelper stackHelper = ArzioLib.getInstance().getItemStackHelper();
 					
-					stackHelper.setAmmoInGun(getPlayer().getItemInHand(), 
-						stackHelper.getAmmoInGun(getPlayer().getItemInHand()) + 1);
+					stackHelper.setGunAmmo(getPlayer().getItemInHand(), 
+						stackHelper.getGunAmmo(getPlayer().getItemInHand()) + 1);
 				}
 			}
 		}

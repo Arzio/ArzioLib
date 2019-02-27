@@ -18,7 +18,7 @@ public class CDSwapGunEvent extends GunEvent{
 	}
 
 	public Gun getGunInMyBack() {
-		ItemStack itemInBack = ArzioLib.getInstance().getPlayerDataHandler().getPlayerData(player).getInventory().getStackInSpecialSlot(this.getPlayer(), CDSpecialSlot.GUN);
+		ItemStack itemInBack = ArzioLib.getInstance().getPlayerDataHandler().getPlayerData(player).getInventory().getStackInSpecialSlot(CDSpecialSlot.GUN);
 		return ArzioLib.getInstance().getItemProvider().getStackAs(Gun.class, itemInBack);
 	}
 	

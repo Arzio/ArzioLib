@@ -50,8 +50,8 @@ public class CDGunTriggerEvent extends GunEvent implements PostEvent{
 			
 			ItemStackHelper stackHelper = ArzioLib.getInstance().getItemStackHelper();
 			
-			stackHelper.setAmmoInGun(getPlayer().getItemInHand(), 
-					stackHelper.getAmmoInGun(getPlayer().getItemInHand()) + 1);
+			stackHelper.setGunAmmo(getPlayer().getItemInHand(), 
+					stackHelper.getGunAmmo(getPlayer().getItemInHand()) + 1);
 		} else {
 			data.removeFlag(UserData.FLAG_GUN_TRIGGER_HAS_RECOVERED_AMMO_LAST_TIME);
 			data.removeFlag(UserData.FLAG_GUN_BULLET_HIT_HAS_RECOVERED_AMMO_LAST_TIME);
