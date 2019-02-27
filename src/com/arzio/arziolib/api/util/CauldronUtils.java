@@ -5,12 +5,15 @@ import java.lang.reflect.Modifier;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_6_R3.inventory.CraftInventory;
 import org.bukkit.craftbukkit.v1_6_R3.inventory.CraftItemStack;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import guava10.com.google.common.primitives.Ints;
 import net.minecraft.server.v1_6_R3.Entity;
 import net.minecraft.server.v1_6_R3.EntityTypes;
+import net.minecraft.server.v1_6_R3.IInventory;
 import net.minecraft.server.v1_6_R3.Item;
 import net.minecraft.server.v1_6_R3.NBTTagCompound;
 
@@ -48,6 +51,14 @@ public class CauldronUtils {
 			e.printStackTrace();
 		}
 		
+		return null;
+	}
+	
+	public static IInventory getNMSInventory(Inventory inventory) {
+		if (inventory instanceof CraftInventory) {
+			CraftInventory cInventory = (CraftInventory) inventory;
+			return cInventory.getInventory();
+		}
 		return null;
 	}
 	
