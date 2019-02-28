@@ -4,12 +4,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.bukkit.Sound;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffectType;
@@ -17,12 +19,13 @@ import org.bukkit.potion.PotionEffectType;
 import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.event.CDPlayerPreDropEvent;
 import com.arzio.arziolib.api.event.packet.CDBulletHitEvent;
+import com.arzio.arziolib.api.event.packet.CDBulletHitEvent.HitType;
 import com.arzio.arziolib.api.event.packet.CDFlamethrowerTriggerEvent;
 import com.arzio.arziolib.api.event.packet.CDGrenadeThrowEvent;
-import com.arzio.arziolib.api.event.packet.CDBulletHitEvent.HitType;
 import com.arzio.arziolib.api.event.packet.CDGunTriggerEvent;
 import com.arzio.arziolib.api.region.StateFlagWrapper;
 import com.arzio.arziolib.api.util.CDDamageCause;
+import com.arzio.arziolib.api.util.CDInventoryType;
 import com.arzio.arziolib.api.util.CDPotionEffectType;
 import com.arzio.arziolib.module.ListenerModule;
 import com.craftingdead.server.API;
@@ -40,6 +43,7 @@ public class ModuleAddonCustomFlags extends ListenerModule{
 	public static final StateFlagWrapper GRENADE_THROWING_FLAG = new StateFlagWrapper(new StateFlag("grenade-throwing", false));
 	public static final StateFlagWrapper HIDE_NAMETAGS_FLAG = new StateFlagWrapper(new StateFlag("hide-nametags", false));
 	public static final StateFlagWrapper CAN_FIRE_GUNS_FLAG = new StateFlagWrapper(new StateFlag("can-fire-guns", false));
+	public static final StateFlagWrapper OPEN_ITEM_INVENTORY_FLAG = new StateFlagWrapper(new StateFlag("open-item-inventory", false));
 	
 	
 	private Set<String> hiddenPlayers = new HashSet<>();
@@ -61,11 +65,29 @@ public class ModuleAddonCustomFlags extends ListenerModule{
 		GRENADE_THROWING_FLAG.enable();
 		HIDE_NAMETAGS_FLAG.enable();
 		CAN_FIRE_GUNS_FLAG.enable();
+		OPEN_ITEM_INVENTORY_FLAG.enable();
 	}
 
 	@Override
 	protected void onDisable() {
 		super.onDisable();
+	}
+	
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onInventoryOpen(InventoryOpenEvent event) {
+		
+		HumanEntity player = event.getPlayer();
+		
+		if (OPEN_ITEM_INVENTORY_FLAG.isDenied(event.getPlayer().getLocation())) {
+			
+			if (CDInventoryType.isItemContainer(event.getView())) {
+				event.setCancelled(true);
+				
+				if (player instanceof Player) {
+					((Player) player).sendMessage("§cYou cannot open this inventory here.");
+				}
+			}
+		}
 	}
 	
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
