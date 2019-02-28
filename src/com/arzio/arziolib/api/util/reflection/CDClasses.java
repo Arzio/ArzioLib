@@ -184,6 +184,14 @@ public class CDClasses {
 	public static final ReflectedClass inventoryShelfLootClass = new ReflectedClass(NameClassFinder.find("InventoryShelfLoot"));
 	public static final ReflectedClass inventoryVendingMachineClass = new ReflectedClass(NameClassFinder.find("InventoryVendingMachine"));
 	
+	public static final ReflectedClass containerBackpackClass = new ReflectedClass(NameClassFinder.find("ContainerBackpack"));
+	public static final ReflectedClass containerFuelTanksClass = new ReflectedClass(NameClassFinder.find("ContainerFuelTanks"));
+	public static final ReflectedClass containerTacticalVestClass = new ReflectedClass(NameClassFinder.find("ContainerTacticalVest"));
+	public static final ReflectedClass containerShelfLootClass = new ReflectedClass(NameClassFinder.find("ContainerShelf", "ContainerShelfLoot"));
+	public static final ReflectedClass containerVendingMachineClass = new ReflectedClass(NameClassFinder.find("ContainerVendingMachine"));
+	public static final ReflectedClass containerInventoryCDAClass = new ReflectedClass(NameClassFinder.find("ContainerInventoryCDA"));
+	
+	
 	
 	public static final ReflectedClass networkManagerClass = new ReflectedClass(NameClassFinder.find("NetworkManager"));
 		public static final ReflectedMethod networkManagerGetPacketIdFromClass = new ReflectedMethod(networkManagerClass, new ContentFinder.MethodBuilder().withReturnType(int.class).withParameterTypes(Class.class).build());
