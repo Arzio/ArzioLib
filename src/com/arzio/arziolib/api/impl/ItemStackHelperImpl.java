@@ -195,8 +195,11 @@ public class ItemStackHelperImpl implements ItemStackHelper {
 			
 		});
 		
-		inventory.setStackInSpecialSlot(slot, result.getStack());
+		if (result == null) {
+			return null;
+		}
 		
+		inventory.setStackInSpecialSlot(slot, result.getStack());
 		return result;
 	}
 
