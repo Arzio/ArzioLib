@@ -1,13 +1,10 @@
 package com.arzio.arziolib.api.impl;
 
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
-public abstract class ItemInventoryNavigatorVoid extends ItemInventoryNavigator<Void>{
-	
-	public ItemInventoryNavigatorVoid(ItemStack stack) {
-		super(stack);
-	}
+import com.arzio.arziolib.api.ItemStackHelper.InventoryNavigator;
+
+public abstract class InventoryNavigatorVoid implements InventoryNavigator<Void>{
 	
 	public abstract void access(Inventory inventory);
 
@@ -16,5 +13,4 @@ public abstract class ItemInventoryNavigatorVoid extends ItemInventoryNavigator<
 		this.access(inventory);
 		return null;
 	}
-
 }

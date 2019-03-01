@@ -5,11 +5,11 @@ import org.bukkit.inventory.ItemStack;
 
 import com.arzio.arziolib.api.ItemStackHelper.InventoryNavigator;
 
-public abstract class ItemInventoryNavigatorReturnable<T> implements InventoryNavigator<T>{
+public abstract class ItemInventoryNavigator<T> implements InventoryNavigator<T>{
 
 	private ItemStack itemStack;
 	
-	public ItemInventoryNavigatorReturnable(ItemStack stack) {
+	public ItemInventoryNavigator(ItemStack stack) {
 		Validate.notNull(stack, "ItemStack cannot be null!");
 		this.itemStack = stack;
 	}
