@@ -8,9 +8,13 @@ import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.ForgeListener;
 
 public abstract class ListenerModule extends NamedModule implements ForgeListener, Listener{
-
+	
 	public ListenerModule(ArzioLib plugin) {
-		super(plugin);
+		this(plugin, true);
+	}
+	
+	public ListenerModule(ArzioLib plugin, boolean defaultState) {
+		super(plugin, defaultState);
 	}
 
 	@Override

@@ -60,7 +60,7 @@ public class ArzioModuleManager implements ModuleManager{
 					.replaceAll("^addon-", "addon.")
 					.replaceAll("^core-", "core.");
 			
-			shouldEnable = yml.getValueWithDefault("enable-modules."+moduleNameWithCategory, true);
+			shouldEnable = yml.getValueWithDefault("enable-modules."+moduleNameWithCategory, module.getDefaultState());
 			
 			yml.save();
 		}
