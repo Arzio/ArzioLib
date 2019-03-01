@@ -69,7 +69,7 @@ public enum CDEntityType {
 	public Entity spawnEntity(World world, Location location) {
 		Class<? extends Entity> entityClass = this.asBukkitType().getEntityClass();
 		try {
-			Constructor<?> constructor = entityClass.getConstructor(net.minecraft.server.v1_6_R3.World.class);
+			Constructor<?> constructor = entityClass.getDeclaredConstructor(net.minecraft.server.v1_6_R3.World.class);
 			
 			CraftWorld craftWorld = (CraftWorld) world;
 			net.minecraft.server.v1_6_R3.Entity entity = (net.minecraft.server.v1_6_R3.Entity) constructor.newInstance(craftWorld.getHandle());
