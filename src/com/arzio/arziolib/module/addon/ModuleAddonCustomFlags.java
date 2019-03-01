@@ -44,8 +44,9 @@ public class ModuleAddonCustomFlags extends ListenerModule{
 	public static final StateFlagWrapper HIDE_NAMETAGS_FLAG = new StateFlagWrapper(new StateFlag("hide-nametags", false));
 	public static final StateFlagWrapper CAN_FIRE_GUNS_FLAG = new StateFlagWrapper(new StateFlag("can-fire-guns", false));
 	public static final StateFlagWrapper OPEN_ITEM_INVENTORY_FLAG = new StateFlagWrapper(new StateFlag("open-item-inventory", false));
-	
-	
+	public static final StateFlagWrapper HEAL_BLEEDING_FLAG = new StateFlagWrapper(new StateFlag("heal-bleeding", false));
+	public static final StateFlagWrapper HEAL_INFECTION_FLAG = new StateFlagWrapper(new StateFlag("heal-infection", false));
+
 	private Set<String> hiddenPlayers = new HashSet<>();
 	
 	public ModuleAddonCustomFlags(ArzioLib plugin) {
@@ -66,6 +67,8 @@ public class ModuleAddonCustomFlags extends ListenerModule{
 		HIDE_NAMETAGS_FLAG.enable();
 		CAN_FIRE_GUNS_FLAG.enable();
 		OPEN_ITEM_INVENTORY_FLAG.enable();
+		HEAL_BLEEDING_FLAG.enable();
+		HEAL_INFECTION_FLAG.enable();
 	}
 
 	@Override
@@ -222,14 +225,23 @@ public class ModuleAddonCustomFlags extends ListenerModule{
 	}
 	
 	@EventHandler(ignoreCancelled = true)
-	public void repairLegOnMove(PlayerMoveEvent event) {
+	public void onMovement(PlayerMoveEvent event) {
 		
 		Player player = event.getPlayer();
 		if (player.hasPotionEffect(CDPotionEffectType.BROKEN_LEG)) {
-			
 			if (REPAIR_LEG_FLAG.isAllowed(player.getLocation())) {
 				player.removePotionEffect(CDPotionEffectType.BROKEN_LEG);
 				player.removePotionEffect(PotionEffectType.BLINDNESS);
+			}
+		}
+		if (player.hasPotionEffect(CDPotionEffectType.BLEEDING)) {
+			if (HEAL_BLEEDING_FLAG.isAllowed(player.getLocation())) {
+				player.removePotionEffect(CDPotionEffectType.BLEEDING);
+			}
+		}
+		if (player.hasPotionEffect(CDPotionEffectType.INFECTION)) {
+			if (HEAL_INFECTION_FLAG.isAllowed(player.getLocation())) {
+				player.removePotionEffect(CDPotionEffectType.INFECTION);
 			}
 		}
 	}
