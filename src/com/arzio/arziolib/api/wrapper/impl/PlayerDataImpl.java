@@ -13,6 +13,7 @@ import com.craftingdead.server.API;
 
 public class PlayerDataImpl implements PlayerData{
 
+	public static final int WATER_LEVEL_RATIO_DIFFERENCE = 20;
 	private String playerName;
 	private final InventoryCDAImpl inventoryCDA;
 	
@@ -79,6 +80,17 @@ public class PlayerDataImpl implements PlayerData{
 	@Override
 	public InventoryCDA getInventory() {
 		return inventoryCDA;
+	}
+
+	@Override
+	public int getWaterLevel() {
+		return CDClasses.waterLevelsValue.getValue(
+				CDClasses.playerDataWaterLevels.getValue(this.getPlayerDataInstance())) / WATER_LEVEL_RATIO_DIFFERENCE;
+	}
+
+	@Override
+	public void setWaterLevel(int amount) {
+		CDClasses.waterLevelsValue.setValue(this.getPlayerDataInstance(), amount * WATER_LEVEL_RATIO_DIFFERENCE);
 	}
 
 }

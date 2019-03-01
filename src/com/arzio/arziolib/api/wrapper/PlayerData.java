@@ -22,4 +22,8 @@ public interface PlayerData {
 	public InventoryCDA getInventory();
 	
 	public void setCanViewNameTags(boolean isPossible);
+	
+	public int getWaterLevel();
+	
+	public void setWaterLevel(int amount);
 }
