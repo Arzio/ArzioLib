@@ -3,6 +3,7 @@ main: com.arzio.arziolib.ArzioLib
 version: 1.3
 author: Arzio
 depend: [ProtocolLib, WorldGuard, WGCustomFlags]
+softdepend: [PlotMe, AuthMe]
 description: Library tools for Crafting Dead servers.
 commands:
     particle:
