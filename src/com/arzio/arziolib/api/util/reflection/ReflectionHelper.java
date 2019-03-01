@@ -140,7 +140,7 @@ public class ReflectionHelper {
 		return null;
 	}
 	
-	public static <T> Field findValueWithTypeAndFilter(Object instance, Class<?> clazz, Class<?> type, FieldChecker<T> predicate) {
+	public static <T> Field findValueWithTypeAndFilter(Object instance, Class<?> clazz, Class<?> type, FieldChecker<T> predicate, String regex) {
 		
 		for (Field f : clazz.getDeclaredFields()) {
 			
@@ -153,6 +153,12 @@ public class ReflectionHelper {
 				
 				if (type != null) {
 					if (!f.getType().equals(type)) {
+						continue;
+					}
+				}
+				
+				if (regex != null) {
+					if (!f.getName().matches(regex)) {
 						continue;
 					}
 				}
@@ -176,15 +182,7 @@ public class ReflectionHelper {
 		return null;
 	}
 	
-	public static Method findMethodWithTypes(Class<?> clazz, Class<?>[] types) {
-		return findMethodWithTypes(clazz, null, types);
-	}
-	
-	public static Method findMethodWithTypes(Class<?> clazz, Class<?> returnType) {
-		return findMethodWithTypes(clazz, returnType, new Class[0]);
-	}
-	
-	public static Method findMethodWithTypes(Class<?> clazz, Class<?> returnType, Class<?>[] types) {
+	public static Method findMethodWithTypes(Class<?> clazz, String regex, Class<?> returnType, Class<?>[] types) {
 		
 		for (Method m : clazz.getDeclaredMethods()) {
 			
@@ -193,29 +191,11 @@ public class ReflectionHelper {
 				if (returnType != null && !returnType.equals(m.getReturnType())) {
 					continue;
 				}
-				if (Arrays.equals(types, m.getParameterTypes())) {
-					return m;
+				if (regex != null) {
+					if (!m.getName().matches(regex)) {
+						continue;
+					}
 				}
-			} catch (Exception e) {
-				ArzioLib.getInstance().getLogger().log(Level.SEVERE, "Method with return type "+clazz+" and parameters "+Arrays.toString(types)+" not found in class "+clazz.getSimpleName(), e);
-			}
-			
-		}
-		
-		return null;
-	}
-	
-	public static Method findMethodWithNameAndTypes(Class<?> clazz, String name, Class<?>[] types) {
-		
-		for (Method m : clazz.getDeclaredMethods()) {
-			
-			try {
-				m.setAccessible(true);
-
-				if (!m.getName().equals(name)) {
-					continue;
-				}
-				m.setAccessible(true);
 				if (Arrays.equals(types, m.getParameterTypes())) {
 					return m;
 				}

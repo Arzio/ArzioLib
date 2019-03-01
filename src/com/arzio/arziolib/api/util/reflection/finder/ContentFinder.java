@@ -15,6 +15,7 @@ public interface ContentFinder<F> {
 		
 		private Class<?> returnType;
 		private Class<?>[] types;
+		private String regex;
 		
 		public MethodBuilder() { }
 		
@@ -28,12 +29,17 @@ public interface ContentFinder<F> {
 			return this;
 		}
 		
+		public MethodBuilder withRegexName(String regex){
+			this.regex = regex;
+			return this;
+		}
+		
 		public ContentFinder<Method> build() {
 			return new ContentFinder<Method>() {
 				
 				@Override
 				public Method find(Class<?> from) throws FinderException{
-					Method found = ReflectionHelper.findMethodWithTypes(from, returnType, types);
+					Method found = ReflectionHelper.findMethodWithTypes(from, regex, returnType, types);
 					if (found == null) {
 						throw new FinderException("The method cannot the be found!");
 					}
@@ -49,6 +55,7 @@ public interface ContentFinder<F> {
 		private Class<?> type;
 		private FieldChecker<T> checker;
 		private Object instance;
+		private String regex;
 		
 		public FieldBuilder() { }
 		
@@ -75,12 +82,17 @@ public interface ContentFinder<F> {
 			return this;
 		}
 		
+		public FieldBuilder<T> withRegexName(String regex){
+			this.regex = regex;
+			return this;
+		}
+		
 		public ContentFinder<Field> build() {
 			return new ContentFinder<Field>() {
 
 				@Override
 				public Field find(Class<?> from) throws FinderException{
-					Field found = ReflectionHelper.findValueWithTypeAndFilter(instance, from, type, checker);
+					Field found = ReflectionHelper.findValueWithTypeAndFilter(instance, from, type, checker, regex);
 					if (found == null) {
 						throw new FinderException("The field could not be found!");
 					}

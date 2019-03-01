@@ -35,7 +35,7 @@ public class EntityUtil {
 	}
 
 	public static void setEntitySize(Entity entity, float x, float y) {
-		Method m = ReflectionHelper.findMethodWithNameAndTypes(net.minecraft.server.v1_6_R3.Entity.class, "func_70105_a", new Class<?>[] { float.class, float.class });
+		Method m = ReflectionHelper.findMethodWithTypes(net.minecraft.server.v1_6_R3.Entity.class, "func_70105_a", null, new Class<?>[] { float.class, float.class });
 		try {
 			m.invoke(((CraftEntity) entity).getHandle(), x, y);
 		} catch (Exception e) {
