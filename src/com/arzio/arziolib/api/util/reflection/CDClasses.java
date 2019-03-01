@@ -54,6 +54,10 @@ public class CDClasses {
 		public static final ReflectedField<Object> craftingDeadMainInstanceField = new ReflectedField<>(craftingDeadMainClass, new ContentFinder.FieldBuilder<>().withType(craftingDeadMainClass.getReferencedClass()).build());
 		public static final ReflectedField<Object> craftingDeadMainCommonPlayerTrackerField = new ReflectedField<>(craftingDeadMainClass, new ContentFinder.FieldBuilder<>().withType(commonPlayerTrackerClass.getReferencedClass()).build());
 	
+	public static final ReflectedClass craftingDeadApiClass = new ReflectedClass(NameClassFinder.find("API", "BukkitUtils", "BukkitUtil"));
+		public static final ReflectedMethod craftingDeadApiSetWaterLevelMethod = new ReflectedMethod(craftingDeadApiClass, new ContentFinder.MethodBuilder().withRegexName("increaseWaterLevelsToPlayer").build());
+	
+		
 	public static final ReflectedClass blockBaseCenterClass = new ReflectedClass(NameClassFinder.find("BlockBaseCenter"));
 		public static final ReflectedMethod blockBaseCenterDestroy = new ReflectedMethod(blockBaseCenterClass, new ContentFinder.MethodBuilder().withParameterTypes(new Class<?>[] { net.minecraft.server.v1_6_R3.World.class, Integer.TYPE, Integer.TYPE, Integer.TYPE, CDClasses.entityPlayerClass.getReferencedClass() }).build());
 	
@@ -146,8 +150,11 @@ public class CDClasses {
 	public static final ReflectedClass inventoryCDAClass = new ReflectedClass(NameClassFinder.find("InventoryCDA", "InventoryCD", "InventoryCDO"));
 		public static final ReflectedField<ItemStack[]> inventoryCDAInventory = new ReflectedField<>(inventoryCDAClass, new ContentFinder.FieldBuilder<ItemStack[]>().withType(ItemStack[].class).build());
 	
+	public static final ReflectedClass waterLevelsClass = new ReflectedClass(NameClassFinder.find("WaterLevels", "WaterLevel"));
+
 	// Player Data class and fields
 	public static final ReflectedClass playerDataClass = new ReflectedClass(NameClassFinder.find("PlayerData"));
+		public static final ReflectedField<Object> playerDataWaterLevels = new ReflectedField<>(playerDataClass, new ContentFinder.FieldBuilder<>().withType(waterLevelsClass.getReferencedClass()).build());
 		public static final ReflectedMethod playerDataBaseSetLocation = new ReflectedMethod(playerDataClass, new ContentFinder.MethodBuilder().withParameterTypes(int.class, int.class, int.class).build());
 		public static Object PLAYER_DATA_DUMMY;
 		static {
@@ -163,6 +170,18 @@ public class CDClasses {
 		public static final ReflectedField<Integer> playerDataBaseYField = new ReflectedField<>(playerDataClass, new ContentFinder.FieldBuilder<Integer>().withExactValue(PLAYER_DATA_DUMMY, int.class, BASE_Y_VALUE_FOR_LOOKUP).build());
 		public static final ReflectedField<Integer> playerDataBaseZField = new ReflectedField<>(playerDataClass, new ContentFinder.FieldBuilder<Integer>().withExactValue(PLAYER_DATA_DUMMY, int.class, BASE_Z_VALUE_FOR_LOOKUP).build());
 		public static final ReflectedField<Object> playerDataInventoryCDA = new ReflectedField<>(playerDataClass, new ContentFinder.FieldBuilder<>().withType(inventoryCDAClass.getReferencedClass()).build());
+	
+	// ... Continuation of the WaterLevels class
+		public static Object WATER_LEVELS_DUMMY;
+		static {
+			try {
+				WATER_LEVELS_DUMMY = waterLevelsClass.getClass().getConstructor(playerDataClass.getReferencedClass()).newInstance(null);
+			} catch (Exception e) {
+				Bukkit.getLogger().log(Level.SEVERE, "Failed to get water levels value. This will break some plugins and modules.", e);
+			}
+		}
+		public static final ReflectedField<Integer> waterLevelsValue = new ReflectedField<>(waterLevelsClass, new ContentFinder.FieldBuilder<>().withExactValue(WATER_LEVELS_DUMMY, int.class, 0).build());
+	
 		
 	public static final ReflectedClass playerDataHandlerClass = new ReflectedClass(NameClassFinder.find("PlayerDataHandler"));
 		public static final ReflectedMethod playerDataHandlerGetPlayerData = new ReflectedMethod(playerDataHandlerClass, new ContentFinder.MethodBuilder().withReturnType(playerDataClass.getReferencedClass()).withParameterTypes(String.class).build());
