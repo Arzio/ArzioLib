@@ -21,23 +21,5 @@ public interface PlayerData {
 	
 	public InventoryCDA getInventory();
 	
-	/* TODO :3
-	public boolean isHandcuffed();
-	
-	public void setHandcuffed(boolean status);
-	
-	public int getHandcuffDamage();
-	
-	public void setHandcuffDamage(int value);
-	
-	public int getWaterLevel();
-	
-	public void setWaterLevel(int amount);
-	
-	public int getBloodLevel();
-	
-	public void setBloodLevel(int amount);
-	*/
-	
 	public void setCanViewNameTags(boolean isPossible);
 }
