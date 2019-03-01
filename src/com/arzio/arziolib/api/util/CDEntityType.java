@@ -66,7 +66,7 @@ public enum CDEntityType {
 		return getTypeOf(entity) == this;
 	}
 	
-	public Entity spawnEntity(World world, Location location) {
+	public Entity spawnEntity(World world, Location location) throws CDAReflectionException{
 		Class<? extends Entity> entityClass = this.asBukkitType().getEntityClass();
 		try {
 			Constructor<?> constructor = entityClass.getDeclaredConstructor(net.minecraft.server.v1_6_R3.World.class);
