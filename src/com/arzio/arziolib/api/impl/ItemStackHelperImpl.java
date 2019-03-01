@@ -10,8 +10,10 @@ import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.ItemStackHelper;
 import com.arzio.arziolib.api.util.CDAttachment;
 import com.arzio.arziolib.api.util.CDAttachmentType;
+import com.arzio.arziolib.api.util.CDSpecialSlot;
 import com.arzio.arziolib.api.util.CauldronUtils;
 import com.arzio.arziolib.api.wrapper.Gun;
+import com.arzio.arziolib.api.wrapper.InventoryCDA;
 
 import net.minecraft.server.v1_6_R3.Item;
 import net.minecraft.server.v1_6_R3.NBTTagCompound;
@@ -27,20 +29,15 @@ public class ItemStackHelperImpl implements ItemStackHelper {
 	}
 	
 	private NBTTagCompound getItemContainerTagCompound(ItemStack stack) {
-		if (stack == null) {
+		NBTTagCompound firstTag = CauldronUtils.getTagCompound(stack);
+		
+		if (firstTag == null) {
 			return null;
 		}
 		
-		NBTTagCompound firstTag = CraftItemStack.asNMSCopy(stack).tag;
-		
-		if (firstTag != null) {
-			for (String invName : STACK_INVENTORY_NAMES) {
-				
-				NBTTagCompound inventoryCompound = firstTag.getCompound(invName);
-				
-				if (inventoryCompound != null) {
-					return inventoryCompound;
-				}
+		for (String invName : STACK_INVENTORY_NAMES) {
+			if (firstTag.hasKey(invName)) {
+				return firstTag.getCompound(invName);
 			}
 		}
 		
@@ -107,7 +104,7 @@ public class ItemStackHelperImpl implements ItemStackHelper {
 	}
 
 	@Override
-	public boolean isContainer(ItemStack stack) {
+	public boolean hasInventory(ItemStack stack) {
 		NBTTagCompound compound = this.getItemContainerTagCompound(stack);
 		return compound != null;
 	}
@@ -131,26 +128,26 @@ public class ItemStackHelperImpl implements ItemStackHelper {
 	}
 
 	@Override
-	public <T, R> Result<R> accessItemInventory(ItemInventoryNavigatorReturnable<R> navigator) {
-		if (this.isContainer(navigator.getItemStack())) {
+	public <T, R> AccessResult<R> accessItemInventory(ItemInventoryNavigator<R> navigator) {
+		if (this.hasInventory(navigator.getItemStack())) {
 			NBTTagCompound inventoryCompound = this.getItemContainerTagCompound(navigator.getItemStack());
+			
 			NBTTagList content = inventoryCompound.getList("content");
 			
 			if (content != null) {
-				
-				int outerMostSlot = -1;
+				int outermostSlot = -1;
 				
 				// Get the outmost slot position from the item collection
 				for (int i = 0; i < content.size(); i++) {
 					NBTTagCompound compound = (NBTTagCompound) content.get(i);
 					byte slot = compound.getByte("slot");
-					if (slot > outerMostSlot) {
-						outerMostSlot = slot;
+					if (slot > outermostSlot) {
+						outermostSlot = slot;
 					}
 				}
 				
 				// Create the temporary inventory
-				int rows = 1 + ((outerMostSlot - 1) / 9);
+				int rows = 1 + ((outermostSlot - 1) / 9);
 				Inventory inventory = Bukkit.createInventory(null, rows * 9);
 				
 				// Load the items into the temporary inventory
@@ -161,7 +158,7 @@ public class ItemStackHelperImpl implements ItemStackHelper {
 				}
 				
 				// Navigate through the temporary inventory
-				R result = navigator.accessAndReturn(inventory);
+				R resultValue = navigator.accessAndReturn(inventory);
 				
 				// After applied, we need to save the inventory in a NEW itemstack
 				NBTTagList itemList = new NBTTagList();
@@ -178,10 +175,29 @@ public class ItemStackHelperImpl implements ItemStackHelper {
 
 				inventoryCompound.set("content", itemList);
 				
-				return new Result<R>(navigator.getItemStack(), result);
+				return new AccessResult<R>(navigator.getItemStack(), resultValue);
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public <T, R> AccessResult<R> accessItemInventory(InventoryCDA inventory, CDSpecialSlot slot, final InventoryNavigator<R> navigator) {
+		
+		ItemStack stack = inventory.getStackInSpecialSlot(slot);
+		
+		AccessResult<R> result = this.accessItemInventory(new ItemInventoryNavigator<R>(stack) {
+
+			@Override
+			public R accessAndReturn(Inventory inventory) {
+				return navigator.accessAndReturn(inventory);
+			}
+			
+		});
+		
+		inventory.setStackInSpecialSlot(slot, result.getStack());
+		
+		return result;
 	}
 
 }

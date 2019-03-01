@@ -4,16 +4,20 @@ import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import com.arzio.arziolib.api.impl.ItemInventoryNavigatorReturnable;
+import com.arzio.arziolib.api.impl.ItemInventoryNavigator;
 import com.arzio.arziolib.api.util.CDAttachment;
 import com.arzio.arziolib.api.util.CDAttachmentType;
+import com.arzio.arziolib.api.util.CDSpecialSlot;
+import com.arzio.arziolib.api.wrapper.InventoryCDA;
 
 
 public interface ItemStackHelper {
 	
-	public boolean isContainer(ItemStack stack);
+	public boolean hasInventory(ItemStack stack);
 	
-	public <T, R> Result<R> accessItemInventory(ItemInventoryNavigatorReturnable<R> applier);
+	public <T, R> AccessResult<R> accessItemInventory(ItemInventoryNavigator<R> navigator);
+	
+	public <T, R> AccessResult<R> accessItemInventory(InventoryCDA inventory, CDSpecialSlot slot, InventoryNavigator<R> navigator);
 	
 	public void setGunAmmo(ItemStack stack, int amount);
 	
@@ -31,12 +35,12 @@ public interface ItemStackHelper {
 		public T accessAndReturn(Inventory inventory);
 	}
 	
-	public static class Result<R> {
+	public static class AccessResult<R> {
 		
 		private R result;
 		private ItemStack stack;
 		
-		public Result(ItemStack stack, R result) {
+		public AccessResult(ItemStack stack, R result) {
 			this.result = result;
 			this.stack = stack;
 		}
