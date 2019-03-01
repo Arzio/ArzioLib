@@ -3,14 +3,19 @@ package com.arzio.arziolib.command;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.util.CDEntityType;
+import com.arzio.arziolib.api.util.CDSpecialSlot;
+import com.arzio.arziolib.api.wrapper.InventoryCDA;
 import com.arzio.arziolib.module.NamedModule;
 
 public class ArzioLibCommand implements CommandExecutor{
@@ -97,6 +102,29 @@ public class ArzioLibCommand implements CommandExecutor{
 				
 				return true;
 			}
+			if (args[0].equalsIgnoreCase("clearspecials") && args.length > 1) {
+				if (!(sender.hasPermission("arziolib.clearspecials"))) {
+					sender.sendMessage("§cYou don't have permission to use this command.");
+					return true;
+				}
+				
+				Player target = Bukkit.getPlayer(args[1]);
+				
+				if (target == null) {
+					sender.sendMessage("§cPlayer not found.");
+					return true;
+				}
+
+				InventoryCDA inventory = ArzioLib.getInstance().getPlayerDataHandler().getPlayerData(target).getInventory();
+				
+				for (CDSpecialSlot slot : CDSpecialSlot.values()) {
+					inventory.setStackInSpecialSlot(slot, new ItemStack(Material.AIR));
+				}
+				
+				sender.sendMessage("§aCleared Special CD Inventory of "+target.getName());
+				
+				return true;
+			}
 		}
 		
 		sender.sendMessage("§aCommands for ArzioLib:");
@@ -104,6 +132,7 @@ public class ArzioLibCommand implements CommandExecutor{
 		sender.sendMessage("§f/arziolib reload <partial module name>§8- §fReloads the module");
 		sender.sendMessage("§f/arziolib clearground §8- §fRemoves corpses and ground items");
 		sender.sendMessage("§f/arziolib clearall §8- §fRemoves every CD entity");
+		sender.sendMessage("§f/arziolib clearspecials <player> §8- §fClears CD inventory");
 		sender.sendMessage(" ");
 		sender.sendMessage("§aMiscellaneous commands:");
 		sender.sendMessage("§f/clothes §8- §fToggles other players clothes for you (FPS+)");
