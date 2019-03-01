@@ -33,25 +33,26 @@ public class InventoryCDAImpl implements InventoryCDA{
 	@Override
 	public void setStackInSpecialSlot(CDSpecialSlot slot, ItemStack item) {
 		try {
-			Player player = playerData.getPlayer();
+			Player player = this.getPlayer();
 			
 			net.minecraft.server.v1_6_R3.ItemStack[] items = CDClasses.inventoryCDAInventory.getValue(
 					CDClasses.playerDataInventoryCDA.getValue(playerData.getPlayerDataInstance()));
 			
 			net.minecraft.server.v1_6_R3.ItemStack oldStack = items[slot.getSlotIndex()];
-			items[slot.getSlotIndex()] = CraftItemStack.asNMSCopy(item);
 			
 			if (slot.isOpenFor(player)) {
 				NBTTagCompound newStackCompound = CauldronUtils.getTagCompound(item);
 				
 				if (newStackCompound != null && oldStack != null && newStackCompound.equals(oldStack.tag)) {
-					return;
+					return; // Do not replace the item if it is the SAME.
 				}
 
 				// Closes the inventory if the Item GUI is being viewed,
 				// AND if the items are NOT equal.
 				player.closeInventory();
 			}
+			
+			items[slot.getSlotIndex()] = CraftItemStack.asNMSCopy(item);
 		} catch (Exception e) {
 			throw new CDAReflectionException(e);
 		}
