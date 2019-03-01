@@ -18,7 +18,16 @@ public enum CDMaterial {
 	HP_SCOPE(9334),
 	TACTICAL_GRIP(9336),
 	BIPOD(9337),
-	SUPPRESSOR(9335);
+	SUPPRESSOR(9335),
+	FLASH_GRENADE(9906),
+	DECOY_GRENADE(9907),
+	SMOKE_GRENADE(9908),
+	FIRE_GRENADE(9909),
+	GRENADE(9910),
+	PIPE_GRENADE(9911),
+	GAS_GRENADE(9912);
+	
+	public static CDMaterial[] GRENADES = new CDMaterial[] { FLASH_GRENADE, DECOY_GRENADE, SMOKE_GRENADE, FIRE_GRENADE, GRENADE, PIPE_GRENADE, GAS_GRENADE };
 
 	private int id;
 	
@@ -34,4 +43,5 @@ public enum CDMaterial {
 	public Material asMaterial() {
 		return Material.getMaterial(this.id);
 	}
+	
 }
