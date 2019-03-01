@@ -46,6 +46,7 @@ import com.arzio.arziolib.module.addon.ModuleAddonKeepEXPAfterDeath;
 import com.arzio.arziolib.module.addon.ModuleAddonProjectileProtectionCompatibility;
 import com.arzio.arziolib.module.addon.ModuleAddonRealSound;
 import com.arzio.arziolib.module.addon.ModuleAddonStackableGrenades;
+import com.arzio.arziolib.module.addon.ModuleAddonStepEmeraldHeal;
 import com.arzio.arziolib.module.addon.ModuleAddonZombieFollowGrenades;
 import com.arzio.arziolib.module.addon.ModuleAddonZombieHearGuns;
 import com.arzio.arziolib.module.core.ModuleCoreBukkitEventsForBases;
@@ -118,6 +119,7 @@ public class ArzioLib extends JavaPlugin {
 		this.moduleManager.registerModule(new ModuleAddonProjectileProtectionCompatibility(this));
 		this.moduleManager.registerModule(new ModuleAddonRealSound(this));
 		this.moduleManager.registerModule(new ModuleAddonStackableGrenades(this));
+		this.moduleManager.registerModule(new ModuleAddonStepEmeraldHeal(this, false));
 		this.moduleManager.registerModule(new ModuleAddonZombieFollowGrenades(this));
 		this.moduleManager.registerModule(new ModuleAddonZombieHearGuns(this));
 		
