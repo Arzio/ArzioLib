@@ -6,8 +6,11 @@ import org.bukkit.inventory.ItemStack;
 
 import com.arzio.arziolib.api.exception.CDAReflectionException;
 import com.arzio.arziolib.api.util.CDSpecialSlot;
+import com.arzio.arziolib.api.util.CauldronUtils;
 import com.arzio.arziolib.api.util.reflection.CDClasses;
 import com.arzio.arziolib.api.wrapper.InventoryCDA;
+
+import net.minecraft.server.v1_6_R3.NBTTagCompound;
 
 public class InventoryCDAImpl implements InventoryCDA{
 	
@@ -33,10 +36,20 @@ public class InventoryCDAImpl implements InventoryCDA{
 			
 			net.minecraft.server.v1_6_R3.ItemStack[] items = CDClasses.inventoryCDAInventory.getValue(
 					CDClasses.playerDataInventoryCDA.getValue(playerData.getPlayerDataInstance()));
+			
+			net.minecraft.server.v1_6_R3.ItemStack oldStack = items[slot.getSlotIndex()];
 			items[slot.getSlotIndex()] = CraftItemStack.asNMSCopy(item);
 			
 			if (slot.isOpenFor(player)) {
-				player.closeInventory(); // Closes the inventory if the Item GUI is being viewed
+				NBTTagCompound newStackCompound = CauldronUtils.getTagCompound(item);
+				
+				if (newStackCompound != null && oldStack != null && newStackCompound.equals(oldStack.tag)) {
+					return;
+				}
+
+				// Closes the inventory if the Item GUI is being viewed,
+				// AND if the items are NOT equal.
+				player.closeInventory();
 			}
 		} catch (Exception e) {
 			throw new CDAReflectionException(e);
