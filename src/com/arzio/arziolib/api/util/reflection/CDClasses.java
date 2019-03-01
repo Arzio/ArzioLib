@@ -53,10 +53,6 @@ public class CDClasses {
 	public static final ReflectedClass craftingDeadMainClass = new ReflectedClass(NameClassFinder.find("CraftingDead", "CDOrigins"));
 		public static final ReflectedField<Object> craftingDeadMainInstanceField = new ReflectedField<>(craftingDeadMainClass, new ContentFinder.FieldBuilder<>().withType(craftingDeadMainClass.getReferencedClass()).build());
 		public static final ReflectedField<Object> craftingDeadMainCommonPlayerTrackerField = new ReflectedField<>(craftingDeadMainClass, new ContentFinder.FieldBuilder<>().withType(commonPlayerTrackerClass.getReferencedClass()).build());
-	
-	public static final ReflectedClass craftingDeadApiClass = new ReflectedClass(NameClassFinder.find("API", "BukkitUtils", "BukkitUtil"));
-		public static final ReflectedMethod craftingDeadApiSetWaterLevelMethod = new ReflectedMethod(craftingDeadApiClass, new ContentFinder.MethodBuilder().withRegexName("increaseWaterLevelsToPlayer").build());
-	
 		
 	public static final ReflectedClass blockBaseCenterClass = new ReflectedClass(NameClassFinder.find("BlockBaseCenter"));
 		public static final ReflectedMethod blockBaseCenterDestroy = new ReflectedMethod(blockBaseCenterClass, new ContentFinder.MethodBuilder().withParameterTypes(new Class<?>[] { net.minecraft.server.v1_6_R3.World.class, Integer.TYPE, Integer.TYPE, Integer.TYPE, CDClasses.entityPlayerClass.getReferencedClass() }).build());
@@ -175,7 +171,7 @@ public class CDClasses {
 		public static Object WATER_LEVELS_DUMMY;
 		static {
 			try {
-				WATER_LEVELS_DUMMY = waterLevelsClass.getClass().getConstructor(playerDataClass.getReferencedClass()).newInstance(null);
+				WATER_LEVELS_DUMMY = waterLevelsClass.getReferencedClass().getDeclaredConstructor(playerDataClass.getReferencedClass()).newInstance(PLAYER_DATA_DUMMY);
 			} catch (Exception e) {
 				Bukkit.getLogger().log(Level.SEVERE, "Failed to get water levels value. This will break some plugins and modules.", e);
 			}
