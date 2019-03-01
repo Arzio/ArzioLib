@@ -31,6 +31,9 @@ public enum CDSpecialSlot {
 	}
 	
 	public boolean isOpenFor(Player player) {
+		if (possibleInventoryTypes == null) {
+			return false;
+		}
 		for (CDInventoryType type : possibleInventoryTypes) {
 			if (type.isOpenFor(player)) {
 				return true;
