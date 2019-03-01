@@ -13,7 +13,8 @@ import com.craftingdead.server.API;
 
 public class PlayerDataImpl implements PlayerData{
 
-	public static final int WATER_LEVEL_RATIO_DIFFERENCE = 20;
+	public static final int MAX_WATER_LEVEL = 36000;
+	public static final int WATER_LEVEL_RATIO_DIFFERENCE = MAX_WATER_LEVEL / 20;
 	private String playerName;
 	private final InventoryCDAImpl inventoryCDA;
 	
@@ -29,8 +30,6 @@ public class PlayerDataImpl implements PlayerData{
 	public Object getPlayerDataInstance() {
 		return CDClasses.playerDataHandlerGetPlayerData.invoke(null, this.playerName);
 	}
-	
-
 	
 	@Override
 	public String getPlayerName() {
@@ -90,7 +89,16 @@ public class PlayerDataImpl implements PlayerData{
 
 	@Override
 	public void setWaterLevel(int amount) {
-		CDClasses.waterLevelsValue.setValue(this.getPlayerDataInstance(), amount * WATER_LEVEL_RATIO_DIFFERENCE);
+		int result = amount * WATER_LEVEL_RATIO_DIFFERENCE;
+		if (result > MAX_WATER_LEVEL) {
+			result = MAX_WATER_LEVEL;
+		}
+		if (result < 0) {
+			result = 0;
+		}
+		
+		CDClasses.waterLevelsValue.setValue(
+			CDClasses.playerDataWaterLevels.getValue(this.getPlayerDataInstance()), result);
 	}
 
 }
