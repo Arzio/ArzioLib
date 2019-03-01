@@ -9,6 +9,7 @@ import com.arzio.arziolib.api.util.CDSpecialSlot;
 import com.arzio.arziolib.api.util.CauldronUtils;
 import com.arzio.arziolib.api.util.reflection.CDClasses;
 import com.arzio.arziolib.api.wrapper.InventoryCDA;
+import com.arzio.arziolib.api.wrapper.PlayerData;
 
 import net.minecraft.server.v1_6_R3.NBTTagCompound;
 
@@ -64,6 +65,16 @@ public class InventoryCDAImpl implements InventoryCDA{
 		} catch (Exception e) {
 			throw new CDAReflectionException(e);
 		}
+	}
+
+	@Override
+	public PlayerData getPlayerData() {
+		return this.playerData;
+	}
+
+	@Override
+	public Player getPlayer() {
+		return this.playerData.getPlayer();
 	}
 
 }

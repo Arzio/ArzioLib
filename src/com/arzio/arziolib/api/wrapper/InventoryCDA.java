@@ -1,5 +1,6 @@
 package com.arzio.arziolib.api.wrapper;
 
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.arzio.arziolib.api.util.CDSpecialSlot;
@@ -26,4 +27,8 @@ public interface InventoryCDA {
 	 * @param player The player
 	 */
 	public void clearSpecialSlots();
+	
+	public PlayerData getPlayerData();
+	
+	public Player getPlayer();
 }
