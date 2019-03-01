@@ -1,11 +1,17 @@
 package com.arzio.arziolib.api.util;
 
+import java.lang.reflect.Constructor;
 import java.util.logging.Level;
 
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.craftbukkit.v1_6_R3.CraftWorld;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 
 import com.arzio.arziolib.ArzioLib;
+import com.arzio.arziolib.api.exception.CDAReflectionException;
 
 /**
  * Enum for CD entity types.
@@ -58,6 +64,21 @@ public enum CDEntityType {
 	
 	public boolean isTypeOf(Entity entity) {
 		return getTypeOf(entity) == this;
+	}
+	
+	public Entity spawnEntity(World world, Location location) {
+		Class<? extends Entity> entityClass = this.asBukkitType().getEntityClass();
+		try {
+			Constructor<?> constructor = entityClass.getConstructor(net.minecraft.server.v1_6_R3.World.class);
+			
+			CraftWorld craftWorld = (CraftWorld) world;
+			net.minecraft.server.v1_6_R3.Entity entity = (net.minecraft.server.v1_6_R3.Entity) constructor.newInstance(craftWorld.getHandle());
+			
+			craftWorld.getHandle().addEntity(entity, SpawnReason.CUSTOM);
+			return entity.getBukkitEntity();
+		} catch (Exception e) {
+			throw new CDAReflectionException("Failed to spawn a custom entity", e);
+		}
 	}
 	
 	public static CDEntityType getTypeOf(Entity entity) {
