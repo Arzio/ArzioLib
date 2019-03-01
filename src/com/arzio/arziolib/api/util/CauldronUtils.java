@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_6_R3.inventory.CraftInventory;
 import org.bukkit.craftbukkit.v1_6_R3.inventory.CraftItemStack;
@@ -29,6 +30,10 @@ public class CauldronUtils {
 		}
 		
 		return resultStack.tag;
+	}
+	
+	public static boolean isPluginLoaded(String pluginName) {
+		return Bukkit.getPluginManager().getPlugin(pluginName) != null;
 	}
 	
 	public static net.minecraft.server.v1_6_R3.ItemStack getNMSStack(ItemStack stack){
