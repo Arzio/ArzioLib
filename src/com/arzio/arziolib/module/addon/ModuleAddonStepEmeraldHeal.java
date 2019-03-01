@@ -14,14 +14,15 @@ import com.arzio.arziolib.module.ListenerModule;
 
 public class ModuleAddonStepEmeraldHeal extends ListenerModule {
 	
-	private PlayerDataHandler playerDataHandler;
+	private final PlayerDataHandler playerDataHandler;
 	
 	public ModuleAddonStepEmeraldHeal(ArzioLib plugin, boolean defaultState) {
 		super(plugin, defaultState);
+		this.playerDataHandler = plugin.getPlayerDataHandler();
 	}
 	
 	@EventHandler(ignoreCancelled = true)
-	public void onDeath(PlayerMoveEvent event) {
+	public void onWalkIntoEmerald(PlayerMoveEvent event) {
 		if (event.getTo().getBlock().getRelative(BlockFace.DOWN).getType() != Material.EMERALD_BLOCK) {
 			return;
 		}
