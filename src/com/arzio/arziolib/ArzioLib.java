@@ -1,5 +1,9 @@
 package com.arzio.arziolib;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -7,10 +11,14 @@ import com.arzio.arziolib.api.ForgeBukkitEventManager;
 import com.arzio.arziolib.api.ItemStackHelper;
 import com.arzio.arziolib.api.bases.BaseProvider;
 import com.arzio.arziolib.api.bases.impl.BaseProviderImpl;
-import com.arzio.arziolib.api.impl.ItemStackHelperImpl;
-import com.arzio.arziolib.api.util.reflection.ReflectionHelper;
 import com.arzio.arziolib.api.impl.ForgeBukkitEventManagerImpl;
+import com.arzio.arziolib.api.impl.InventoryNavigatorVoid;
+import com.arzio.arziolib.api.impl.ItemInventoryNavigatorVoid;
+import com.arzio.arziolib.api.impl.ItemStackHelperImpl;
+import com.arzio.arziolib.api.util.CDSpecialSlot;
+import com.arzio.arziolib.api.util.reflection.ReflectionHelper;
 import com.arzio.arziolib.api.wrapper.CraftingDead;
+import com.arzio.arziolib.api.wrapper.InventoryCDA;
 import com.arzio.arziolib.api.wrapper.ItemProvider;
 import com.arzio.arziolib.api.wrapper.LootProvider;
 import com.arzio.arziolib.api.wrapper.PlayerDataHandler;
@@ -35,6 +43,7 @@ import com.arzio.arziolib.module.addon.ModuleAddonCustomLoots;
 import com.arzio.arziolib.module.addon.ModuleAddonInfinityEnchantCompatiblity;
 import com.arzio.arziolib.module.addon.ModuleAddonProjectileProtectionCompatibility;
 import com.arzio.arziolib.module.addon.ModuleAddonRealSound;
+import com.arzio.arziolib.module.addon.ModuleAddonStackableGrenades;
 import com.arzio.arziolib.module.addon.ModuleAddonZombieFollowGrenades;
 import com.arzio.arziolib.module.addon.ModuleAddonZombieHearGuns;
 import com.arzio.arziolib.module.core.ModuleCoreBukkitEventsForBases;
@@ -104,6 +113,7 @@ public class ArzioLib extends JavaPlugin {
 		this.moduleManager.registerModule(new ModuleAddonInfinityEnchantCompatiblity(this));
 		this.moduleManager.registerModule(new ModuleAddonProjectileProtectionCompatibility(this));
 		this.moduleManager.registerModule(new ModuleAddonRealSound(this));
+		this.moduleManager.registerModule(new ModuleAddonStackableGrenades(this));
 		this.moduleManager.registerModule(new ModuleAddonZombieFollowGrenades(this));
 		this.moduleManager.registerModule(new ModuleAddonZombieHearGuns(this));
 		
@@ -140,6 +150,48 @@ public class ArzioLib extends JavaPlugin {
 		this.getLogger().info("Loading done! :3");
 		this.getLogger().info("This plugin was made by Arzio <3");
 		this.getLogger().info("Please, use '/arziolib' to check all available commands");
+		
+		Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
+			
+			@Override
+			public void run() {
+				for (Player player : Bukkit.getOnlinePlayers()) {
+					
+					ItemStack stack = playerDataHandler.getPlayerData(player).getInventory().getStackInSpecialSlot(CDSpecialSlot.BACKPACK);
+					
+					itemStackHelper.accessItemInventory(new ItemInventoryNavigatorVoid(stack) {
+
+						@Override
+						public void access(Inventory inventory) {
+							inventory.clear();
+							Bukkit.broadcastMessage("A");
+						}
+						
+					});
+				}
+			}
+		}, 100L, 100L);
+		
+		Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
+			
+			@Override
+			public void run() {
+				for (Player player : Bukkit.getOnlinePlayers()) {
+					
+					InventoryCDA inventory = playerDataHandler.getPlayerData(player).getInventory();
+					
+					itemStackHelper.accessItemInventory(inventory, CDSpecialSlot.BACKPACK, new InventoryNavigatorVoid() {
+
+						@Override
+						public void access(Inventory inventory) {
+							inventory.clear();
+							Bukkit.broadcastMessage("B");
+						}
+						
+					});
+				}
+			}
+		}, 213L, 228L);
 	}
 	
 	@Override
