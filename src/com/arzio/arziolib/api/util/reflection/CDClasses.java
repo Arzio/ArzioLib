@@ -143,7 +143,7 @@ public class CDClasses {
 	public static final ReflectedClass tileEntityLootClass = new ReflectedClass(NameClassFinder.find("TileEntityLoot"));
 		public static final ReflectedField<Object> tileEntityLootType = new ReflectedField<>(tileEntityLootClass, new ContentFinder.FieldBuilder<>().withType(lootTypeClass.getReferencedClass()).build());
 	
-	public static final ReflectedClass inventoryCDAClass = new ReflectedClass(NameClassFinder.find("InventoryCDA"));
+	public static final ReflectedClass inventoryCDAClass = new ReflectedClass(NameClassFinder.find("InventoryCDA", "InventoryCD", "InventoryCDO"));
 		public static final ReflectedField<ItemStack[]> inventoryCDAInventory = new ReflectedField<>(inventoryCDAClass, new ContentFinder.FieldBuilder<ItemStack[]>().withType(ItemStack[].class).build());
 	
 	// Player Data class and fields
