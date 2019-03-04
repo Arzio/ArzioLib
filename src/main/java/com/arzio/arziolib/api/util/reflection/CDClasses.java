@@ -14,6 +14,7 @@ import com.arzio.arziolib.api.util.CDMaterial;
 import com.arzio.arziolib.api.util.reflection.ReflectionHelper.FieldChecker;
 import com.arzio.arziolib.api.util.reflection.finder.ContentFinder;
 import com.arzio.arziolib.api.util.reflection.finder.NameClassFinder;
+import com.craftingdead.server.API;
 
 import net.minecraft.server.v1_6_R3.Item;
 import net.minecraft.server.v1_6_R3.ItemStack;
@@ -26,6 +27,7 @@ public class CDClasses {
 	
 	public static final String LOOT_TYPE_ID_FOR_LOOKUP = "FakeIDForLootType";
 	public static final String LOOT_TYPE_NAME_FOR_LOOKUP = "FakeNameForLootType";
+	public static final String PLAYER_DATA_DUMMY_NAME = "ThisIsADummyPlayerDataObject!";
 	
 	public static ReflectedClass entityPlayerClass;
 	static {
@@ -147,15 +149,20 @@ public class CDClasses {
 		public static final ReflectedField<ItemStack[]> inventoryCDAInventory = new ReflectedField<>(inventoryCDAClass, new ContentFinder.FieldBuilder<ItemStack[]>().withType(ItemStack[].class).build());
 	
 	public static final ReflectedClass waterLevelsClass = new ReflectedClass(NameClassFinder.find("WaterLevels", "WaterLevel"));
-
+	
 	// Player Data class and fields
 	public static final ReflectedClass playerDataClass = new ReflectedClass(NameClassFinder.find("PlayerData"));
+		
+	public static final ReflectedClass playerDataHandlerClass = new ReflectedClass(NameClassFinder.find("PlayerDataHandler"));
+		public static final ReflectedMethod playerDataHandlerGetPlayerData = new ReflectedMethod(playerDataHandlerClass, new ContentFinder.MethodBuilder().withReturnType(playerDataClass.getReferencedClass()).withParameterTypes(String.class).build());
+
+	// ... Continuation of PlayerDataClass
 		public static final ReflectedField<Object> playerDataWaterLevels = new ReflectedField<>(playerDataClass, new ContentFinder.FieldBuilder<>().withType(waterLevelsClass.getReferencedClass()).build());
 		public static final ReflectedMethod playerDataBaseSetLocation = new ReflectedMethod(playerDataClass, new ContentFinder.MethodBuilder().withParameterTypes(int.class, int.class, int.class).build());
 		public static Object PLAYER_DATA_DUMMY;
 		static {
 			try {
-				PLAYER_DATA_DUMMY = playerDataClass.getReferencedClass().getConstructor(String.class).newInstance("ThisIsADummyPlayerDataObject!");
+				PLAYER_DATA_DUMMY = playerDataHandlerGetPlayerData.invoke(null, PLAYER_DATA_DUMMY_NAME);
 				playerDataBaseSetLocation.getReferencedMethod().invoke(PLAYER_DATA_DUMMY, BASE_X_VALUE_FOR_LOOKUP, BASE_Y_VALUE_FOR_LOOKUP, BASE_Z_VALUE_FOR_LOOKUP);
 			} catch (Exception e) {
 				Bukkit.getLogger().log(Level.SEVERE, "Bad news: the base system will not be working properly. Some mod update have broken it.", e);
@@ -167,20 +174,24 @@ public class CDClasses {
 		public static final ReflectedField<Integer> playerDataBaseZField = new ReflectedField<>(playerDataClass, new ContentFinder.FieldBuilder<Integer>().withExactValue(PLAYER_DATA_DUMMY, int.class, BASE_Z_VALUE_FOR_LOOKUP).build());
 		public static final ReflectedField<Object> playerDataInventoryCDA = new ReflectedField<>(playerDataClass, new ContentFinder.FieldBuilder<>().withType(inventoryCDAClass.getReferencedClass()).build());
 	
-	// ... Continuation of the WaterLevels class
-		public static Object WATER_LEVELS_DUMMY;
 		static {
-			try {
-				WATER_LEVELS_DUMMY = waterLevelsClass.getReferencedClass().getDeclaredConstructor(playerDataClass.getReferencedClass()).newInstance(PLAYER_DATA_DUMMY);
-			} catch (Exception e) {
-				Bukkit.getLogger().log(Level.SEVERE, "Failed to get water levels value. This will break some plugins and modules.", e);
-			}
+			// Forces the fake-player-data to have a negative value for the water level stat
+			API.increaseWaterLevelsToPlayer(PLAYER_DATA_DUMMY_NAME, -500);
 		}
-		public static final ReflectedField<Integer> waterLevelsValue = new ReflectedField<>(waterLevelsClass, new ContentFinder.FieldBuilder<>().withExactValue(WATER_LEVELS_DUMMY, int.class, 0).build());
+		
+		public static final ReflectedField<Integer> waterLevelsValue = new ReflectedField<>(waterLevelsClass, new ContentFinder.FieldBuilder<Integer>().withValue(playerDataWaterLevels.getValue(PLAYER_DATA_DUMMY), int.class, new FieldChecker<Integer>() {
+
+			@Override
+			public boolean isCorrect(Integer found, Field field) throws Exception {
+				// Get the field with negative value.
+				// Theoretically, the only negative value for this fake-player-data
+				// will be the current water level value, as we changed it to negative before.
+				return found < 0;
+			}
+		
+		}).build());
 	
 		
-	public static final ReflectedClass playerDataHandlerClass = new ReflectedClass(NameClassFinder.find("PlayerDataHandler"));
-		public static final ReflectedMethod playerDataHandlerGetPlayerData = new ReflectedMethod(playerDataHandlerClass, new ContentFinder.MethodBuilder().withReturnType(playerDataClass.getReferencedClass()).withParameterTypes(String.class).build());
 
 	public static final ReflectedClass packetBaseBaseRemovalClass = new ReflectedClass(NameClassFinder.find("CDAPacketBaseRemoval"));
 	public static final ReflectedClass packetBulletCollisionClientClass = new ReflectedClass(NameClassFinder.find("CDAPacketBulletCollisionClient"));

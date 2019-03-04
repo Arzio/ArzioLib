@@ -65,6 +65,9 @@ public class UserData {
 	}
 	
 	public void setCurrentSoundLevel(float value) {
+		if (value < 0) {
+			value = 0;
+		}
 		this.currentSoundLevel = value;
 	}
 	
