@@ -1,9 +1,6 @@
 package com.arzio.arziolib.api.wrapper.impl;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
-import com.arzio.arziolib.api.exception.CDAReflectionException;
+import com.arzio.arziolib.api.util.CauldronUtils;
 import com.arzio.arziolib.api.util.reflection.CDClasses;
 import com.arzio.arziolib.api.wrapper.CraftingDead;
 
@@ -24,24 +21,13 @@ public class CraftingDeadMainImpl implements CraftingDead{
 				GameRegistry.registerPlayerTracker(this.getPlayerTracker());
 			}
 		} else {
-			this.getForgeTrackers().remove(this.getPlayerTracker());
+			CauldronUtils.getForgePlayerTrackers().remove(this.getPlayerTracker());
 		}
 	}
 
 	@Override
 	public boolean isTrackerRegistered() {
-		return this.getForgeTrackers().contains(this.getPlayerTracker());
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<IPlayerTracker> getForgeTrackers() {
-		try {
-			Field trackersField = GameRegistry.class.getDeclaredField("playerTrackers");
-			trackersField.setAccessible(true);
-			return (List<IPlayerTracker>) trackersField.get(null);
-		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-			throw new CDAReflectionException(e);
-		}
+		return CauldronUtils.getForgePlayerTrackers().contains(this.getPlayerTracker());
 	}
 
 
