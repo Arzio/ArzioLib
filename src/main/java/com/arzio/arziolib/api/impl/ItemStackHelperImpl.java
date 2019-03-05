@@ -28,7 +28,7 @@ public class ItemStackHelperImpl implements ItemStackHelper {
 		return itemById.getClass().equals(item.getClass());
 	}
 	
-	private NBTTagCompound getItemContainerTagCompound(ItemStack stack) {
+	public NBTTagCompound getItemContainerTagCompound(ItemStack stack) {
 		NBTTagCompound firstTag = CauldronUtils.getTagCompound(stack);
 		
 		if (firstTag == null) {
@@ -44,7 +44,7 @@ public class ItemStackHelperImpl implements ItemStackHelper {
 		return null;
 	}
 	
-	private NBTTagCompound getGunTagCompound(ItemStack stack) {
+	public NBTTagCompound getGunTagCompound(ItemStack stack) {
 		Gun gun = ArzioLib.getInstance().getItemProvider().getStackAs(Gun.class, stack);
 		
 		if (gun == null) {
