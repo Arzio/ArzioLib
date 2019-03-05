@@ -98,7 +98,7 @@ public class UserData {
 	}
 	
 	public void removeFlag(int flag) {
-		this.playerFlags ^= flag;
+		this.playerFlags &= ~flag;
 	}
 	
 	public void addFlag(int flag) {
