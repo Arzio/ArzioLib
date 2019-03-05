@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_6_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_6_R3.inventory.CraftInventory;
 import org.bukkit.craftbukkit.v1_6_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.Inventory;
@@ -21,6 +22,10 @@ import net.minecraft.server.v1_6_R3.NBTTagCompound;
 public class CauldronUtils {
 
 	private static Field handleField = null;
+	
+	public static Entity getNMSEntity(org.bukkit.entity.Entity entity) {
+		return ((CraftEntity) entity).getHandle();
+	}
 	
 	public static NBTTagCompound getTagCompound(ItemStack stack) {
 		net.minecraft.server.v1_6_R3.ItemStack resultStack = getNMSStack(stack);
