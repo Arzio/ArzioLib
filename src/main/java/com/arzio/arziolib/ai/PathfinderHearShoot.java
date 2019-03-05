@@ -2,6 +2,7 @@ package com.arzio.arziolib.ai;
 
 import java.util.List;
 
+import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.config.UserData;
 
 import net.minecraft.server.v1_6_R3.EntityCreature;
@@ -16,25 +17,30 @@ public class PathfinderHearShoot extends PathfinderGoal {
 	private double range = 50D;
 	private EntityLiving targetEntity;
 	private EntityInsentient holder;
+	private final ArzioLib plugin;
 
-	public PathfinderHearShoot(EntityCreature entitycreature) {
+	public PathfinderHearShoot(ArzioLib plugin, EntityCreature entitycreature) {
+		this.plugin = plugin;
 		this.holder = entitycreature;
 	}
 
 	public boolean a() {
-		@SuppressWarnings("unchecked")
-		List<EntityPlayer> list = this.holder.world.a(EntityPlayer.class,this.holder.boundingBox.grow(this.range, this.range, this.range));
-		if (!list.isEmpty()) {
-			for (EntityPlayer player : list) {
-				int distance = (int) this.holder.d(player);
+		if (plugin.isEnabled()) {
+			@SuppressWarnings("unchecked")
+			List<EntityPlayer> list = this.holder.world.a(EntityPlayer.class,this.holder.boundingBox.grow(this.range, this.range, this.range));
+			if (!list.isEmpty()) {
+				for (EntityPlayer player : list) {
+					int distance = (int) this.holder.d(player);
 
-				UserData data = UserData.getFrom(player.getName());
-				if (data.getCurrentSoundLevel() >= distance) {
-					this.targetEntity = player;
-					return true;
+					UserData data = UserData.getFrom(player.getName());
+					if (data.getCurrentSoundLevel() >= distance) {
+						this.targetEntity = player;
+						return true;
+					}
 				}
 			}
 		}
+		
 		return false;
 	}
 

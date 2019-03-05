@@ -60,7 +60,7 @@ public class ModuleAddonZombieHearGuns extends ListenerModule{
 		for (CDEntityType type : CDEntityType.getZombieTypes()) {
 			if (type.isTypeOf(entity)) {
 				EntityCreature creature = ((CraftCreature) event.getEntity()).getHandle();
-				EntityUtil.getTargetSelector(creature).a(2, new PathfinderHearShoot(creature));
+				EntityUtil.getTargetSelector(creature).a(2, new PathfinderHearShoot(this.getPlugin(), creature));
 				break;
 			}
 		}
