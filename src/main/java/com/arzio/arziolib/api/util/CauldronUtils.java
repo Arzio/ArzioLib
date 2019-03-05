@@ -12,6 +12,10 @@ import org.bukkit.craftbukkit.v1_6_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import com.arzio.arziolib.api.exception.CDAReflectionException;
+
+import cpw.mods.fml.common.IPlayerTracker;
+import cpw.mods.fml.common.registry.GameRegistry;
 import guava10.com.google.common.primitives.Ints;
 import net.minecraft.server.v1_6_R3.Entity;
 import net.minecraft.server.v1_6_R3.EntityTypes;
@@ -25,6 +29,17 @@ public class CauldronUtils {
 	
 	public static Entity getNMSEntity(org.bukkit.entity.Entity entity) {
 		return ((CraftEntity) entity).getHandle();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static List<IPlayerTracker> getForgePlayerTrackers() {
+		try {
+			Field trackersField = GameRegistry.class.getDeclaredField("playerTrackers");
+			trackersField.setAccessible(true);
+			return (List<IPlayerTracker>) trackersField.get(null);
+		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+			throw new CDAReflectionException(e);
+		}
 	}
 	
 	public static NBTTagCompound getTagCompound(ItemStack stack) {
