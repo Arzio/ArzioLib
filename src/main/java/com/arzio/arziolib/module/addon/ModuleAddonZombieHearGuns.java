@@ -12,11 +12,11 @@ import org.bukkit.scheduler.BukkitTask;
 import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.ai.PathfinderHearShoot;
 import com.arzio.arziolib.api.event.packet.CDGunTriggerEvent;
+import com.arzio.arziolib.api.util.CDAttachmentType;
 import com.arzio.arziolib.api.util.CDEntityType;
 import com.arzio.arziolib.api.util.EntityUtil;
 import com.arzio.arziolib.api.wrapper.Gun;
 import com.arzio.arziolib.config.UserData;
-import com.arzio.arziolib.config.UserDataProvider;
 import com.arzio.arziolib.module.ListenerModule;
 
 import net.minecraft.server.v1_6_R3.EntityCreature;
@@ -70,9 +70,15 @@ public class ModuleAddonZombieHearGuns extends ListenerModule{
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onFire(CDGunTriggerEvent event) {
 		
-		Gun gun = ArzioLib.getInstance().getItemProvider().getStackAs(Gun.class, event.getPlayer().getItemInHand());
+		Gun gun = this.getPlugin().getItemProvider().getStackAs(Gun.class, event.getPlayer().getItemInHand());
 		
 		if (!gun.isFireBased()) {
+			return;
+		}
+		
+		boolean hasSilencer = this.getPlugin().getItemStackHelper().hasAttachment(event.getPlayer().getItemInHand(), CDAttachmentType.MUZZLE);
+		
+		if (hasSilencer) {
 			return;
 		}
 		
@@ -82,7 +88,10 @@ public class ModuleAddonZombieHearGuns extends ListenerModule{
 			soundLevel = 2.0F;
 		}
 		
-		UserData data = UserDataProvider.getInstance().getUserData(event.getPlayer());
+		// Increases the sound level of the gun by 30 times.
+		soundLevel *= 30F;
+		
+		UserData data = UserData.getFrom(event.getPlayer());
 		if (soundLevel > data.getCurrentSoundLevel()) {
 			data.setCurrentSoundLevel(soundLevel);
 		}
