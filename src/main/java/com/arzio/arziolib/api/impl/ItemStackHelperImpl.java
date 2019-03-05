@@ -48,7 +48,7 @@ public class ItemStackHelperImpl implements ItemStackHelper {
 		Gun gun = ArzioLib.getInstance().getItemProvider().getStackAs(Gun.class, stack);
 		
 		if (gun == null) {
-			return null; // Returns null if it is not a Gun
+			return null; // Returns null if its not a Gun
 		}
 		
 		NBTTagCompound compound = CauldronUtils.getTagCompound(stack);
@@ -100,7 +100,12 @@ public class ItemStackHelperImpl implements ItemStackHelper {
 			return;
 		}
 		
-		compound.setInt("attachmentSlot"+type.getId(), attach.getId());
+		int id = 0;
+		if (attach != null) {
+			id = attach.getId();
+		}
+		
+		compound.setInt("attachmentSlot"+type.getId(), id);
 	}
 
 	@Override
