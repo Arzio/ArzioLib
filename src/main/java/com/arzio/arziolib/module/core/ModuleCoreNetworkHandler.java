@@ -27,7 +27,7 @@ import net.minecraft.server.v1_6_R3.Packet250CustomPayload;
 
 public class ModuleCoreNetworkHandler extends NamedModule implements IPacketHandler{
 
-	private List<IPacketHandler> serverHandlers = new ArrayList<>();
+	private List<IPacketHandler> wrappedHandlers = new ArrayList<>();
 	private final PacketAdapter adapter;
 	private Method getMethod = null;
 	private Method removeAllMethod = null;
@@ -93,10 +93,10 @@ public class ModuleCoreNetworkHandler extends NamedModule implements IPacketHand
 	}
 	
 	private void injectWrapper() throws Exception {
+		wrappedHandlers.clear();
 		@SuppressWarnings("unchecked")
 		Collection<IPacketHandler> handlers = (Collection<IPacketHandler>) getMethod.invoke(serverPacketHandlers, ArzioLib.MOD_NETWORK_ID);
-		serverHandlers.clear();
-		serverHandlers.addAll(handlers);
+		wrappedHandlers.addAll(handlers);
 		
 		removeAllMethod.invoke(serverPacketHandlers, ArzioLib.MOD_NETWORK_ID);
 		putMethod.invoke(serverPacketHandlers, ArzioLib.MOD_NETWORK_ID, this);
@@ -104,7 +104,14 @@ public class ModuleCoreNetworkHandler extends NamedModule implements IPacketHand
 	
 	private void removeWrapper() throws Exception {
 		removeAllMethod.invoke(serverPacketHandlers, ArzioLib.MOD_NETWORK_ID);
-		putMethod.invoke(serverPacketHandlers, ArzioLib.MOD_NETWORK_ID, serverHandlers);
+		
+		// As the putMethod is from a Multimap, those put calls will not replace
+		// the existing value in the MOD_NETWORK key.
+		for (IPacketHandler handler : wrappedHandlers) {
+			putMethod.invoke(serverPacketHandlers, ArzioLib.MOD_NETWORK_ID, handler);
+		}
+		
+		wrappedHandlers.clear();
 	}
 	
 	@Override
@@ -125,7 +132,7 @@ public class ModuleCoreNetworkHandler extends NamedModule implements IPacketHand
 		}
 		
 		// Calls the wrapped (children) packet handlers, including the mod's one
-		for (IPacketHandler packetHandler : serverHandlers) {
+		for (IPacketHandler packetHandler : wrappedHandlers) {
 			packetHandler.onPacketData(manager, packet, player);
 		}
 	}
