@@ -217,7 +217,8 @@ public class CDClasses {
 	public static final ReflectedClass containerVendingMachineClass = new ReflectedClass(NameClassFinder.find("ContainerVendingMachine"));
 	public static final ReflectedClass containerInventoryCDAClass = new ReflectedClass(NameClassFinder.find("ContainerInventoryCDA"));
 	
-	
+	public static final ReflectedClass itemClothingClass = new ReflectedClass(NameClassFinder.find("ItemClothing"));
+		public static final ReflectedField<Integer> itemClothingProtectionLevel = new ReflectedField<>(itemClothingClass, new ContentFinder.FieldBuilder<Integer>().withExactValue(Item.byId[CDMaterial.SPETSNAZ_CLOTHING.getId()], int.class, 3).build());
 	
 	public static final ReflectedClass networkManagerClass = new ReflectedClass(NameClassFinder.find("NetworkManager"));
 		public static final ReflectedMethod networkManagerGetPacketIdFromClass = new ReflectedMethod(networkManagerClass, new ContentFinder.MethodBuilder().withReturnType(int.class).withParameterTypes(Class.class).build());
