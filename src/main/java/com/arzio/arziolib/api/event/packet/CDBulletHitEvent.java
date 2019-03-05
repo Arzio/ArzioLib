@@ -23,7 +23,7 @@ public class CDBulletHitEvent extends GunEvent implements PostEvent {
 	private boolean isHeadshot;
 	private Block blockHit;
 	private Location exactHitLocation;
-	private boolean spendAmmo = false;
+	private boolean spendAmmo = true;
 	
 	public CDBulletHitEvent(Player shooter, Gun gun, Entity entityHit, boolean isHeadshot, CDPacketDataWrapper dataWrapper) {
 		super(shooter, gun, dataWrapper);
