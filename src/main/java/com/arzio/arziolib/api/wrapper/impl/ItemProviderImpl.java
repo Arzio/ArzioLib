@@ -54,6 +54,8 @@ public class ItemProviderImpl implements ItemProvider {
 				item = new GunImpl(material);
 			} else if (isMaterialFromClass(material, CDClasses.itemMagazineClass.getReferencedClass())) {
 				item = new MagazineImpl(material);
+			} else if (isMaterialFromClass(material, CDClasses.itemClothingClass.getReferencedClass())) {
+				item = new ClothingImpl(material);
 			} else {
 				item = new CDItemImpl(material);
 			}
