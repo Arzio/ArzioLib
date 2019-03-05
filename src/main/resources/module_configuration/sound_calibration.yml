@@ -95,7 +95,7 @@ guns:
             max: 0.25
             min: 0.045
             range: 80
-    magnum:
+    44magnum:
         normal:
             max: 0.25
             min: 0.045
