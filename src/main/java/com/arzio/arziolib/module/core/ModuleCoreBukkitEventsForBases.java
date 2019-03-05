@@ -5,9 +5,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 
 import com.arzio.arziolib.ArzioLib;
-import com.arzio.arziolib.api.bases.Base;
-import com.arzio.arziolib.api.bases.BaseProvider;
+import com.arzio.arziolib.api.BaseProvider;
 import com.arzio.arziolib.api.event.packet.CDRequestBaseDestroyEvent;
+import com.arzio.arziolib.api.wrapper.Base;
 import com.arzio.arziolib.module.ListenerModule;
 
 public class ModuleCoreBukkitEventsForBases extends ListenerModule{

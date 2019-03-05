@@ -4,7 +4,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import com.arzio.arziolib.api.bases.Base;
+import com.arzio.arziolib.api.wrapper.Base;
 
 public class CDBaseDestroyEvent extends Event implements Cancellable{
 

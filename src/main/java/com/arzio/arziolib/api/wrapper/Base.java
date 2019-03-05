@@ -1,4 +1,4 @@
-package com.arzio.arziolib.api.bases;
+package com.arzio.arziolib.api.wrapper;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;

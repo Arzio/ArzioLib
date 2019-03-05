@@ -12,7 +12,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
 import com.arzio.arziolib.ArzioLib;
-import com.arzio.arziolib.api.bases.Base;
 import com.arzio.arziolib.api.event.PostEvent;
 import com.arzio.arziolib.api.event.handler.CDPacketReceivedEvent;
 import com.arzio.arziolib.api.event.handler.CDPacketSentEvent;
@@ -29,6 +28,7 @@ import com.arzio.arziolib.api.event.packet.CDSwapGunEvent;
 import com.arzio.arziolib.api.event.packet.PayloadPacketEvent;
 import com.arzio.arziolib.api.util.CDPacketDataWrapper;
 import com.arzio.arziolib.api.util.CDPacketType;
+import com.arzio.arziolib.api.wrapper.Base;
 import com.arzio.arziolib.api.wrapper.Gun;
 import com.arzio.arziolib.module.ListenerModule;
 

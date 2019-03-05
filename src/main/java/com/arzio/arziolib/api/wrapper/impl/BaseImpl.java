@@ -1,4 +1,4 @@
-package com.arzio.arziolib.api.bases.impl;
+package com.arzio.arziolib.api.wrapper.impl;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -7,11 +7,11 @@ import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_6_R3.CraftWorld;
 import org.bukkit.entity.Player;
 
-import com.arzio.arziolib.api.bases.Base;
 import com.arzio.arziolib.api.event.CDBaseDestroyEvent;
 import com.arzio.arziolib.api.util.CDBaseMaterial;
 import com.arzio.arziolib.api.util.TileEntityUtils;
 import com.arzio.arziolib.api.util.reflection.CDClasses;
+import com.arzio.arziolib.api.wrapper.Base;
 
 import net.minecraft.server.v1_6_R3.NBTTagCompound;
 

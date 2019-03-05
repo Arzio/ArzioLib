@@ -1,4 +1,4 @@
-package com.arzio.arziolib.api.bases.impl;
+package com.arzio.arziolib.api.impl;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -14,11 +14,12 @@ import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 
 import com.arzio.arziolib.ArzioLib;
-import com.arzio.arziolib.api.bases.Base;
-import com.arzio.arziolib.api.bases.BaseProvider;
+import com.arzio.arziolib.api.BaseProvider;
 import com.arzio.arziolib.api.event.CDBaseLoadEvent;
 import com.arzio.arziolib.api.util.CDBaseMaterial;
+import com.arzio.arziolib.api.wrapper.Base;
 import com.arzio.arziolib.api.wrapper.PlayerData;
+import com.arzio.arziolib.api.wrapper.impl.BaseImpl;
 
 public class BaseProviderImpl implements BaseProvider{
 

@@ -3,10 +3,10 @@ package com.arzio.arziolib;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.arzio.arziolib.api.BaseProvider;
 import com.arzio.arziolib.api.ForgeBukkitEventManager;
 import com.arzio.arziolib.api.ItemStackHelper;
-import com.arzio.arziolib.api.bases.BaseProvider;
-import com.arzio.arziolib.api.bases.impl.BaseProviderImpl;
+import com.arzio.arziolib.api.impl.BaseProviderImpl;
 import com.arzio.arziolib.api.impl.ForgeBukkitEventManagerImpl;
 import com.arzio.arziolib.api.impl.ItemStackHelperImpl;
 import com.arzio.arziolib.api.util.CauldronUtils;

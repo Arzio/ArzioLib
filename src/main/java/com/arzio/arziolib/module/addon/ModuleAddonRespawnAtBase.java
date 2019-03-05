@@ -5,7 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import com.arzio.arziolib.ArzioLib;
-import com.arzio.arziolib.api.bases.BaseProvider;
+import com.arzio.arziolib.api.BaseProvider;
 import com.arzio.arziolib.module.ListenerModule;
 
 public class ModuleAddonRespawnAtBase extends ListenerModule {

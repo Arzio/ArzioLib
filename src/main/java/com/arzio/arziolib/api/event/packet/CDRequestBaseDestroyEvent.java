@@ -3,8 +3,8 @@ package com.arzio.arziolib.api.event.packet;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
-import com.arzio.arziolib.api.bases.Base;
 import com.arzio.arziolib.api.util.CDPacketDataWrapper;
+import com.arzio.arziolib.api.wrapper.Base;
 
 public class CDRequestBaseDestroyEvent extends PayloadPacketEvent{
 

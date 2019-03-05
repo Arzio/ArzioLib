@@ -1,4 +1,4 @@
-package com.arzio.arziolib.api.bases;
+package com.arzio.arziolib.api;
 
 import java.util.Set;
 
@@ -7,6 +7,8 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
+
+import com.arzio.arziolib.api.wrapper.Base;
 
 public interface BaseProvider {
 
