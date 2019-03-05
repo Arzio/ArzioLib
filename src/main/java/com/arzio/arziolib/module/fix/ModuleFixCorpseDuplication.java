@@ -1,6 +1,5 @@
 package com.arzio.arziolib.module.fix;
 
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 
 import com.arzio.arziolib.ArzioLib;
@@ -27,29 +26,17 @@ public class ModuleFixCorpseDuplication extends ListenerModule{
 	public void onEnable() {
 		super.onEnable();
 		
-		Bukkit.getScheduler().runTaskLater(this.getPlugin(), new Runnable() {
-			
-			@Override
-			public void run() {
-				getPlugin().getCraftingDeadMain().setTrackerEnabled(false);
-			}
-			
-		}, 1L);
-		
+		getPlugin().getCraftingDeadMain().setTrackerEnabled(false);
 	}
 
 	@Override
 	public void onDisable() {
 		super.onDisable();
 		
-		Bukkit.getScheduler().runTaskLater(this.getPlugin(), new Runnable() {
-			
-			@Override
-			public void run() {
-				getPlugin().getCraftingDeadMain().setTrackerEnabled(true);
-			}
-			
-		}, 1L);
+		// Only disable this module if the plugin IS NOT being disabled
+		if (this.getPlugin().isEnabled()) {
+			getPlugin().getCraftingDeadMain().setTrackerEnabled(true);
+		}
 
 	}
 
