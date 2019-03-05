@@ -59,7 +59,7 @@ public class ModuleAddonCustomLoots extends NamedModule{
 			});
 			
 		}
-		logger.log(Level.INFO, "Loaded a total of "+amount.get()+" loot chances.");
+		logger.log(Level.INFO, "Loaded a total of "+amount.get()+" loot chances. If you want to reset the loot chances, delete the "+yml.getFile().getName()+" file and reload the module.");
 	}
 
 	@Override
