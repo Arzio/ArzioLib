@@ -29,7 +29,8 @@ public class MiscListener implements ForgeListener{
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onAdminJoin(PlayerJoinEvent event) {
-		if (event.getPlayer().isOp()){
+		// As some servers does not uses OP, we check for any common permission
+		if (event.getPlayer().isOp() || event.getPlayer().hasPermission("essentials.gamemode")){
 			final Player player = event.getPlayer();
 			
 			CountdownTimer timer = new CountdownTimer(ArzioLib.getInstance(), 5L, new CountdownTimer.TimeCallback() {
