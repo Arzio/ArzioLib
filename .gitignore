@@ -4,8 +4,8 @@
 # build folder
 /build/
 
-# libs folder
-/libs/**
+# dependencies folder
+/dependencies/**
 
 # Compiled class file
 *.class
@@ -59,7 +59,6 @@ hs_err_pid*
 
 # Gradle files
 .gradle
-*.properties
 
 # Ignore Gradle GUI config
 gradle-app.setting

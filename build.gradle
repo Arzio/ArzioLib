@@ -1,44 +1,55 @@
-apply plugin: 'java'
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'de.undercouch:gradle-download-task:3.4.3'
+    }
+}
 
-// Version of the plugin
-version '1.3.3'
+apply plugin: 'java'
+apply plugin: 'de.undercouch.download'
 
 // This project MUST be compiled with Java 1.7
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
-void downloadFile(String fileName, String url){
-	if (!file('libs/'+fileName).exists()) {
-		println 'Downloading dependency from URL: '+fileName
-		ant.get(src: url, dest: new File('libs/'+fileName))
-	}
+task deleteMod(type: Delete){
+	delete downloads_folder+'/CraftingDeadMod.zip'
 }
 
-task downloadJars() {
-	downloadFile('WorldGuard-5.8.jar', 'https://dev.bukkit.org/projects/worldguard/files/719257/download')
-	downloadFile('AuthMe-3.1.jar', 'https://dev.bukkit.org/projects/authme-reloaded/files/755043/download')
-	downloadFile('PlotMe-0.13b.jar', 'https://dev.bukkit.org/projects/plotme/files/707659/download')
-	downloadFile('WGCustomFlags-1.6.zip', 'https://dev.bukkit.org/projects/worldguard-custom-flags/files/720514/download')
-	downloadFile('ProtocolLib-3.3.1.jar', 'https://dev.bukkit.org/projects/protocollib/files/785673/download')
-	downloadFile('WorldEdit-5.5.8.jar', 'https://dev.bukkit.org/projects/worldedit/files/739931/download')
-	downloadFile('craftbukkit-1.6.4.jar', 'https://cdn.getbukkit.org/craftbukkit/craftbukkit-1.6.4-R2.0.jar')
-	downloadFile('cauldron-1.6.4-1.965.21.204-server.jar', 'https://minecraft.maeyanie.com/cauldron/cauldron-1.6.4-1.965.21.204-server.jar')
-	downloadFile('asm-all-4.1.jar', 'http://central.maven.org/maven2/org/ow2/asm/asm-all/4.1/asm-all-4.1.jar')
-	downloadFile('CraftingDead.zip', 'http://dl.brad.ac/uploads/craftingdead/reborn/modpack/o-version-125B12.zip')
+task downloadMod(type: Download){
+	src modpack_url
+	dest new File(downloads_folder, 'CraftingDeadMod.zip')
+	overwrite false
 }
 
-task unzip(type: Copy) {
-	fileTree(dir: 'libs').include('*.zip').each { zipFile ->
-      println "Unzipping $zipFile.name"
-      from zipTree(zipFile)
-      destinationDir = file('libs')
+task downloadDependencies(dependsOn: downloadMod, type: Download) {
+    src ([
+    	'https://dev.bukkit.org/projects/authme-reloaded/files/755043/download',
+    	'https://dev.bukkit.org/projects/worldguard/files/719257/download',
+    	'https://dev.bukkit.org/projects/plotme/files/707659/download',
+    	'https://dev.bukkit.org/projects/protocollib/files/785673/download',
+    	'https://dev.bukkit.org/projects/worldedit/files/739931/download',
+    	'https://cdn.getbukkit.org/craftbukkit/craftbukkit-1.6.4-R2.0.jar',
+    	'https://minecraft.maeyanie.com/cauldron/cauldron-1.6.4-1.965.21.204-server.jar',
+    	'http://central.maven.org/maven2/org/ow2/asm/asm-all/4.1/asm-all-4.1.jar',
+    	'https://dev.bukkit.org/projects/worldguard-custom-flags/files/720514/download'
+    ])
+    dest downloads_folder
+    overwrite false
+}
+
+task prepareDependencies(dependsOn: downloadDependencies, type: Copy) {
+	fileTree(dir: downloads_folder).include('*.zip').each { zipFile ->
+		println "Unzipping $zipFile.name"
+ 		from zipTree(zipFile)
+ 	 	into downloads_folder
 	}
 }
 
 compileJava {
-	dependsOn downloadJars
-	dependsOn unzip
-	unzip.mustRunAfter downloadJars
+	dependsOn prepareDependencies
 }
 
 repositories {
@@ -46,8 +57,8 @@ repositories {
 }
 
 dependencies {
-	compile fileTree(dir: "/libs", includes: ['*.jar'])
-	compile fileTree(dir: "/libs/mods", includes: ['*.jar'])
+	compile fileTree(dir: downloads_folder, includes: ['*.jar'])
+	compile fileTree(dir: downloads_folder+'/mods', includes: ['*.jar'])
 }
 
 processResources {
