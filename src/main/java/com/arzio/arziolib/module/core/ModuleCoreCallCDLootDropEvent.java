@@ -1,6 +1,7 @@
 package com.arzio.arziolib.module.core;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
@@ -15,6 +16,7 @@ import com.arzio.arziolib.module.ListenerModule;
 
 public class ModuleCoreCallCDLootDropEvent extends ListenerModule{
 
+	private Player lastPlayer = null;
 	private boolean willLootItemDrop = false;
 	
 	public ModuleCoreCallCDLootDropEvent(ArzioLib plugin) {
@@ -24,16 +26,18 @@ public class ModuleCoreCallCDLootDropEvent extends ListenerModule{
 	@EventHandler(priority=EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
 		if (willLootItemDrop) {
-			willLootItemDrop = false;
 			
 			if (CDEntityType.GROUND_ITEM.isTypeOf(event.getEntity())) {
-				CDLootDropEvent innerEvent = new CDLootDropEvent(event.getEntity());
+				CDLootDropEvent innerEvent = new CDLootDropEvent(this.lastPlayer, event.getEntity());
 				Bukkit.getPluginManager().callEvent(innerEvent);
 				
 				if (innerEvent.isCancelled()) {
 					event.setCancelled(true);
 				}
 			}
+			
+			willLootItemDrop = false;
+			lastPlayer = null;
 		}
 	}
 	
@@ -43,6 +47,7 @@ public class ModuleCoreCallCDLootDropEvent extends ListenerModule{
 			
 			if (CDLootType.getFrom(event.getClickedBlock()) != null) {
 				this.willLootItemDrop = true;
+				this.lastPlayer = event.getPlayer();
 			}
 		}
 	}

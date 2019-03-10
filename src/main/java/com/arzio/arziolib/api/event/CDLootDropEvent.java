@@ -2,6 +2,7 @@ package com.arzio.arziolib.api.event;
 
 import org.bukkit.craftbukkit.v1_6_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityEvent;
@@ -15,9 +16,15 @@ public class CDLootDropEvent extends EntityEvent implements Cancellable{
 
 	private static final HandlerList handlers = new HandlerList();
 	private boolean cancelled = false;
+	private final Player who;
 	
-	public CDLootDropEvent(Entity what) {
+	public CDLootDropEvent(Player who, Entity what) {
 		super(what);
+		this.who = who;
+	}
+	
+	public Player getPlayer() {
+		return this.who;
 	}
 	
 	public ItemStack getStack() {
