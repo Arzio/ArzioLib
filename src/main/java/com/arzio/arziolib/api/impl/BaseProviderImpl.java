@@ -5,7 +5,6 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -15,7 +14,6 @@ import org.bukkit.entity.Player;
 
 import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.BaseProvider;
-import com.arzio.arziolib.api.event.CDBaseLoadEvent;
 import com.arzio.arziolib.api.util.CDBaseMaterial;
 import com.arzio.arziolib.api.wrapper.Base;
 import com.arzio.arziolib.api.wrapper.PlayerData;
@@ -56,9 +54,6 @@ public class BaseProviderImpl implements BaseProvider{
 		if (base == null) {
 			base = new BaseImpl(location);
 			dataInCache.put(location, base);
-			
-			CDBaseLoadEvent event = new CDBaseLoadEvent(base);
-			Bukkit.getPluginManager().callEvent(event);
 		}
 		
 		return base;
