@@ -85,14 +85,24 @@ public enum CDEntityType {
         if (entity == null)
             return null;
         
+        String entityTypeName = entity.getType().name();
+        for (CDEntityType type : CDEntityType.values()) {
+        	if (type.asBukkitType().name().equalsIgnoreCase(entityTypeName)) {
+        		return type;
+        	}
+        }
+        
+        // Entity type not found with a simple search.
+        // We need to search it deeper.
         EntityType bukkitType = EntityUtil.getCompatibleEntityType(entity);
         
         if (bukkitType == null) {
         	return null;
         }
         
+        String bukkitEntityTypeName = bukkitType.name();
         for (CDEntityType type : CDEntityType.values()) {
-        	if (type.asBukkitType() == bukkitType) {
+        	if (type.asBukkitType().name().equalsIgnoreCase(bukkitEntityTypeName)) {
         		return type;
         	}
         }
