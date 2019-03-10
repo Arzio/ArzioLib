@@ -2,6 +2,7 @@ name: ArzioLib
 main: com.arzio.arziolib.ArzioLib
 version: {PROJECT_VERSION}
 author: Arzio
+load: STARTUP
 depend: [ProtocolLib, WorldGuard, WGCustomFlags]
 softdepend: [PlotMe, AuthMe]
 description: Library tools for Crafting Dead servers.
