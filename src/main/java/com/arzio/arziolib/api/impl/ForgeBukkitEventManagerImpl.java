@@ -123,7 +123,7 @@ public class ForgeBukkitEventManagerImpl implements ForgeBukkitEventManager, Lis
 		busIdField.setAccessible(true);
 		int busId = busIdField.getInt(MinecraftForge.EVENT_BUS);
 		
-		ArzioLib.getInstance().getLogger().log(Level.INFO, "Registering new Forge event listener with BusID "+busId);
+		ArzioLib.getInstance().getLogger().log(Level.INFO, "Registering new Forge event listener with BusID "+busId+" with callback for "+event.getMethodCallback().getName());
 		new Event().getListenerList().register(busId, event.getPriority(), event);
 
 		Field listenersField = EventBus.class.getDeclaredField("listeners");
