@@ -29,12 +29,13 @@ public class ModuleFixGrenadeThrowPosition extends ListenerModule{
 		
 		Entity entity = event.getEntity();
 		
+		if (this.lastThrower == null) {
+			return;
+		}
+		
 		for (CDEntityType type : CDEntityType.getGrenadeTypes()) {
 			if (type.isTypeOf(entity)) {
-				Player player = this.lastThrower;
-				
-				entity.teleport(player.getEyeLocation().subtract(0D, 0.2D, 0D));
-				entity.setVelocity(entity.getVelocity().multiply(1.5F));
+				entity.teleport(this.lastThrower.getEyeLocation().subtract(0D, 0.2D, 0D));
 			}
 		}
 		
