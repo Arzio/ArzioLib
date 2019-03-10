@@ -20,10 +20,11 @@ def downloadedFile = { name, url ->
     Object result = file.absolutePath;
     
     if ("${name}".contains(".zip")){
-    	println "Unzipping ${name}"
+    	println "Deleting ${name} cache folder"
     	File destiny = new File("$buildDir/download/${name}-EXTRACTED/");
     	destiny.delete(); // Deletes the extraction cache folder
     	
+    	println "Unzipping ${name}"
     	ant.unzip(src: file, dest: destiny)
     	result = fileTree(dir: destiny, include: "**/*.jar")
     }
