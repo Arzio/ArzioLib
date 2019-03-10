@@ -42,11 +42,11 @@ dependencies {
 	compile downloadedFile('craftbukkit-1.6.4-R2.0.jar', 'https://cdn.getbukkit.org/craftbukkit/craftbukkit-1.6.4-R2.0.jar')
 	compile downloadedFile('cauldron-1.6.4-1.965.21.204-server.jar', 'https://minecraft.maeyanie.com/cauldron/cauldron-1.6.4-1.965.21.204-server.jar')
 	compile downloadedFile('asm-all-4.1.jar', 'http://central.maven.org/maven2/org/ow2/asm/asm-all/4.1/asm-all-4.1.jar')
-	compile downloadedFile('CraftingDead.zip', 'http://dl.brad.ac/uploads/craftingdead/reborn/modpack/o-version-125B12.zip')
+	compile downloadedFile('CraftingDead.zip', modpack_url)
 }
 
 processResources {
-	// Replaces the PROJECT_VERSION tag inside of yml resources by the project version
+    // Replaces the PROJECT_VERSION tag inside of yml resources by the project version
     from('src/main/resources') {
         include '*.yml'
         filter { line ->
