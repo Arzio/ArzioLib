@@ -5,9 +5,9 @@ import org.bukkit.Material;
 import com.arzio.arziolib.api.util.reflection.CDClasses;
 import com.arzio.arziolib.api.wrapper.Ammo;
 
-public class MagazineImpl extends CDItemImpl implements Ammo{
+public class AmmoImpl extends CDItemImpl implements Ammo{
 
-	public MagazineImpl(Material material) {
+	public AmmoImpl(Material material) {
 		super(material);
 	}
 
