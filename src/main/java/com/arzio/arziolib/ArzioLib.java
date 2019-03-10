@@ -44,6 +44,7 @@ import com.arzio.arziolib.module.addon.ModuleAddonZombieFollowGrenades;
 import com.arzio.arziolib.module.addon.ModuleAddonZombieHearGuns;
 import com.arzio.arziolib.module.core.ModuleCoreBukkitEventsForBases;
 import com.arzio.arziolib.module.core.ModuleCoreCDPacketEventCaller;
+import com.arzio.arziolib.module.core.ModuleCoreCallCDLootDropEvent;
 import com.arzio.arziolib.module.core.ModuleCoreCallEntityJoinWorldEvent;
 import com.arzio.arziolib.module.core.ModuleCoreNetworkHandler;
 import com.arzio.arziolib.module.fix.ModuleFixArmorBreaking;
@@ -84,7 +85,10 @@ public class ArzioLib extends JavaPlugin {
 
 	// Forge-Bukkit compatible listener
 	private ForgeBukkitEventManager forgeBukkitEventManager;
-
+	
+	@Override
+	public void onLoad() { }
+	
 	@Override
 	public void onEnable() {
 		instance = this;
@@ -119,6 +123,7 @@ public class ArzioLib extends JavaPlugin {
 		
 		// Core - DO NOT DISABLE THEM UNLESS YOU KNOW YOU ARE DOING
 		this.moduleManager.registerModule(new ModuleCoreBukkitEventsForBases(this, baseProvider));
+		this.moduleManager.registerModule(new ModuleCoreCallCDLootDropEvent(this));
 		this.moduleManager.registerModule(new ModuleCoreCallEntityJoinWorldEvent(this));
 		this.moduleManager.registerModule(new ModuleCoreCDPacketEventCaller(this));
 		this.moduleManager.registerModule(new ModuleCoreNetworkHandler(this));
