@@ -18,6 +18,7 @@ public enum CDLootType {
 	
 	private CDLootType(String id, CDMaterial material) {
 		this.id = id;
+		this.material = material;
 	}
 	
 	public CDMaterial getMaterial() {
