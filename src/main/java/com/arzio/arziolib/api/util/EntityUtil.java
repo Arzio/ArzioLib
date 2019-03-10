@@ -29,7 +29,6 @@ public class EntityUtil {
 				EntityInsentient.class, entity, "field_70714_bg");
 	}
 	
-	@SuppressWarnings("deprecation")
 	public static EntityType getCompatibleEntityType(Entity entity) {
 		return EntityType.fromId(CauldronUtils.getEntityTypeIDfromClass(((CraftEntity) entity).getHandle()));
 	}
