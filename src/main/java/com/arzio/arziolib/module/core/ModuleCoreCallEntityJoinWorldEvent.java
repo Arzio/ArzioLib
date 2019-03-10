@@ -1,15 +1,19 @@
 package com.arzio.arziolib.module.core;
 
+import java.util.ArrayList;
+
 import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_6_R3.CraftWorld;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.world.WorldInitEvent;
 
 import com.arzio.arziolib.ArzioLib;
-import com.arzio.arziolib.api.util.reflection.ReflectionHelper;
+import com.arzio.arziolib.api.event.EntityJoinWorldEvent;
 import com.arzio.arziolib.module.ListenerModule;
 
 import net.minecraft.server.v1_6_R3.Entity;
 import net.minecraft.server.v1_6_R3.World;
-import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 
 public class ModuleCoreCallEntityJoinWorldEvent extends ListenerModule{
 
@@ -17,17 +21,34 @@ public class ModuleCoreCallEntityJoinWorldEvent extends ListenerModule{
 		super(plugin);
 	}
 	
-	@ForgeSubscribe
-	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
-		Entity entity = ReflectionHelper.getValueFromEvent(event, Entity.class);
-		World world = ReflectionHelper.getValueFromEvent(event, World.class);
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onWorldInit(WorldInitEvent event) {
+		CraftWorld craftWorld = (CraftWorld) event.getWorld();
+		World nmsWorld = craftWorld.getHandle();
 		
-		com.arzio.arziolib.api.event.EntityJoinWorldEvent innerEvent = new com.arzio.arziolib.api.event.EntityJoinWorldEvent(entity.getBukkitEntity(), world.getWorld());
+		// Swaps the World's entityList ArrayList with my event-based ArrayList :DD
+		nmsWorld.entityList = new EntityEventArrayList(nmsWorld);
+	}
+	
+	public static class EntityEventArrayList extends ArrayList<Entity> {
+		private static final long serialVersionUID = 6551028671379463300L;
 		
-		Bukkit.getPluginManager().callEvent(innerEvent);
+		private final World nmsWorld;
 		
-		if (innerEvent.isCancelled()) {
-			event.setCanceled(true);
+		public EntityEventArrayList(World nmsWorld) {
+			this.nmsWorld = nmsWorld;
+		}
+		
+		@Override
+		public boolean add(Entity e) {
+			EntityJoinWorldEvent innerEvent = new EntityJoinWorldEvent(e.getBukkitEntity(), nmsWorld.getWorld());
+			Bukkit.getPluginManager().callEvent(innerEvent);
+			
+			if (innerEvent.isCancelled()) {
+				e.die();
+			}
+			
+			return super.add(e);
 		}
 	}
 
