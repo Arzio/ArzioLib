@@ -43,6 +43,7 @@ import com.arzio.arziolib.module.addon.ModuleAddonStackableGrenades;
 import com.arzio.arziolib.module.addon.ModuleAddonStepEmeraldHeal;
 import com.arzio.arziolib.module.addon.ModuleAddonZombieFollowGrenades;
 import com.arzio.arziolib.module.addon.ModuleAddonZombieHearGuns;
+import com.arzio.arziolib.module.addon.ModuleAddonZombieSpawnBlockBlacklist;
 import com.arzio.arziolib.module.core.ModuleCoreBukkitEventsForBases;
 import com.arzio.arziolib.module.core.ModuleCoreCDPacketEventCaller;
 import com.arzio.arziolib.module.core.ModuleCoreCallCDLootDropEvent;
@@ -122,6 +123,7 @@ public class ArzioLib extends JavaPlugin {
 		this.moduleManager.registerModule(new ModuleAddonStepEmeraldHeal(this, false));
 		this.moduleManager.registerModule(new ModuleAddonZombieFollowGrenades(this));
 		this.moduleManager.registerModule(new ModuleAddonZombieHearGuns(this));
+		this.moduleManager.registerModule(new ModuleAddonZombieSpawnBlockBlacklist(this, false));
 		
 		// Core - DO NOT DISABLE THEM UNLESS YOU KNOW YOU ARE DOING
 		this.moduleManager.registerModule(new ModuleCoreBukkitEventsForBases(this, baseProvider));
