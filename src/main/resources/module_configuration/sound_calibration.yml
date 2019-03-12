@@ -13,7 +13,7 @@ guns:
             max: 0.01
             min: 0.01
             range: 1
-    taser:
+    x26taser:
         normal:
             max: 0.01
             min: 0.01
@@ -26,6 +26,15 @@ guns:
         silenced:
             max: 1.35
             min: 0.025
+            range: 50
+    mpt-55:
+        normal:
+            max: 2
+            min: 0.0245
+            range: 100
+        silenced:
+            max: 1
+            min: 0.035
             range: 50
     g18:
         normal:
@@ -129,7 +138,7 @@ guns:
             max: 1.85
             min: 0.045
             range: 70
-    mossberg:
+    mossberg500:
         normal:
             max: 1.85
             min: 0.095
