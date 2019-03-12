@@ -130,6 +130,11 @@ public class ModuleAddonRealSound extends ListenerModule{
 	
 	public static void sendSoundAtEntity(Player player, String sound, double distance, int x, int y,
 			int z, double volumeMax, double pitch, double volumeMin) {
+		
+		if (!player.isValid() || !player.isOnline()) {
+			return;
+		}
+		
 		String s = sound;
 		double d0 = (double) x;
 		double d1 = (double) y;
