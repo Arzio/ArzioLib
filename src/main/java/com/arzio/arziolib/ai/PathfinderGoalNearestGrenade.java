@@ -3,9 +3,10 @@ package com.arzio.arziolib.ai;
 import java.util.List;
 
 import com.arzio.arziolib.api.util.CDEntityType;
+import com.arzio.arziolib.api.util.reflection.CDClasses;
 
+import net.minecraft.server.v1_6_R3.Entity;
 import net.minecraft.server.v1_6_R3.EntityCreature;
-import net.minecraft.server.v1_6_R3.EntityProjectile;
 import net.minecraft.server.v1_6_R3.PathfinderGoal;
 
 public class PathfinderGoalNearestGrenade extends PathfinderGoal {
@@ -16,7 +17,7 @@ public class PathfinderGoalNearestGrenade extends PathfinderGoal {
 	private double e;
 	private double f;
 	private double g;
-	private EntityProjectile h;
+	private Entity h;
 	private boolean j;
 	private boolean l;
 	private boolean m;
@@ -30,19 +31,26 @@ public class PathfinderGoalNearestGrenade extends PathfinderGoal {
 
 	@SuppressWarnings("unchecked")
 	public boolean a() {
-		List<EntityProjectile> list = this.holder.world.a(EntityProjectile.class, this.holder.boundingBox.grow(15, 15, 15));
+		List<Entity> list = this.holder.world.a(CDClasses.entityGrenadeClass.getReferencedClass(), this.holder.boundingBox.grow(15, 15, 15));
+		
 		if (list.isEmpty()) {
 			return false;
 		}
 		
-		EntityProjectile target = list.get(0);
-		this.h = null;
+		Entity grenadeFound = null;
 		
-		for (CDEntityType type : CDEntityType.getGrenadeTypes()) {
-			if (type.isTypeOf(target.getBukkitEntity())) {
-				this.h = target;
+		for (Entity e : list) {
+			if (!CDEntityType.C4.isTypeOf(e.getBukkitEntity())) {
+				grenadeFound = e;
+				break;
 			}
 		}
+		
+		if (grenadeFound == null) {
+			return false;
+		}
+		
+		this.h = grenadeFound;
 		
 		if (this.h == null) {
 			return false;
