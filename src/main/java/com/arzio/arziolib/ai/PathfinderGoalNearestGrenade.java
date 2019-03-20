@@ -2,6 +2,8 @@ package com.arzio.arziolib.ai;
 
 import java.util.List;
 
+import com.arzio.arziolib.api.util.CDEntityType;
+
 import net.minecraft.server.v1_6_R3.EntityCreature;
 import net.minecraft.server.v1_6_R3.EntityProjectile;
 import net.minecraft.server.v1_6_R3.PathfinderGoal;
@@ -32,7 +34,16 @@ public class PathfinderGoalNearestGrenade extends PathfinderGoal {
 		if (list.isEmpty()) {
 			return false;
 		}
-		this.h = list.get(0);
+		
+		EntityProjectile target = list.get(0);
+		this.h = null;
+		
+		for (CDEntityType type : CDEntityType.getGrenadeTypes()) {
+			if (type.isTypeOf(target.getBukkitEntity())) {
+				this.h = target;
+			}
+		}
+		
 		if (this.h == null) {
 			return false;
 		}
