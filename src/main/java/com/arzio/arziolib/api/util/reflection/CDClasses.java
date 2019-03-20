@@ -38,6 +38,8 @@ public class CDClasses {
 		}
 	}
 	
+	public static ReflectedClass entityGrenadeClass = new ReflectedClass(NameClassFinder.find("EntityGrenade"));
+	
 	public static final ReflectedClass blockManagerClass = new ReflectedClass(NameClassFinder.find("BlockManager"));
 		public static final ReflectedField<int[]> blockManagerBaseMaterialIds = new ReflectedField<>(blockManagerClass, new ContentFinder.FieldBuilder<int[]>().withValue(null, int[].class, new FieldChecker<int[]>() {
 
