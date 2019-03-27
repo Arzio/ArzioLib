@@ -26,6 +26,7 @@ public class CDBaseMaterial {
 	public static final CDBaseMaterial WHITE_STONE_BRICK = addMaterial("WHITE_STONE_BRICK", 1250);
 	public static final CDBaseMaterial SAND_BAG = addMaterial("SAND_BAG", 1251);
 	public static final CDBaseMaterial WOODEN_DOOR = addMaterial("WOODEN_DOOR", 64);
+	public static final CDBaseMaterial FORGE = addMaterial("FORGE", 1244);
 	
 	private int id;
 	private String name;
