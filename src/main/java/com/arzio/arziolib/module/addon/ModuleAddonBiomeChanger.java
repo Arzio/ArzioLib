@@ -55,7 +55,7 @@ public class ModuleAddonBiomeChanger extends ListenerModule {
 
 	@Override
 	public String getName() {
-		return "addon-custom-base-materials";
+		return "addon-biome-changer";
 	}
 
 }
