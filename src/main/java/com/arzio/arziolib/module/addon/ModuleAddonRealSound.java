@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 
 import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.event.packet.CDGunTriggerEvent;
@@ -72,7 +73,7 @@ public class ModuleAddonRealSound extends ListenerModule{
 		super.onDisable();
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onTrigger(CDGunTriggerEvent event) {
 		
 		Gun gun = event.getHeldGun();

@@ -2,6 +2,7 @@ package com.arzio.arziolib.module.fix;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 
 import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.event.packet.CDBulletHitEvent;
@@ -19,14 +20,14 @@ public class ModuleFixSniperFastShoot extends ListenerModule{
 		super(plugin);
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOW)
 	public void bulletHitForFastShotFix(CDBulletHitEvent event) {
 		if (this.isAbusingWithSniper(event.getPlayer(), event.getHeldGun(), true)) {
 			event.setCancelled(true);
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOW)
 	public void gunTriggerForFastShotFix(CDGunTriggerEvent event) {
 		if (this.isAbusingWithSniper(event.getPlayer(), event.getHeldGun(), false)) {
 			event.setCancelled(true);
