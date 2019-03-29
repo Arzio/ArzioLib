@@ -8,35 +8,48 @@ import org.bukkit.scheduler.BukkitTask;
 import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.event.packet.CDBulletHitEvent;
 import com.arzio.arziolib.api.event.packet.CDGunTriggerEvent;
+import com.arzio.arziolib.config.YMLFile;
 import com.arzio.arziolib.module.ListenerModule;
 
 public class ModuleFixGunDamageOnServerFreeze extends ListenerModule{
 
 	private BukkitTask task;
-	private long lastTick = -1;
+	private long lastTick = 0L;
 	private long suspendedMillis = 0L;
+	private YMLFile yml;
+	
+	private long minimumFreezeTime;
+	private long bulletSuspensionDuration;
 	
 	public ModuleFixGunDamageOnServerFreeze(ArzioLib plugin) {
 		super(plugin);
+		this.yml = new YMLFile(plugin, "module_configuration/suspend-bullets-on-server-freeze.yml");
 	}
 	
 	@Override
 	public void onEnable() {
 		super.onEnable();
+		
+		yml.reload();
+		
+		this.minimumFreezeTime = yml.getValueWithDefault("minimum-freeze-time-in-millis-until-suspend", 700L);
+		this.bulletSuspensionDuration = yml.getValueWithDefault("bullet-suspension-duration-in-millis", 400L);
+		
+		yml.save();
+		
 		task = Bukkit.getScheduler().runTaskTimer(ArzioLib.getInstance(), new Runnable() {
 			
 			@Override
 			public void run() {
-				recalculateFreezeStatus();
-				
-				long timeNow = System.currentTimeMillis();
-				long differenceBetweenLastTick = timeNow - lastTick;
-				
 				if (suspendedMillis > 0L) {
-					suspendedMillis -= differenceBetweenLastTick;
+					suspendedMillis -= getDifferenceBetweenLastTick();
 				}
-				lastTick = timeNow;
+				
+				recalculateSuspendedMillis();
+				
+				lastTick = System.currentTimeMillis();
 			}
+			
 		}, 1L, 1L);
 	}
 	
@@ -48,38 +61,33 @@ public class ModuleFixGunDamageOnServerFreeze extends ListenerModule{
 		}
 	}
 	
-	private void recalculateFreezeStatus() {
+	private long getDifferenceBetweenLastTick() {
 		long timeNow = System.currentTimeMillis();
-		long differenceBetweenLastTick = timeNow - lastTick;
-		
-		if (differenceBetweenLastTick > 700L) {
-			suspendedMillis = 400L; // Suspends every bullet and gun trigger for more 400 ms
+		long timeDifferenceBetweenLastTick = timeNow - lastTick;
+		return timeDifferenceBetweenLastTick;
+	}
+	
+	private void recalculateSuspendedMillis() {
+		if (getDifferenceBetweenLastTick() > this.minimumFreezeTime) {
+			suspendedMillis = this.bulletSuspensionDuration; // Suspends every bullet and gun trigger for some millis
 		}
 	}
 	
-	private boolean isAbleToFire() {
-		this.recalculateFreezeStatus();
-		return this.suspendedMillis <= 0;
+	public boolean canFire() {
+		this.recalculateSuspendedMillis(); // Bullet packets happens before Bukkit's tick task, so we need to recalculate
+		return 0 >= this.suspendedMillis;
 	}
 	
-	/**
-	 * Fixes the hidden armor durability when receiving bullet damage.
-	 * @param event
-	 */
 	@EventHandler(priority = EventPriority.LOW)
 	public void disableGunTriggerOnFreeze(CDGunTriggerEvent event) {
-		if (!this.isAbleToFire()) {
+		if (!this.canFire()) {
 			event.setCancelled(true);
 		}
 	}
 	
-	/**
-	 * Fixes the hidden armor durability when receiving bullet damage.
-	 * @param event
-	 */
 	@EventHandler(priority = EventPriority.LOW)
 	public void disableBulletHitOnFreeze(CDBulletHitEvent event) {
-		if (!this.isAbleToFire()) {
+		if (!this.canFire()) {
 			event.setCancelled(true);
 		}
 	}
