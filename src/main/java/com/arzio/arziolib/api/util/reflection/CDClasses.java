@@ -2,6 +2,7 @@ package com.arzio.arziolib.api.util.reflection;
 
 import static com.arzio.arziolib.api.util.reflection.ReflectionHelper.getSimpleSourceFileNamesToOriginalClassNames;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -18,6 +19,7 @@ import com.craftingdead.server.API;
 
 import net.minecraft.server.v1_6_R3.Item;
 import net.minecraft.server.v1_6_R3.ItemStack;
+import net.minecraft.server.v1_6_R3.World;
 
 public class CDClasses {
 
@@ -39,6 +41,30 @@ public class CDClasses {
 	}
 	
 	public static ReflectedClass entityGrenadeClass = new ReflectedClass(NameClassFinder.find("EntityGrenade"));
+	
+	public static ReflectedClass entityCorpseClass = new ReflectedClass(NameClassFinder.find("EntityCorpse"));
+	
+	public static Object ENTITY_CORPSE_DUMMY = null;
+	
+	static {
+		try {
+			Constructor<?> corpseConstructor = entityCorpseClass.getReferencedClass().getConstructor(World.class);
+			World world = null;
+			ENTITY_CORPSE_DUMMY = corpseConstructor.newInstance(world);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static final ReflectedField<Integer> entityCorpseMaxAgeTicks = new ReflectedField<>(entityCorpseClass, new ContentFinder.FieldBuilder<Integer>().withValue(ENTITY_CORPSE_DUMMY, int.class, new FieldChecker<Integer>() {
+
+		@Override
+		public boolean isCorrect(Integer found, Field field) throws Exception {
+			return found > 1;
+		}
+
+		
+	}).build());
 	
 	public static final ReflectedClass blockManagerClass = new ReflectedClass(NameClassFinder.find("BlockManager"));
 		public static final ReflectedField<int[]> blockManagerBaseMaterialIds = new ReflectedField<>(blockManagerClass, new ContentFinder.FieldBuilder<int[]>().withValue(null, int[].class, new FieldChecker<int[]>() {
