@@ -18,8 +18,8 @@ public class ModuleFixGunDamageOnServerFreeze extends ListenerModule{
 	private long suspendedMillis = 0L;
 	private YMLFile yml;
 	
-	private long minimumFreezeTime;
-	private long bulletSuspensionDuration;
+	private int minimumFreezeTime;
+	private int bulletSuspensionDuration;
 	
 	public ModuleFixGunDamageOnServerFreeze(ArzioLib plugin) {
 		super(plugin);
@@ -32,8 +32,8 @@ public class ModuleFixGunDamageOnServerFreeze extends ListenerModule{
 		
 		yml.reload();
 		
-		this.minimumFreezeTime = yml.getValueWithDefault("minimum-freeze-time-in-millis-until-suspend", 700L);
-		this.bulletSuspensionDuration = yml.getValueWithDefault("bullet-suspension-duration-in-millis", 400L);
+		this.minimumFreezeTime = yml.getValueWithDefault("minimum-freeze-time-in-millis-until-suspend", 700);
+		this.bulletSuspensionDuration = yml.getValueWithDefault("bullet-suspension-duration-in-millis", 400);
 		
 		yml.save();
 		
