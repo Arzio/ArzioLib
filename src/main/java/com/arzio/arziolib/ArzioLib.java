@@ -29,6 +29,7 @@ import com.arzio.arziolib.listener.MiscListener;
 import com.arzio.arziolib.module.ModuleManager;
 import com.arzio.arziolib.module.ModuleManager.ToggleAction;
 import com.arzio.arziolib.module.addon.ModuleAddonBiomeChanger;
+import com.arzio.arziolib.module.addon.ModuleAddonCorpseCustomLifespan;
 import com.arzio.arziolib.module.addon.ModuleAddonCustomBaseMaterials;
 import com.arzio.arziolib.module.addon.ModuleAddonCustomFlags;
 import com.arzio.arziolib.module.addon.ModuleAddonCustomGunsAndAmmos;
@@ -109,6 +110,7 @@ public class ArzioLib extends JavaPlugin {
 		
 		// Addons
 		this.moduleManager.registerModule(new ModuleAddonBiomeChanger(this));
+		this.moduleManager.registerModule(new ModuleAddonCorpseCustomLifespan(this));
 		this.moduleManager.registerModule(new ModuleAddonCustomBaseMaterials(this));
 		this.moduleManager.registerModule(new ModuleAddonCustomFlags(this));
 		this.moduleManager.registerModule(new ModuleAddonCustomGunsAndAmmos(this));
