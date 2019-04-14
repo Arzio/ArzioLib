@@ -10,10 +10,14 @@ import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.ItemStackHelper;
 import com.arzio.arziolib.api.util.CDAttachment;
 import com.arzio.arziolib.api.util.CDAttachmentType;
+import com.arzio.arziolib.api.util.CDMaterial;
 import com.arzio.arziolib.api.util.CDSpecialSlot;
 import com.arzio.arziolib.api.util.CauldronUtils;
+import com.arzio.arziolib.api.util.reflection.CDClasses;
+import com.arzio.arziolib.api.wrapper.Ammo;
 import com.arzio.arziolib.api.wrapper.Gun;
 import com.arzio.arziolib.api.wrapper.InventoryCDA;
+import com.arzio.arziolib.api.wrapper.ItemProvider;
 
 import net.minecraft.server.v1_6_R3.Item;
 import net.minecraft.server.v1_6_R3.NBTTagCompound;
@@ -72,18 +76,14 @@ public class ItemStackHelperImpl implements ItemStackHelper {
 	}
 
 	@Override
-	public Material getAttachment(ItemStack stack, CDAttachmentType type) {
+	public CDAttachment getAttachment(ItemStack stack, CDAttachmentType type) {
 		NBTTagCompound compound = getGunTagCompound(stack);
 		if ((compound != null) && (compound.hasKey("attachmentSlot" + type.getId()))) {
 			int id = compound.getInt("attachmentSlot" + type.getId());
 			
 			CDAttachment attach = CDAttachment.getById(id);
 			
-			if (attach == null) {
-				return null;
-			}
-			
-			return attach.getMaterial().asMaterial();
+			return attach;
 		}
 		return null;
 	}
@@ -94,7 +94,7 @@ public class ItemStackHelperImpl implements ItemStackHelper {
 	}
 
 	@Override
-	public void setAttachment(ItemStack stack, CDAttachmentType type, CDAttachment attach) {
+	public void setAttachment(ItemStack stack, CDAttachment attach) {
 		NBTTagCompound compound = getGunTagCompound(stack);
 		if (compound == null) {
 			return;
@@ -105,7 +105,7 @@ public class ItemStackHelperImpl implements ItemStackHelper {
 			id = attach.getId();
 		}
 		
-		compound.setInt("attachmentSlot"+type.getId(), id);
+		compound.setInt("attachmentSlot"+attach.getType().getId(), id);
 	}
 
 	@Override
@@ -119,6 +119,13 @@ public class ItemStackHelperImpl implements ItemStackHelper {
 		NBTTagCompound tag = getGunTagCompound(stack);
 		if (tag != null) {
 			tag.setInt("gunAmmo", amount);
+		}
+	}
+	
+	private void setGunClipId(ItemStack stack, int id) {
+		NBTTagCompound tag = getGunTagCompound(stack);
+		if (tag != null) {
+			tag.setInt("gunLoadedClip", id);
 		}
 	}
 
@@ -206,6 +213,35 @@ public class ItemStackHelperImpl implements ItemStackHelper {
 		
 		inventory.setStackInSpecialSlot(slot, result.getStack());
 		return result;
+	}
+
+	@Override
+	public void setGunClip(ItemStack gun, ItemStack clip) {
+		ItemProvider provider = ArzioLib.getInstance().getItemProvider();
+		
+		if (provider.getStackAs(Gun.class, gun) == null) {
+			throw new IllegalArgumentException("The gun stack must be a gun item!");
+		}
+		
+		if (clip == null) {
+			clip = new ItemStack(Material.AIR);
+		}
+		
+		if (clip.getType() == Material.AIR) {			
+			this.setGunClipId(gun, 0);
+			this.setGunAmmo(gun, 0);
+		} else {
+			if (provider.getStackAs(Ammo.class, clip) == null) {
+				throw new IllegalArgumentException("The ammo stack must be a ammo item or AIR or null!");
+			}
+			CDClasses.itemGunSetClipMethod.invoke(Item.byId[gun.getTypeId()], null, CauldronUtils.getNMSStack(gun), CauldronUtils.getNMSStack(clip));
+		}
+	}
+
+	@Override
+	public ItemStack getGunClip(ItemStack gun) {
+		net.minecraft.server.v1_6_R3.ItemStack nmsStack = (net.minecraft.server.v1_6_R3.ItemStack) CDClasses.itemGunGetClipMethod.invoke(Item.byId[CDMaterial.M4A1.getId()], CauldronUtils.getNMSStack(gun));
+		return CraftItemStack.asBukkitCopy(nmsStack);
 	}
 
 }

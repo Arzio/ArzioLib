@@ -1,6 +1,5 @@
 package com.arzio.arziolib.api;
 
-import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -23,11 +22,15 @@ public interface ItemStackHelper {
 	
 	public int getGunAmmo(ItemStack stack);
 	
+	public void setGunClip(ItemStack gun, ItemStack clip);
+	
+	public ItemStack getGunClip(ItemStack gun);
+	
 	public boolean canGunFire(ItemStack stack);
 	
-	public Material getAttachment(ItemStack stack, CDAttachmentType type);
+	public CDAttachment getAttachment(ItemStack stack, CDAttachmentType type);
 	
-	public void setAttachment(ItemStack stack, CDAttachmentType type, CDAttachment attach);
+	public void setAttachment(ItemStack stack, CDAttachment attach);
 	
 	public boolean hasAttachment(ItemStack stack, CDAttachmentType type);
 	
