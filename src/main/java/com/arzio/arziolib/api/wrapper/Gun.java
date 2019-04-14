@@ -2,6 +2,8 @@ package com.arzio.arziolib.api.wrapper;
 
 import org.bukkit.Material;
 
+import com.arzio.arziolib.api.util.CDAttachment;
+
 public interface Gun extends CDItem {
 	
 	public int getBodyDamage();
@@ -15,6 +17,8 @@ public interface Gun extends CDItem {
 	public Material[] getCompatibleAmmos();
 	
 	public void setCompatibleMagazines(Material... materials);
+	
+	public CDAttachment[] getCompatibleAttachments();
 	
 	public float getRPM();
 	
@@ -30,7 +34,11 @@ public interface Gun extends CDItem {
 	
 	public String getSilencedSound();
 	
+	public String getReloadSound();
+	
 	public void setShootSound(String soundName);
 	
 	public void setSilencedSound(String soundName);
+	
+	public void setReloadSound(String soundName);
 }

@@ -3,6 +3,7 @@ package com.arzio.arziolib.api.wrapper.impl;
 import org.bukkit.Material;
 
 import com.arzio.arziolib.ArzioLib;
+import com.arzio.arziolib.api.util.CDAttachment;
 import com.arzio.arziolib.api.util.CDMaterial;
 import com.arzio.arziolib.api.util.CauldronUtils;
 import com.arzio.arziolib.api.util.reflection.CDClasses;
@@ -89,6 +90,35 @@ public class GunImpl extends CDItemImpl implements Gun{
 	@Override
 	public void setSilencedSound(String soundName) {
 		CDClasses.itemGunSuppresedSoundName.setValue(this.getItemInstance(), soundName);
+	}
+
+	@Override
+	public String getReloadSound() {
+		return ArzioLib.MOD_RESOURCE_NAME+CDClasses.itemGunReloadSoundName.getValue(this.getItemInstance());
+	}
+
+	@Override
+	public void setReloadSound(String soundName) {
+		CDClasses.itemGunReloadSoundName.setValue(this.getItemInstance(), soundName);
+	}
+
+	@Override
+	public CDAttachment[] getCompatibleAttachments() {
+		Object[] compatibleArray = CDClasses.itemGunCompatibleAttachmentsField.getValue(this.getItemInstance());
+		Object[] existingAttachments = CDClasses.gunAttachmentArrayField.getValue(null);
+		
+		CDAttachment[] foundAttachments = new CDAttachment[compatibleArray.length];
+		int index = 0;
+		
+		for (Object compatible : compatibleArray) {
+			for (CDAttachment attach : CDAttachment.getAll()) {
+				if (compatible == existingAttachments[attach.getId()]) {
+					foundAttachments[index++] = attach;
+				}
+			}
+		}
+		
+		return foundAttachments;
 	}
 
 }
