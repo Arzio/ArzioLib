@@ -5,7 +5,9 @@ import java.lang.reflect.Modifier;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_6_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_6_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_6_R3.inventory.CraftInventory;
 import org.bukkit.craftbukkit.v1_6_R3.inventory.CraftItemStack;
@@ -29,6 +31,17 @@ public class CauldronUtils {
 	
 	public static Entity getNMSEntity(org.bukkit.entity.Entity entity) {
 		return ((CraftEntity) entity).getHandle();
+	}
+	
+	public static void playSound(Location location, String sound, float volume, float pitch) {
+	    if ((location == null) || (sound == null)) {
+	        return;
+	      }
+	      double x = location.getX();
+	      double y = location.getY();
+	      double z = location.getZ();
+	      
+	      ((CraftWorld)location.getWorld()).getHandle().makeSound(x, y, z, sound, volume, pitch);
 	}
 	
 	@SuppressWarnings("unchecked")
