@@ -2,6 +2,7 @@ package com.arzio.arziolib.api.util.reflection;
 
 import static com.arzio.arziolib.api.util.reflection.ReflectionHelper.getSimpleSourceFileNamesToOriginalClassNames;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -91,6 +92,9 @@ public class CDClasses {
 	
 	public static final ReflectedClass itemCDClass = new ReflectedClass(NameClassFinder.find("ItemCD"));
 	
+	public static final ReflectedClass gunAttachmentClass = new ReflectedClass(NameClassFinder.find("GunAttachment"));
+		public static final ReflectedField<Object[]> gunAttachmentArrayField = new ReflectedField<>(gunAttachmentClass, new ContentFinder.FieldBuilder<>().withType(Array.newInstance(gunAttachmentClass.getReferencedClass(), 1).getClass()).build());
+	
 	// ItemGun class and fields
 	public static final ReflectedClass itemGunClass = new ReflectedClass(NameClassFinder.find("ItemGun"));
 		public static final ReflectedField<Integer> itemGunBodyDamageField = new ReflectedField<>(itemGunClass, new ContentFinder.FieldBuilder<Integer>().withExactValue(Item.byId[CDMaterial.M4A1.getId()], int.class, 6).build());
@@ -101,6 +105,11 @@ public class CDClasses {
 		public static final ReflectedField<Float>   itemGunSoundLevel = new ReflectedField<>(itemGunClass, new ContentFinder.FieldBuilder<Float>().withExactValue(Item.byId[CDMaterial.M1_GARAND.getId()], float.class, 1.5F).build());
 		public static final ReflectedField<String>  itemGunFireSoundName = new ReflectedField<>(itemGunClass, new ContentFinder.FieldBuilder<String>().withExactValue(Item.byId[CDMaterial.M4A1.getId()], String.class, "m4a1shoot").build());
 		public static final ReflectedField<String>  itemGunSuppresedSoundName = new ReflectedField<>(itemGunClass, new ContentFinder.FieldBuilder<String>().withExactValue(Item.byId[CDMaterial.M4A1.getId()], String.class, "m4a1shootsd").build());
+		public static final ReflectedField<String>  itemGunReloadSoundName = new ReflectedField<>(itemGunClass, new ContentFinder.FieldBuilder<String>().withExactValue(Item.byId[CDMaterial.M4A1.getId()], String.class, "m4a1reload").build());
+		public static final ReflectedField<Object[]>  itemGunCompatibleAttachmentsField = new ReflectedField<>(itemGunClass, new ContentFinder.FieldBuilder<String>().withType(Array.newInstance(gunAttachmentClass.getReferencedClass(), 1).getClass()).build());
+		public static final ReflectedMethod itemGunGetClipMethod = new ReflectedMethod(itemGunClass, new ContentFinder.MethodBuilder().withReturnType(ItemStack.class).withParameterTypes(ItemStack.class).build());
+		public static final ReflectedMethod itemGunSetClipMethod = new ReflectedMethod(itemGunClass, new ContentFinder.MethodBuilder().withParameterTypes(entityPlayerClass.getReferencedClass(), ItemStack.class, ItemStack.class).build());
+		
 		
 	// ItemMagazine class and fields
 	public static final ReflectedClass itemMagazineClass = new ReflectedClass(NameClassFinder.find("ItemAmmo"));
