@@ -38,6 +38,7 @@ import com.arzio.arziolib.module.addon.ModuleAddonInfinityEnchantCompatiblity;
 import com.arzio.arziolib.module.addon.ModuleAddonKeepEXPAfterDeath;
 import com.arzio.arziolib.module.addon.ModuleAddonProjectileProtectionCompatibility;
 import com.arzio.arziolib.module.addon.ModuleAddonRealSound;
+import com.arzio.arziolib.module.addon.ModuleAddonEquipGunsFromInventory;
 import com.arzio.arziolib.module.addon.ModuleAddonRespawnAtBase;
 import com.arzio.arziolib.module.addon.ModuleAddonRespawnLoots;
 import com.arzio.arziolib.module.addon.ModuleAddonStackableGrenades;
@@ -115,6 +116,7 @@ public class ArzioLib extends JavaPlugin {
 		this.moduleManager.registerModule(new ModuleAddonCustomFlags(this));
 		this.moduleManager.registerModule(new ModuleAddonCustomGunsAndAmmos(this));
 		this.moduleManager.registerModule(new ModuleAddonCustomLoots(this));
+		this.moduleManager.registerModule(new ModuleAddonEquipGunsFromInventory(this));
 		this.moduleManager.registerModule(new ModuleAddonInfinityEnchantCompatiblity(this));
 		this.moduleManager.registerModule(new ModuleAddonKeepEXPAfterDeath(this, false));
 		this.moduleManager.registerModule(new ModuleAddonProjectileProtectionCompatibility(this));
