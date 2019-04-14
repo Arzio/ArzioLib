@@ -18,7 +18,7 @@ public class ItemProviderImpl implements ItemProvider {
 	
 	@Override
 	public <T extends CDItem> T getStackAs(Class<T> clazz, ItemStack stack) {
-		return this.getMaterialAs(clazz, stack.getType());
+		return stack == null ? null : this.getMaterialAs(clazz, stack.getType());
 	}
 	
 	@SuppressWarnings("unchecked")
