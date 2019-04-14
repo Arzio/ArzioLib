@@ -16,6 +16,10 @@ public abstract class PayloadPacketEvent extends PlayerEvent implements Cancella
 		this.dataWrapper = dataWrapper;
 	}
 	
+	public boolean hasData() {
+		return this.dataWrapper != null;
+	}
+	
 	public CDPacketDataWrapper getData() {
 		return this.dataWrapper;
 	}
