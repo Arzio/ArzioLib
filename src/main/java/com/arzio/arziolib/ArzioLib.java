@@ -23,6 +23,8 @@ import com.arzio.arziolib.command.ArzioLibCommand;
 import com.arzio.arziolib.command.ClothesCommand;
 import com.arzio.arziolib.command.ParticlesCommand;
 import com.arzio.arziolib.command.PingCommand;
+import com.arzio.arziolib.command.ThirstAllCommand;
+import com.arzio.arziolib.command.ThirstCommand;
 import com.arzio.arziolib.config.ArzioModuleManager;
 import com.arzio.arziolib.config.UserDataProvider;
 import com.arzio.arziolib.listener.MiscListener;
@@ -34,6 +36,7 @@ import com.arzio.arziolib.module.addon.ModuleAddonCustomBaseMaterials;
 import com.arzio.arziolib.module.addon.ModuleAddonCustomFlags;
 import com.arzio.arziolib.module.addon.ModuleAddonCustomGunsAndAmmos;
 import com.arzio.arziolib.module.addon.ModuleAddonCustomLoots;
+import com.arzio.arziolib.module.addon.ModuleAddonDisableBulletPenetration;
 import com.arzio.arziolib.module.addon.ModuleAddonInfinityEnchantCompatiblity;
 import com.arzio.arziolib.module.addon.ModuleAddonKeepEXPAfterDeath;
 import com.arzio.arziolib.module.addon.ModuleAddonProjectileProtectionCompatibility;
@@ -116,6 +119,7 @@ public class ArzioLib extends JavaPlugin {
 		this.moduleManager.registerModule(new ModuleAddonCustomFlags(this));
 		this.moduleManager.registerModule(new ModuleAddonCustomGunsAndAmmos(this));
 		this.moduleManager.registerModule(new ModuleAddonCustomLoots(this));
+		this.moduleManager.registerModule(new ModuleAddonDisableBulletPenetration(this));
 		this.moduleManager.registerModule(new ModuleAddonEquipGunsFromInventory(this));
 		this.moduleManager.registerModule(new ModuleAddonInfinityEnchantCompatiblity(this));
 		this.moduleManager.registerModule(new ModuleAddonKeepEXPAfterDeath(this, false));
@@ -162,6 +166,8 @@ public class ArzioLib extends JavaPlugin {
 		this.getCommand("particle").setExecutor(new ParticlesCommand());
 		this.getCommand("clothes").setExecutor(new ClothesCommand());
 		this.getCommand("ping").setExecutor(new PingCommand());
+		this.getCommand("thirst").setExecutor(new ThirstCommand());
+		this.getCommand("thirstall").setExecutor(new ThirstAllCommand());
 		
 		this.getLogger().info("Loading done! :3");
 		this.getLogger().info("This plugin was made by Arzio <3");
