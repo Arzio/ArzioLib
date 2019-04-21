@@ -23,13 +23,21 @@ public class Flags {
 		return isFlagInState(flag, location, State.DENY);
 	}
 	
-	public static boolean isFlagInState(StateFlag flag, Location location, State state) {
-		ApplicableRegionSet set = ArzioLib.getInstance().getWorldGuard().getRegionManager(location.getWorld())
+	public static <T> T getFlagValue(Flag<T> flag, Location location) {
+		ApplicableRegionSet set = ArzioLib.getInstance()
+				.getWorldGuard()
+				.getRegionManager(location.getWorld())
 				.getApplicableRegions(location);
-		if (set != null) {
-			return set.getFlag(flag) == state;
-		}
-		return false;
+		return set == null ? null : set.getFlag(flag);
+	}
+	
+	public static boolean flagExists(Flag<?> flag, Location location) {
+		return getFlagValue(flag, location) != null;
+	}
+	
+	public static boolean isFlagInState(StateFlag flag, Location location, State state) {
+		State currentState = getFlagValue(flag, location);
+		return currentState == null ? false : currentState == state;
 	}
 
 	public static boolean canRegionHavePvP(Location location) {
