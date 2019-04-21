@@ -19,6 +19,14 @@ commands:
         description: Main command for the plugin
         usage: /arziolib to see the comands
         aliases: [ arzio ]
+    thirst:
+        description: Heals your thirst
+        usage: /thirst
+        aliases: [ sede ]
+    thirstall:
+        description: Heals thirst for all players
+        usage: /thirstall
+        aliases: [ sedeall ]
     ping:
         description: Command to check your ping
         usage: /ping
