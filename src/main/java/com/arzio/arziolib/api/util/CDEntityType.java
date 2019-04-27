@@ -16,7 +16,6 @@ import com.arzio.arziolib.api.exception.CDAReflectionException;
 /**
  * Enum for CD entity types.
  * @author BlackFairy
- *
  */
 public enum CDEntityType {
 
@@ -33,7 +32,11 @@ public enum CDEntityType {
 	GRENADE_GAS("grenadegas"),
 	CORPSE("corpse"),
 	GROUND_ITEM("grounditem"),
+	
+	/** Head entity does not exists at server side anymore due to CD 1.2.8 update. */
+	@Deprecated
 	HEAD("head"),
+	
 	C4("c4"),
 	FLAME_THROWER_FIRE("flamethrowerfire"),
 	SUPPLY_DROP("supplydrop");
@@ -87,7 +90,10 @@ public enum CDEntityType {
         
         String entityTypeName = entity.getType().name();
         for (CDEntityType type : CDEntityType.values()) {
-        	if (type.asBukkitType().name().equalsIgnoreCase(entityTypeName)) {
+        	EntityType bukkitType = type.asBukkitType();
+        	
+        	// Prevents nullpointer if the entity type does not exists anymore.
+        	if (bukkitType != null && bukkitType.name().equalsIgnoreCase(entityTypeName)) {
         		return type;
         	}
         }
