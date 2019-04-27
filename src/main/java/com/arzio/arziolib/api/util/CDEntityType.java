@@ -108,7 +108,10 @@ public enum CDEntityType {
         
         String bukkitEntityTypeName = bukkitType.name();
         for (CDEntityType type : CDEntityType.values()) {
-        	if (type.asBukkitType().name().equalsIgnoreCase(bukkitEntityTypeName)) {
+        	EntityType entityType = type.asBukkitType();
+        	
+        	// Prevents nullpointer if the entity type does not exists anymore.
+        	if (entityType != null && entityType.name().equalsIgnoreCase(bukkitEntityTypeName)) {
         		return type;
         	}
         }
