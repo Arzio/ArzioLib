@@ -49,7 +49,7 @@ public enum CDEntityType {
 		try {
 			this.type = EntityType.valueOf(this.getBukkitName().toUpperCase());
 		} catch (Exception e) {
-			ArzioLib.getInstance().getLogger().log(Level.WARNING, "Bukkit entity type for the CD Entity '"+this.getName()+"' could not be found. This entity will not be detected properly by plugins.", e);
+			ArzioLib.getInstance().getLogger().log(Level.WARNING, "Bukkit entity type for the CD Entity '"+this.getName()+"' is deprecated or could not be found. This entity will not be detected properly by plugins in this CD version.");
 		}
 	}
 	
