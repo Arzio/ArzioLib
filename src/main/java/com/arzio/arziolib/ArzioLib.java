@@ -1,8 +1,10 @@
 package com.arzio.arziolib;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.arzio.arziolib.UpdateChecker.CheckMethod;
 import com.arzio.arziolib.api.BaseProvider;
 import com.arzio.arziolib.api.ForgeBukkitEventManager;
 import com.arzio.arziolib.api.ItemStackHelper;
@@ -76,7 +78,7 @@ public class ArzioLib extends JavaPlugin {
 	public static final ModContainer MOD_CONTAINER = ReflectionHelper.getCraftingDeadModContainer();
 	public static final String MOD_RESOURCE_NAME = "craftingdead:";
 	public static final String MOD_NETWORK_ID = "cdaNetworking";
-	
+
 	private static ArzioLib instance;
 	private ModuleManager moduleManager;
 	private ItemStackHelper itemStackHelper;
@@ -91,14 +93,15 @@ public class ArzioLib extends JavaPlugin {
 
 	// Forge-Bukkit compatible listener
 	private ForgeBukkitEventManager forgeBukkitEventManager;
-	
+
 	@Override
-	public void onLoad() { }
-	
+	public void onLoad() {
+	}
+
 	@Override
 	public void onEnable() {
 		instance = this;
-		
+
 		this.userDataProvider = new UserDataProvider();
 		this.playerDataHandler = new PlayerDataHandlerImpl();
 		this.forgeBukkitEventManager = new ForgeBukkitEventManagerImpl(this);
@@ -107,10 +110,10 @@ public class ArzioLib extends JavaPlugin {
 		this.itemStackHelper = new ItemStackHelperImpl();
 		this.baseProvider = new BaseProviderImpl();
 		this.lootProvider = new LootProviderImpl();
-		
+
 		// Initiate the module manager
 		this.moduleManager = new ArzioModuleManager(this);
-		
+
 		// Addons
 		this.moduleManager.registerModule(new ModuleAddonBiomeChanger(this));
 		this.moduleManager.registerModule(new ModuleAddonCorpseCustomLifespan(this));
@@ -130,14 +133,14 @@ public class ArzioLib extends JavaPlugin {
 		this.moduleManager.registerModule(new ModuleAddonZombieFollowGrenades(this));
 		this.moduleManager.registerModule(new ModuleAddonZombieHearGuns(this));
 		this.moduleManager.registerModule(new ModuleAddonZombieSpawnBlockBlacklist(this, false));
-		
+
 		// Core - DO NOT DISABLE THEM UNLESS YOU KNOW YOU ARE DOING
 		this.moduleManager.registerModule(new ModuleCoreBukkitEventsForBases(this, baseProvider));
 		this.moduleManager.registerModule(new ModuleCoreCallCDLootDropEvent(this));
 		this.moduleManager.registerModule(new ModuleCoreCallEntityJoinWorldEvent(this));
 		this.moduleManager.registerModule(new ModuleCoreCDPacketEventCaller(this));
 		this.moduleManager.registerModule(new ModuleCoreNetworkHandler(this));
-		
+
 		// Fixes
 		this.moduleManager.registerModule(new ModuleFixArmorBreaking(this));
 		this.moduleManager.registerModule(new ModuleFixCorpseDuplication(this));
@@ -154,24 +157,37 @@ public class ArzioLib extends JavaPlugin {
 		this.moduleManager.registerModule(new ModuleFixSniperFastShoot(this));
 		this.moduleManager.registerModule(new ModuleFixSwapGunFastShoot(this));
 		this.moduleManager.registerModule(new ModuleFixZombieHeight(this));
-		
+
 		// Toggle them all!
 		this.moduleManager.toggleAll(ToggleAction.TOGGLE_FROM_CONFIG);
-		
+
 		this.getServer().getPluginManager().registerEvents(new MiscListener(), this);
-		
+
 		this.getCommand("arziolib").setExecutor(new ArzioLibCommand(this));
 		this.getCommand("particle").setExecutor(new ParticlesCommand());
 		this.getCommand("clothes").setExecutor(new ClothesCommand());
 		this.getCommand("ping").setExecutor(new PingCommand());
 		this.getCommand("thirst").setExecutor(new ThirstCommand());
 		this.getCommand("thirstall").setExecutor(new ThirstAllCommand());
-		
+
 		this.getLogger().info("Loading done! :3");
 		this.getLogger().info("This plugin was made by Arzio <3");
 		this.getLogger().info("Please, use '/arziolib' to check all available commands");
+
+		// Checks for new updates using the main thread
+		UpdateChecker.INSTANCE.checkUpdates(CheckMethod.SYNC);
+		
+		// Automatically checks for updates in a async way every 10 minutes
+		Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
+			
+			@Override
+			public void run() {
+				UpdateChecker.INSTANCE.checkUpdates(CheckMethod.ASYNC);
+			}
+			
+		}, 600L * 20L, 600L * 20L); // Checks for update every 10 minutes
 	}
-	
+
 	@Override
 	public void reloadConfig() {
 		super.reloadConfig();
@@ -185,7 +201,7 @@ public class ArzioLib extends JavaPlugin {
 		instance = null;
 		this.getLogger().info("Plugin unloaded: " + this.getName() + " by Arzio");
 	}
-	
+
 	public WGCustomFlagsPlugin getWGCustomFlags() {
 		Plugin plugin = getServer().getPluginManager().getPlugin("WGCustomFlags");
 
@@ -205,7 +221,7 @@ public class ArzioLib extends JavaPlugin {
 
 		return (WorldGuardPlugin) plugin;
 	}
-	
+
 	public PlayerDataHandler getPlayerDataHandler() {
 		return this.playerDataHandler;
 	}
@@ -213,7 +229,7 @@ public class ArzioLib extends JavaPlugin {
 	public BaseProvider getBaseProvider() {
 		return this.baseProvider;
 	}
-	
+
 	public LootProvider getLootProvider() {
 		return this.lootProvider;
 	}
@@ -243,7 +259,9 @@ public class ArzioLib extends JavaPlugin {
 	}
 
 	public static ArzioLib getInstance() {
-		if (instance == null) throw new IllegalStateException("The plugin is not enabled yet! Maybe you need to make your plugin wait until the Lib loads. Add this plugin to your plugin's dependencies in your plugin.yml");
+		if (instance == null)
+			throw new IllegalStateException(
+					"The plugin is not enabled yet! Maybe you need to make your plugin wait until the Lib loads. Add this plugin to your plugin's dependencies in your plugin.yml");
 		return instance;
 	}
 }
