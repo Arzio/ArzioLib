@@ -21,18 +21,8 @@ import com.arzio.arziolib.api.wrapper.impl.BaseImpl;
 
 public class BaseProviderImpl implements BaseProvider{
 
-	private Map<Location, Base> dataInCache = new HashMap<Location, Base>();
+	private Map<Block, Base> dataInCache = new HashMap<Block, Base>();
 	
-	@Override
-	public Base getBaseFromCenter(BlockState state) {
-		return this.getBaseFromCenter(state.getBlock());
-	}
-
-	@Override
-	public Base getBaseFromCenter(Block block) {
-		return this.getBaseFromCenter(block.getLocation());
-	}
-
 	@Override
 	public Base getBaseFromPlayer(Player player) {
 		PlayerData data = ArzioLib.getInstance().getPlayerDataHandler().getPlayerData(player);
@@ -40,20 +30,30 @@ public class BaseProviderImpl implements BaseProvider{
 	}
 	
 	@Override
-	public Base getBaseFromCenter(Location location) {
-		return loadBaseIfNotAlready(location);
+	public Base getBaseFromCenter(BlockState state) {
+		return this.getBaseFromCenter(state.getBlock());
 	}
 	
-	private Base loadBaseIfNotAlready(Location location) {
-		if (!CDBaseMaterial.isCenter(location.getBlock())) {
+	@Override
+	public Base getBaseFromCenter(Location location) {
+		return this.getBaseFromCenter(location.getBlock());
+	}
+	
+	@Override
+	public Base getBaseFromCenter(Block block) {
+		return this.loadBaseIfNotAlready(block);
+	}
+	
+	private Base loadBaseIfNotAlready(Block block) {
+		if (!CDBaseMaterial.isCenter(block)) {
 			return null;
 		}
 		
-		Base base = dataInCache.get(location);
+		Base base = dataInCache.get(block);
 		
 		if (base == null) {
-			base = new BaseImpl(location);
-			dataInCache.put(location, base);
+			base = new BaseImpl(block);
+			dataInCache.put(block, base);
 		}
 		
 		return base;
@@ -90,14 +90,14 @@ public class BaseProviderImpl implements BaseProvider{
 	}
 
 	protected void removeBase(Base base) {
-		dataInCache.remove(base.getLocation());
+		dataInCache.remove(base.getLocation().getBlock());
 	}
 	
 	private void addUncachedBasesFrom(World world) {
 		for (Chunk chunk : world.getLoadedChunks()) {
 			for (BlockState baseCenter : chunk.getTileEntities()) {
 				if (CDBaseMaterial.isCenter(baseCenter)) {
-					loadBaseIfNotAlready(baseCenter.getLocation());
+					loadBaseIfNotAlready(baseCenter.getBlock());
 				}
 			}
 		}

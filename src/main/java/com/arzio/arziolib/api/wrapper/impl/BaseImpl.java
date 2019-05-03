@@ -17,15 +17,15 @@ import net.minecraft.server.v1_6_R3.NBTTagCompound;
 
 public class BaseImpl implements Base {
 
-	private final Location location;
+	private final Block block;
 
-	public BaseImpl(Location location) {
-		this.location = location;
+	public BaseImpl(Block block) {
+		this.block = block;
 	}
 
 	@Override
 	public String getOwnerName() {
-		return TileEntityUtils.getTagCompound(this.location.getBlock()).getString("owner");
+		return TileEntityUtils.getTagCompound(this.block).getString("owner");
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class BaseImpl implements Base {
 
 	@Override
 	public boolean isValid() {
-		return CDBaseMaterial.isCenter(location.getBlock());
+		return CDBaseMaterial.isCenter(this.block);
 	}
 
 	@Override
@@ -52,7 +52,6 @@ public class BaseImpl implements Base {
 			return;
 		}
 
-		Block block = location.getBlock();
 		CraftWorld cw = (CraftWorld) block.getWorld();
 
 		CDClasses.blockBaseCenterDestroy.invoke(
@@ -68,15 +67,13 @@ public class BaseImpl implements Base {
 			return false;
 		}
 
-		Block base = this.location.getBlock();
-
 		if (!block.getWorld().equals(block.getWorld())) {
 			return false;
 		}
 
 		// Checking location
-		if (Math.abs(base.getX() - block.getX()) <= 7 && Math.abs(base.getY() - block.getY()) <= 7
-				&& Math.abs(base.getZ() - block.getZ()) <= 7) {
+		if (Math.abs(block.getX() - block.getX()) <= 7 && Math.abs(block.getY() - block.getY()) <= 7
+				&& Math.abs(block.getZ() - block.getZ()) <= 7) {
 
 			return CDBaseMaterial.isBaseMaterial(block);
 		}
@@ -91,27 +88,27 @@ public class BaseImpl implements Base {
 
 	@Override
 	public Location getLocation() {
-		return this.location;
+		return this.block.getLocation();
 	}
 
 	@Override
 	public int getTimeIdle() {
-		return TileEntityUtils.getTagCompound(this.location.getBlock()).getInt("timeIdled");
+		return TileEntityUtils.getTagCompound(this.block).getInt("timeIdled");
 	}
 
 	@Override
 	public void setTimeIdle(int time) {
-		NBTTagCompound compound = TileEntityUtils.getTagCompound(this.location.getBlock());
+		NBTTagCompound compound = TileEntityUtils.getTagCompound(this.block);
 
 		compound.setInt("timeIdled", time);
 
-		TileEntityUtils.setTagCompound(compound, this.location.getBlock());
+		TileEntityUtils.setTagCompound(compound, this.block);
 	}
 
 	@Override
 	public String[] getMembers() {
 
-		NBTTagCompound compound = TileEntityUtils.getTagCompound(this.location.getBlock());
+		NBTTagCompound compound = TileEntityUtils.getTagCompound(this.block);
 		int size = compound.getInt("members");
 		
 		String[] memberArray = new String[size];
@@ -125,14 +122,50 @@ public class BaseImpl implements Base {
 
 	@Override
 	public void setMembers(String[] members) {
-		NBTTagCompound compound = TileEntityUtils.getTagCompound(this.location.getBlock());
+		NBTTagCompound compound = TileEntityUtils.getTagCompound(this.block);
 
 		compound.setInt("members", members.length);
 		for (int i = 0; i < members.length; i++) {
 			compound.setString("member"+i, members[i]);
 		}
 
-		TileEntityUtils.setTagCompound(compound, this.location.getBlock());
+		TileEntityUtils.setTagCompound(compound, this.block);
 	}
 
+	@Override
+	public Block getBlock() {
+		return this.block;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((block == null) ? 0 : block.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		BaseImpl other = (BaseImpl) obj;
+		if (block == null) {
+			if (other.block != null)
+				return false;
+		} else if (!block.equals(other.block))
+			return false;
+		return true;
+	}
+
+	@Override
+	public boolean hasOwner() {
+		String ownerName = this.getOwnerName();
+		return ownerName != null && ownerName.length() > 0;
+	}
+	
 }

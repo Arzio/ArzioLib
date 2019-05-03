@@ -101,6 +101,26 @@ public class LootImpl implements Loot{
 		return chanceList.toArray(new LootChance[0]);
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
+	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		LootImpl other = (LootImpl) obj;
+		if (type != other.type)
+			return false;
+		return true;
+	}
 
 }
