@@ -48,11 +48,8 @@ dependencies {
 
 processResources {
     // Replaces the PROJECT_VERSION tag inside of yml resources by the project version
-    from('src/main/resources') {
-        include '*.yml'
-        filter { line ->
-        	line.replace('{PROJECT_VERSION}', version)
-        }
+    filter { 
+    	String line -> line.replace('{PROJECT_VERSION}', version) 
     }
 }
 
