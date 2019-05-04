@@ -19,6 +19,7 @@ public interface Base {
 	public void setTimeIdle(int time);
 	public String[] getMembers();
 	public void setMembers(String[] members);
+	public boolean hasPermission(Player player);
 	/*
 	public Set<Block> getBlocks();
 	*/

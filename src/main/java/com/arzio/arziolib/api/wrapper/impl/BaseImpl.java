@@ -56,26 +56,27 @@ public class BaseImpl implements Base {
 
 		CDClasses.blockBaseCenterDestroy.invoke(
 				net.minecraft.server.v1_6_R3.Block.byId[CDBaseMaterial.BASE_CENTER.getId()],
-				(net.minecraft.server.v1_6_R3.World) cw.getHandle(), block.getX(), block.getY(), block.getZ(), null);
+				(net.minecraft.server.v1_6_R3.World) cw.getHandle(), this.getBlock().getX(), this.getBlock().getY(), this.getBlock().getZ(), null);
 	}
 
 	@Override
-	public boolean isPartOfBase(Block block) {
+	public boolean isPartOfBase(Block otherBlock) {
 
 		// TNT nunca faz parte de base
-		if (block.getType() == Material.TNT) {
+		if (otherBlock.getType() == Material.TNT) {
 			return false;
 		}
 
-		if (!block.getWorld().equals(block.getWorld())) {
+		if (!otherBlock.getWorld().equals(this.getBlock().getWorld())) {
 			return false;
 		}
 
 		// Checking location
-		if (Math.abs(block.getX() - block.getX()) <= 7 && Math.abs(block.getY() - block.getY()) <= 7
-				&& Math.abs(block.getZ() - block.getZ()) <= 7) {
+		if (Math.abs(otherBlock.getX() - this.getBlock().getX()) <= 7
+				&& Math.abs(otherBlock.getY() - this.getBlock().getY()) <= 7
+				&& Math.abs(otherBlock.getZ() - this.getBlock().getZ()) <= 7) {
 
-			return CDBaseMaterial.isBaseMaterial(block);
+			return CDBaseMaterial.isBaseMaterial(otherBlock);
 		}
 
 		return false;
@@ -110,7 +111,7 @@ public class BaseImpl implements Base {
 
 		NBTTagCompound compound = TileEntityUtils.getTagCompound(this.block);
 		int size = compound.getInt("members");
-		
+
 		String[] memberArray = new String[size];
 		for (int i = 0; i < size; i++) {
 			String str = compound.getString("member" + i);
@@ -126,7 +127,7 @@ public class BaseImpl implements Base {
 
 		compound.setInt("members", members.length);
 		for (int i = 0; i < members.length; i++) {
-			compound.setString("member"+i, members[i]);
+			compound.setString("member" + i, members[i]);
 		}
 
 		TileEntityUtils.setTagCompound(compound, this.block);
@@ -167,5 +168,25 @@ public class BaseImpl implements Base {
 		String ownerName = this.getOwnerName();
 		return ownerName != null && ownerName.length() > 0;
 	}
-	
+
+	@Override
+	public boolean hasPermission(Player player) {
+		if (!this.hasOwner()) {
+			return false;
+		}
+		
+		boolean hasPermission = this.getOwnerName().equalsIgnoreCase(player.getName());
+		
+		if (!hasPermission) {
+			for (String member : this.getMembers()) {
+				if (member.equalsIgnoreCase(player.getName())) {
+					hasPermission = true;
+					break;
+				}
+			}
+		}
+		
+		return hasPermission;
+	}
+
 }
