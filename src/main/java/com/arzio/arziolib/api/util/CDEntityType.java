@@ -4,7 +4,6 @@ import java.lang.reflect.Constructor;
 import java.util.logging.Level;
 
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_6_R3.CraftWorld;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -12,6 +11,8 @@ import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 
 import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.exception.CDAReflectionException;
+
+import net.minecraft.server.v1_6_R3.EntityTypes;
 
 /**
  * Enum for CD entity types.
@@ -33,7 +34,9 @@ public enum CDEntityType {
 	CORPSE("corpse"),
 	GROUND_ITEM("grounditem"),
 	
-	/** Head entity does not exists at server side anymore due to CD 1.2.8 update. */
+	/** 
+	 * @deprecated Head entity does not exists at server side anymore due to CD 1.2.8 update.
+	 */
 	@Deprecated
 	HEAD("head"),
 	
@@ -65,17 +68,23 @@ public enum CDEntityType {
 		return this.type;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public Class<? extends net.minecraft.server.v1_6_R3.Entity> getNMSClass(){
+		return EntityTypes.a(this.asBukkitType().getTypeId());
+	}
+	
 	public boolean isTypeOf(Entity entity) {
 		return getTypeOf(entity) == this;
 	}
 	
-	public Entity spawnEntity(World world, Location location) throws CDAReflectionException{
-		Class<? extends Entity> entityClass = this.asBukkitType().getEntityClass();
+	public Entity spawnEntity(Location location) throws CDAReflectionException{
+		Class<? extends net.minecraft.server.v1_6_R3.Entity> entityClass = this.getNMSClass();
 		try {
 			Constructor<?> constructor = entityClass.getDeclaredConstructor(net.minecraft.server.v1_6_R3.World.class);
 			
-			CraftWorld craftWorld = (CraftWorld) world;
+			CraftWorld craftWorld = (CraftWorld) location.getWorld();
 			net.minecraft.server.v1_6_R3.Entity entity = (net.minecraft.server.v1_6_R3.Entity) constructor.newInstance(craftWorld.getHandle());
+			entity.setLocation(location.getX(), location.getY(), location.getZ(), location.getPitch(), location.getYaw());
 			
 			craftWorld.getHandle().addEntity(entity, SpawnReason.CUSTOM);
 			return entity.getBukkitEntity();
