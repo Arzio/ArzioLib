@@ -152,6 +152,24 @@ public enum CDEntityType {
         }
         return null;
     }
+	
+	public static boolean isZombie(Entity entity) {
+	    for (CDEntityType zombieType : getZombieTypes()) {
+	        if (zombieType.isTypeOf(entity)) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+	
+    public static boolean isGrenade(Entity entity) {
+        for (CDEntityType zombieType : getGrenadeTypes()) {
+            if (zombieType.isTypeOf(entity)) {
+                return true;
+            }
+        }
+        return false;
+    }
     
     public static CDEntityType[] getZombieTypes() {
     	return new CDEntityType[] { CD_ZOMBIE, CD_ZOMBIE_FAST, CD_ZOMBIE_TANK, CD_ZOMBIE_WEAK };
