@@ -48,7 +48,7 @@ public class ModuleFixItemUsageOnRegions extends Module {
         if (CDMaterial.TASER.isTypeOf(event.getHeldGun())) {
             if (!Flags.canRegionHavePvP(event.getPlayer().getLocation())) {
                 event.setCancelled(true);
-                event.getPlayer().sendMessage("§cYou cannot use Taser in safe zones!");
+                event.getPlayer().sendMessage("�cYou cannot use Taser in safe zones!");
             }
         }
     }
@@ -75,7 +75,7 @@ public class ModuleFixItemUsageOnRegions extends Module {
 	public void onGrenadeThrowing(CDGrenadeThrowEvent event) {
 		if (!Flags.canRegionHavePvP(event.getPlayer().getLocation())) {
 			event.setCancelled(true);
-			event.getPlayer().sendMessage("§cPVP is disabled in this area!");
+			event.getPlayer().sendMessage("�cPVP is disabled in this area!");
 		}
 	}
 	
@@ -98,7 +98,7 @@ public class ModuleFixItemUsageOnRegions extends Module {
 		if (stack.getType() == CDMaterial.BLOODBAG.asMaterial() || stack.getType() == CDMaterial.HANDCUFFS.asMaterial()) {
 			if (!Flags.canRegionHavePvP(event.getPlayer().getLocation()) || !Flags.canRegionHavePvP(event.getRightClicked().getLocation())) {
 				event.setCancelled(true);
-				event.getPlayer().sendMessage("§cPVP is disabled here!");
+				event.getPlayer().sendMessage("�cPVP is disabled here!");
 			}
 		}
 	}

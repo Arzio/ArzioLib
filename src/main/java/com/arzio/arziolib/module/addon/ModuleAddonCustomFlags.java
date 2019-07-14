@@ -16,6 +16,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -72,7 +73,9 @@ public class ModuleAddonCustomFlags extends Module {
     public static final EasyStateFlag OPEN_CD_INVENTORY_FLAG = new EasyStateFlag("open-cd-inventory");
     public static final EasyStateFlag CLEAR_CD_INVENTORY_FLAG = new EasyStateFlag("clear-cd-inventory");
     public static final EasyStateFlag CLEAR_MINECRAFT_INVENTORY_FLAG = new EasyStateFlag("clear-minecraft-inventory");
-	
+    public static final EasyStateFlag TASER_FLAG = new EasyStateFlag("taser");
+    public static final EasyStateFlag HANDCUFFS_FLAG = new EasyStateFlag("handcuffs");
+    
 	private final PlayerDataHandler playerDataHandler;
 	private final UserDataProvider userDataProvider;
 	
@@ -115,6 +118,43 @@ public class ModuleAddonCustomFlags extends Module {
             }
         }
 	}
+	
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+    public void disableTaserTrigger(CDGunTriggerEvent event) {
+        if (CDMaterial.TASER.isTypeOf(event.getHeldGun()) && TASER_FLAG.isDenied(event.getPlayer().getLocation())){
+            event.getPlayer().sendMessage("§cYou cannot use Taser here!");
+            event.setCancelled(true);
+        }
+    }
+    
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+    public void disableTaserHit(CDBulletHitEvent event) {
+        if (CDMaterial.TASER.isTypeOf(event.getHeldGun()) && TASER_FLAG.isDenied(event.getPlayer().getLocation())){
+            event.setCancelled(true);
+        }
+    }
+    
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+    public void disableHandcuffs(PlayerInteractEntityEvent event) {
+        // Continue only if the clicked entity is a player
+        if (!(event.getRightClicked() instanceof Player)) {
+            return;
+        }
+        
+        ItemStack stack = event.getPlayer().getItemInHand();
+        
+        // Check if the clicker is holding any item
+        if (stack == null) {
+            return;
+        }
+        
+        if (CDMaterial.HANDCUFFS.isTypeOf(stack)) {
+            if (HANDCUFFS_FLAG.isDenied(event.getPlayer().getLocation()) || HANDCUFFS_FLAG.isDenied(event.getRightClicked().getLocation())) {
+                event.setCancelled(true);
+                event.getPlayer().sendMessage("§cYou cannot use handcuffs here!");
+            }
+        }
+    }
 	
     @EventHandler
     public void cdBuildHanging(HangingBreakByEntityEvent event) {
