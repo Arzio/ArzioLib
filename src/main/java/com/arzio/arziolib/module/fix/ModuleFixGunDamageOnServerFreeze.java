@@ -9,9 +9,11 @@ import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.event.packet.CDBulletHitEvent;
 import com.arzio.arziolib.api.event.packet.CDGunTriggerEvent;
 import com.arzio.arziolib.config.YMLFile;
-import com.arzio.arziolib.module.ListenerModule;
+import com.arzio.arziolib.module.Module;
+import com.arzio.arziolib.module.RegisterModule;
 
-public class ModuleFixGunDamageOnServerFreeze extends ListenerModule{
+@RegisterModule(name = "fix-gun-damage-on-server-freeze")
+public class ModuleFixGunDamageOnServerFreeze extends Module{
 
 	private BukkitTask task;
 	private long lastTick = 0L;
@@ -21,15 +23,11 @@ public class ModuleFixGunDamageOnServerFreeze extends ListenerModule{
 	private int minimumFreezeTime;
 	private int bulletSuspensionDuration;
 	
-	public ModuleFixGunDamageOnServerFreeze(ArzioLib plugin) {
-		super(plugin);
-		this.yml = new YMLFile(plugin, "module_configuration/suspend-bullets-on-server-freeze.yml");
-	}
-	
 	@Override
 	public void onEnable() {
 		super.onEnable();
 		
+        this.yml = new YMLFile(this.getPlugin(), "module_configuration/suspend-bullets-on-server-freeze.yml");
 		yml.reload();
 		
 		this.minimumFreezeTime = yml.getValueWithDefault("minimum-freeze-time-in-millis-until-suspend", 700);
@@ -90,11 +88,6 @@ public class ModuleFixGunDamageOnServerFreeze extends ListenerModule{
 		if (!this.canFire()) {
 			event.setCancelled(true);
 		}
-	}
-
-	@Override
-	public String getName() {
-		return "fix-gun-damage-on-server-freeze";
 	}
 
 }

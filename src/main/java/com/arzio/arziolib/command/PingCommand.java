@@ -14,16 +14,16 @@ public class PingCommand implements CommandExecutor {
 			if (args.length >= 1) {
 				Player playerAlvo = Bukkit.getPlayer(args[0]);
 				if (playerAlvo != null) {
-					sender.sendMessage("§aPing of §l"+playerAlvo.getName()+"§a: §e"+getPingString(playerAlvo));
+					sender.sendMessage("Â§aPing of Â§l"+playerAlvo.getName()+"Â§a: Â§e"+getPingString(playerAlvo));
 				} else {
-					sender.sendMessage("§cPlayer '"+args[0]+"' not found.");
+					sender.sendMessage("Â§cPlayer '"+args[0]+"' not found.");
 				}
 			} else {
-				sender.sendMessage("§aYour ping: §e"+getPingString((Player) sender));
+				sender.sendMessage("Â§aYour ping: Â§e"+getPingString((Player) sender));
 			}
 			return true;
 		}
-		sender.sendMessage("§cThis command can only be used by players.");
+		sender.sendMessage("Â§cThis command can only be used by players.");
 
 		return true;
 	}

@@ -18,21 +18,21 @@ public interface ItemStackHelper {
 	
 	public <T, R> AccessResult<R> accessItemInventory(InventoryCDA inventory, CDSpecialSlot slot, InventoryNavigator<R> navigator);
 	
-	public void setGunAmmo(ItemStack stack, int amount);
+	public void setGunAmmo(ItemStack gun, int amount);
 	
-	public int getGunAmmo(ItemStack stack);
+	public int getGunAmmo(ItemStack gun);
 	
 	public void setGunClip(ItemStack gun, ItemStack clip);
 	
 	public ItemStack getGunClip(ItemStack gun);
 	
-	public boolean canGunFire(ItemStack stack);
+	public boolean canGunFire(ItemStack gun);
 	
-	public CDAttachment getAttachment(ItemStack stack, CDAttachmentType type);
+	public CDAttachment getAttachment(ItemStack gun, CDAttachmentType type);
 	
-	public void setAttachment(ItemStack stack, CDAttachment attach);
+	public void setAttachment(ItemStack gun, CDAttachmentType type, CDAttachment attach);
 	
-	public boolean hasAttachment(ItemStack stack, CDAttachmentType type);
+	public boolean hasAttachment(ItemStack gun, CDAttachmentType type);
 	
 	public static interface InventoryNavigator<T> {
 		public T accessAndReturn(Inventory inventory);

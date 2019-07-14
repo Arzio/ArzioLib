@@ -2,23 +2,20 @@ package com.arzio.arziolib.module.addon;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
-import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.util.CDBaseMaterial;
 import com.arzio.arziolib.config.YMLFile;
 import com.arzio.arziolib.config.YMLFile.ConfigurationVisitor;
-import com.arzio.arziolib.module.NamedModule;
+import com.arzio.arziolib.module.Module;
+import com.arzio.arziolib.module.RegisterModule;
 
-public class ModuleAddonCustomBaseMaterials extends NamedModule{
+@RegisterModule(name = "addon-custom-base-materials")
+public class ModuleAddonCustomBaseMaterials extends Module{
 
-	private final YMLFile yml;
-	
-	public ModuleAddonCustomBaseMaterials(ArzioLib plugin) {
-		super(plugin);
-		yml = new YMLFile(plugin, "module_configuration/base_materials.yml");
-	}
+	private YMLFile yml;
 
 	@Override
 	public void onEnable() {
+        this.yml = new YMLFile(this.getPlugin(), "module_configuration/base_materials.yml");
 		
 		for (CDBaseMaterial material : CDBaseMaterial.MATERIAL_SET){
 			material.setId(yml.getValueWithDefault("material."+material.getName()+".id", material.getId()));
@@ -37,18 +34,5 @@ public class ModuleAddonCustomBaseMaterials extends NamedModule{
 		yml.save();
 		CDBaseMaterial.pushMaterialsToCD();
 	}
-
-	@Override
-	public void onDisable() {
-		// 
-	}
-
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return "addon-custom-base-materials";
-	}
-	
-	
 
 }

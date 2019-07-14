@@ -7,27 +7,20 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 
 import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.BaseProvider;
-import com.arzio.arziolib.module.ListenerModule;
+import com.arzio.arziolib.module.Module;
+import com.arzio.arziolib.module.RegisterModule;
 
-public class ModuleAddonRespawnAtBase extends ListenerModule {
-	
-	public ModuleAddonRespawnAtBase(ArzioLib plugin, boolean defaultState) {
-		super(plugin, defaultState);
-	}
-	
-	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	public void onRespawn(PlayerRespawnEvent event){
-		BaseProvider provider = this.getPlugin().getBaseProvider();
-		Player player = event.getPlayer();
-		
-		if (provider.hasBase(player)) {
-			event.setRespawnLocation(provider.getBaseFromPlayer(player).getLocation().clone().add(0.5D, 1D, 0.5D));
-		}
-	}
+@RegisterModule(name = "addon-respawn-at-base", defaultState = false)
+public class ModuleAddonRespawnAtBase extends Module {
 
-	@Override
-	public String getName() {
-		return "addon-respawn-at-base";
-	}
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onRespawn(PlayerRespawnEvent event) {
+        BaseProvider provider = ArzioLib.getInstance().getBaseProvider();
+        Player player = event.getPlayer();
+
+        if (provider.hasBase(player)) {
+            event.setRespawnLocation(provider.getBaseFromPlayer(player).getLocation().clone().add(0.5D, 1D, 0.5D));
+        }
+    }
 
 }

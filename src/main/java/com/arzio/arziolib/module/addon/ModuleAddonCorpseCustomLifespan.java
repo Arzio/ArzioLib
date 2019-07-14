@@ -3,27 +3,25 @@ package com.arzio.arziolib.module.addon;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.event.EntityJoinWorldEvent;
 import com.arzio.arziolib.api.util.CDEntityType;
 import com.arzio.arziolib.api.util.CauldronUtils;
 import com.arzio.arziolib.api.util.reflection.CDClasses;
 import com.arzio.arziolib.config.YMLFile;
-import com.arzio.arziolib.module.ListenerModule;
+import com.arzio.arziolib.module.Module;
+import com.arzio.arziolib.module.RegisterModule;
 
-public class ModuleAddonCorpseCustomLifespan extends ListenerModule{
+@RegisterModule(name = "addon-corpse-custom-lifespan")
+public class ModuleAddonCorpseCustomLifespan extends Module{
 
-	private final YMLFile yml;
+	private YMLFile yml;
 	private int lifespan;
-	
-	public ModuleAddonCorpseCustomLifespan(ArzioLib plugin) {
-		super(plugin);
-		yml = new YMLFile(plugin, "module_configuration/corpse_lifespan.yml");
-	}
 
 	@Override
 	public void onEnable() {
 		super.onEnable();
+
+        yml = new YMLFile(this.getPlugin(), "module_configuration/corpse_lifespan.yml");
 		yml.reload();
 		
 		this.lifespan = yml.getValueWithDefault("corpse-max-lifespan-in-seconds", 240);
@@ -41,11 +39,6 @@ public class ModuleAddonCorpseCustomLifespan extends ListenerModule{
 	@Override
 	public void onDisable() {
 		super.onDisable();
-	}
-
-	@Override
-	public String getName() {
-		return "addon-corpse-custom-lifespan";
 	}
 
 }

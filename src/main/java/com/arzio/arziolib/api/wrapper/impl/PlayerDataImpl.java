@@ -6,17 +6,19 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import com.arzio.arziolib.api.util.CDBaseMaterial;
+import com.arzio.arziolib.api.util.CDPacketHelper;
 import com.arzio.arziolib.api.util.reflection.CDClasses;
 import com.arzio.arziolib.api.wrapper.InventoryCDA;
 import com.arzio.arziolib.api.wrapper.PlayerData;
-import com.craftingdead.server.API;
 
 public class PlayerDataImpl implements PlayerData{
 
+    public static final int MAX_NORMALIZED_WATER_LEVEL = 20;
 	public static final int MAX_WATER_LEVEL = 36000;
-	public static final int WATER_LEVEL_RATIO_DIFFERENCE = MAX_WATER_LEVEL / 20;
+	public static final int WATER_LEVEL_RATIO_DIFFERENCE = MAX_WATER_LEVEL / MAX_NORMALIZED_WATER_LEVEL;
 	private String playerName;
 	private final InventoryCDAImpl inventoryCDA;
+	private boolean isNametagsHidden = true;
 	
 	public PlayerDataImpl(Player player) {
 		this(player.getName());
@@ -57,9 +59,16 @@ public class PlayerDataImpl implements PlayerData{
 	}
 
 	@Override
-	public void setCanViewNameTags(boolean isPossible) {
-		API.setCanViewPlayerTag(this.playerName, isPossible);
+	public void setNametagsHidden(boolean isPossible) {
+	    if (CDPacketHelper.sendNametagPacket(this.getPlayer(), isPossible)) {
+	        this.isNametagsHidden = isPossible;
+	    }
 	}
+	
+    @Override
+    public boolean isNametagsHidden() {
+        return this.isNametagsHidden;
+    }
 
 	@Override
 	public boolean hasBase() {
@@ -125,5 +134,15 @@ public class PlayerDataImpl implements PlayerData{
 			return false;
 		return true;
 	}
+
+    @Override
+    public void resendViewableNametags() {
+        this.setNametagsHidden(this.isNametagsHidden);
+    }
+
+    @Override
+    public int getMaxWaterLevel() {
+        return MAX_NORMALIZED_WATER_LEVEL;
+    }
 
 }

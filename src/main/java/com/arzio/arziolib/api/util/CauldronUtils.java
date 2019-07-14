@@ -2,6 +2,7 @@ package com.arzio.arziolib.api.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -11,6 +12,7 @@ import org.bukkit.craftbukkit.v1_6_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_6_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_6_R3.inventory.CraftInventory;
 import org.bukkit.craftbukkit.v1_6_R3.inventory.CraftItemStack;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -31,6 +33,18 @@ public class CauldronUtils {
 	
 	public static Entity getNMSEntity(org.bukkit.entity.Entity entity) {
 		return ((CraftEntity) entity).getHandle();
+	}
+	
+	public static List<Player> getOperators(){
+	    List<Player> operators = new ArrayList<>();
+	    
+	    for (Player player : Bukkit.getOnlinePlayers()) {
+	        if (player.isOp()) {
+	            operators.add(player);
+	        }
+	    }
+	    
+	    return operators;
 	}
 	
 	public static void playSound(Location location, String sound, float volume, float pitch) {

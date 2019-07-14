@@ -13,7 +13,7 @@ public class ClothesCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command arg1, String arg2, String[] args) {
 		if (!(sender instanceof Player)) {
-			sender.sendMessage("§cOnly players can use this command.");
+			sender.sendMessage("Â§cOnly players can use this command.");
 			return true;
 		}
 		
@@ -21,10 +21,10 @@ public class ClothesCommand implements CommandExecutor {
 		UserData userData = UserDataProvider.getInstance().getUserData(player);
 		
 		if (userData.isClothesHidden()) {
-			player.sendMessage("§aPlayer clothes are now visible for you.");
+			player.sendMessage("Â§aPlayer clothes are now visible for you.");
 			userData.setClothesHidden(false);
 		} else {
-			player.sendMessage("§ePlayer clothes are now invisible for you.");
+			player.sendMessage("Â§ePlayer clothes are now invisible for you.");
 			userData.setClothesHidden(true);
 		}
 		return true;

@@ -15,8 +15,9 @@ import org.bukkit.inventory.ItemStack;
 import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.util.CDEntityType;
 import com.arzio.arziolib.api.util.CDSpecialSlot;
+import com.arzio.arziolib.api.util.ThrowableHelper;
 import com.arzio.arziolib.api.wrapper.InventoryCDA;
-import com.arzio.arziolib.module.NamedModule;
+import com.arzio.arziolib.module.ModuleContainer;
 
 public class ArzioLibCommand implements CommandExecutor{
 
@@ -32,37 +33,50 @@ public class ArzioLibCommand implements CommandExecutor{
 		if (args.length > 0) {
 			if (args[0].equalsIgnoreCase("reload")) {
 				if (!(sender.hasPermission("arziolib.reload"))) {
-					sender.sendMessage("§cYou don't have permission to use this command.");
+					sender.sendMessage("Â§cYou don't have permission to use this command.");
 					return true;
 				}
 				
 				if (args.length > 1) {
 					
-					List<NamedModule> modulesFound = plugin.getModuleManager().getModulesByPartialName(args[1]);
+					List<ModuleContainer> modulesFound = plugin.getModuleManager().getEnabledModulesByPartialName(args[1]);
 					
 					if (modulesFound.isEmpty()) {
-						sender.sendMessage("§cModule not found.");
+						sender.sendMessage("Â§cModule not found.");
 						return true;
 					}
 					
 					if (modulesFound.size() > 1) {
-						sender.sendMessage("§cFound more than 1 module with this partial name.");
+						sender.sendMessage("Â§4Found more than 1 module with this partial name:");
+						
+						for (ModuleContainer container : modulesFound) {
+						    sender.sendMessage("Â§c - "+container.getName());
+						}
+						
 						return true;
 					}
 					
-					modulesFound.get(0).reload();
-					sender.sendMessage("§aModule reloaded! Check console for possible errors.");
+					try {
+                        modulesFound.get(0).reload();
+                        sender.sendMessage("Â§aModule reloaded!");
+                    } catch (Throwable t) {
+                        sender.sendMessage("Â§4Failed to reload the module. Check console for error logs.");
+                        sender.sendMessage("Â§cStacktrace:");
+                        ThrowableHelper.printStackTrace(t, sender);
+                        t.printStackTrace();
+                    }
+					
 				} else {
-					sender.sendMessage("§aReloading configuration...");
+					sender.sendMessage("Â§aReloading configuration...");
 					plugin.reloadConfig();
-					sender.sendMessage("§aConfiguration reloaded!");
+					sender.sendMessage("Â§aConfiguration reloaded!");
 				}
 				return true;
 			}
 
 			if (args[0].equalsIgnoreCase("clearground")) {
 				if (!(sender.hasPermission("arziolib.clearground"))) {
-					sender.sendMessage("§cYou don't have permission to use this command.");
+					sender.sendMessage("Â§cYou don't have permission to use this command.");
 					return true;
 				}
 
@@ -77,13 +91,40 @@ public class ArzioLibCommand implements CommandExecutor{
 					}
 				}
 				
-				sender.sendMessage("§aAffected a total amount of "+amount+" entities");
+				sender.sendMessage("Â§aAffected a total amount of "+amount+" entities");
 				
 				return true;
 			}
+            if (args[0].equalsIgnoreCase("modules")) {
+                if (!(sender.hasPermission("arziolib.modules"))) {
+                    sender.sendMessage("Â§cYou don't have permission to use this command.");
+                    return true;
+                }
+                
+                List<ModuleContainer> modules = plugin.getModuleManager().getAllModules();
+
+                sender.sendMessage("Â§6Total of "+modules.size()+" modules:");
+                for (ModuleContainer module : modules) {
+                    String status = "[ENABLED]";
+                    String color = "Â§a";
+                    
+                    if (!module.isEnabled()) {
+                        status = "[DISABLED]";
+                        color = "Â§7";
+                    }
+                    if (module.isErrored()) {
+                        status = "[ERRORED]";
+                        color = "Â§c";
+                    }
+                    
+                    sender.sendMessage("Â§7 - "+color+module.getName()+" Â§l"+status);
+                }
+                
+                return true;
+            }
 			if (args[0].equalsIgnoreCase("clearall")) {
 				if (!(sender.hasPermission("arziolib.clearall"))) {
-					sender.sendMessage("§cYou don't have permission to use this command.");
+					sender.sendMessage("Â§cYou don't have permission to use this command.");
 					return true;
 				}
 
@@ -98,20 +139,20 @@ public class ArzioLibCommand implements CommandExecutor{
 					}
 				}
 				
-				sender.sendMessage("§aAffected a total amount of "+amount+" entities");
+				sender.sendMessage("Â§aAffected a total amount of "+amount+" entities");
 				
 				return true;
 			}
 			if (args[0].equalsIgnoreCase("clearspecials") && args.length > 1) {
 				if (!(sender.hasPermission("arziolib.clearspecials"))) {
-					sender.sendMessage("§cYou don't have permission to use this command.");
+					sender.sendMessage("Â§cYou don't have permission to use this command.");
 					return true;
 				}
 				
 				Player target = Bukkit.getPlayer(args[1]);
 				
 				if (target == null) {
-					sender.sendMessage("§cPlayer not found.");
+					sender.sendMessage("Â§cPlayer not found.");
 					return true;
 				}
 
@@ -121,22 +162,23 @@ public class ArzioLibCommand implements CommandExecutor{
 					inventory.setStackInSpecialSlot(slot, new ItemStack(Material.AIR));
 				}
 				
-				sender.sendMessage("§aCleared Special CD Inventory of "+target.getName());
+				sender.sendMessage("Â§aCleared Special CD Inventory of "+target.getName());
 				
 				return true;
 			}
 		}
 		
-		sender.sendMessage("§aCommands for ArzioLib:");
-		sender.sendMessage("§f/arziolib reload §8- §fReloads the module.yml file");
-		sender.sendMessage("§f/arziolib reload <partial module name>§8- §fReloads the module");
-		sender.sendMessage("§f/arziolib clearground §8- §fRemoves corpses and ground items");
-		sender.sendMessage("§f/arziolib clearall §8- §fRemoves every CD entity");
-		sender.sendMessage("§f/arziolib clearspecials <player> §8- §fClears CD inventory");
+		sender.sendMessage("Â§aCommands for ArzioLib:");
+		sender.sendMessage("Â§f/arziolib modules Â§8- Â§fShows every module");
+		sender.sendMessage("Â§f/arziolib reload Â§8- Â§fReloads the module.yml file");
+		sender.sendMessage("Â§f/arziolib reload <part of module name>Â§8- Â§fReloads the module");
+		sender.sendMessage("Â§f/arziolib clearground Â§8- Â§fRemoves corpses and ground items");
+		sender.sendMessage("Â§f/arziolib clearall Â§8- Â§fRemoves every CD entity");
+		sender.sendMessage("Â§f/arziolib clearspecials <player> Â§8- Â§fClears CD inventory");
 		sender.sendMessage(" ");
-		sender.sendMessage("§aMiscellaneous commands:");
-		sender.sendMessage("§f/clothes §8- §fToggles other players clothes for you (FPS+)");
-		sender.sendMessage("§f/particles §8- §fToggles bullet particles for you (FPS+)");
+		sender.sendMessage("Â§aMiscellaneous commands:");
+		sender.sendMessage("Â§f/clothes Â§8- Â§fToggles other players clothes for you (FPS+)");
+		sender.sendMessage("Â§f/particles Â§8- Â§fToggles bullet particles for you (FPS+)");
 		
 		return true;
 	}

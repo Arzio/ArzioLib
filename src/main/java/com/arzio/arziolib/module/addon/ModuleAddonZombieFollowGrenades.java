@@ -5,19 +5,16 @@ import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
-import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.ai.PathfinderGoalNearestGrenade;
 import com.arzio.arziolib.api.util.CDEntityType;
 import com.arzio.arziolib.api.util.EntityUtil;
-import com.arzio.arziolib.module.ListenerModule;
+import com.arzio.arziolib.module.Module;
+import com.arzio.arziolib.module.RegisterModule;
 
 import net.minecraft.server.v1_6_R3.EntityCreature;
 
-public class ModuleAddonZombieFollowGrenades extends ListenerModule{
-
-	public ModuleAddonZombieFollowGrenades(ArzioLib plugin) {
-		super(plugin);
-	}
+@RegisterModule(name = "addon-zombie-follow-grenades")
+public class ModuleAddonZombieFollowGrenades extends Module{
 	
 	@EventHandler
 	public void onEntitySpawn(CreatureSpawnEvent event) {
@@ -30,10 +27,5 @@ public class ModuleAddonZombieFollowGrenades extends ListenerModule{
 				break;
 			}
 		}
-	}
-
-	@Override
-	public String getName() {
-		return "addon-zombie-follow-grenades";
 	}
 }

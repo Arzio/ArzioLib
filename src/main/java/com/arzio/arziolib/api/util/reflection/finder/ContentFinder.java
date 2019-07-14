@@ -9,6 +9,7 @@ import com.arzio.arziolib.api.util.reflection.ReflectionHelper.FieldChecker;
 
 public interface ContentFinder<F> {
 
+    // TODO maybe remove the parameter
 	public F find(Class<?> from) throws FinderException;
 	
 	public static class MethodBuilder {

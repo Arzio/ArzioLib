@@ -9,16 +9,13 @@ import org.bukkit.event.world.ChunkLoadEvent;
 import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.util.CDBiome;
 import com.arzio.arziolib.config.YMLFile;
-import com.arzio.arziolib.module.ListenerModule;
+import com.arzio.arziolib.module.Module;
+import com.arzio.arziolib.module.RegisterModule;
 
-public class ModuleAddonBiomeChanger extends ListenerModule {
+@RegisterModule(name = "addon-biome-changer")
+public class ModuleAddonBiomeChanger extends Module {
 
-	private final YMLFile yml;
-	
-	public ModuleAddonBiomeChanger(ArzioLib plugin) {
-		super(plugin);
-		yml = new YMLFile(plugin, "module_configuration/world_biomes.yml");
-	}
+	private YMLFile yml;
 	
 	@EventHandler(ignoreCancelled = true)
 	public void onChunkLoad(ChunkLoadEvent event){
@@ -44,18 +41,8 @@ public class ModuleAddonBiomeChanger extends ListenerModule {
 
 	@Override
 	public void onEnable() {
-		super.onEnable();
+        yml = new YMLFile(this.getPlugin(), "module_configuration/world_biomes.yml");
 		yml.saveDefaultFile();
-	}
-
-	@Override
-	public void onDisable() {
-		super.onDisable();
-	}
-
-	@Override
-	public String getName() {
-		return "addon-biome-changer";
 	}
 
 }

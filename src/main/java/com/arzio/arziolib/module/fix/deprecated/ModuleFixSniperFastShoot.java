@@ -1,24 +1,22 @@
-package com.arzio.arziolib.module.fix;
+package com.arzio.arziolib.module.fix.deprecated;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.event.packet.CDBulletHitEvent;
 import com.arzio.arziolib.api.event.packet.CDGunTriggerEvent;
 import com.arzio.arziolib.api.wrapper.Gun;
 import com.arzio.arziolib.config.UserData;
 import com.arzio.arziolib.config.UserDataProvider;
-import com.arzio.arziolib.module.ListenerModule;
+import com.arzio.arziolib.module.Module;
+import com.arzio.arziolib.module.RegisterModule;
 
-public class ModuleFixSniperFastShoot extends ListenerModule{
+@Deprecated
+@RegisterModule(name = "fix-sniper-fast-shoot")
+public class ModuleFixSniperFastShoot extends Module{
 
 	private static final int[] FAST_SHOT_GUNS = new int[] { 9287, 9290 };
-	
-	public ModuleFixSniperFastShoot(ArzioLib plugin) {
-		super(plugin);
-	}
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void bulletHitForFastShotFix(CDBulletHitEvent event) {
@@ -65,10 +63,5 @@ public class ModuleFixSniperFastShoot extends ListenerModule{
 			}
 		}
 		return false;
-	}
-
-	@Override
-	public String getName() {
-		return "fix-sniper-fast-shoot";
 	}
 }

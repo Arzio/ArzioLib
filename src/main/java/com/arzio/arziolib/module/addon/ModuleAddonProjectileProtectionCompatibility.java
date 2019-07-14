@@ -13,26 +13,24 @@ import com.arzio.arziolib.api.util.CDSpecialSlot;
 import com.arzio.arziolib.api.wrapper.InventoryCDA;
 import com.arzio.arziolib.api.wrapper.PlayerDataHandler;
 import com.arzio.arziolib.config.YMLFile;
-import com.arzio.arziolib.module.ListenerModule;
+import com.arzio.arziolib.module.Module;
+import com.arzio.arziolib.module.RegisterModule;
 
-public class ModuleAddonProjectileProtectionCompatibility extends ListenerModule {
+@RegisterModule(name = "addon-projectile-protection-compatibility")
+public class ModuleAddonProjectileProtectionCompatibility extends Module {
 	
 	private PlayerDataHandler dataHandler;
 	private YMLFile yml;
 	private double projectileProtectionRatio = 2F;
 	
-	public ModuleAddonProjectileProtectionCompatibility(ArzioLib plugin) {
-		super(plugin);
-		this.yml = new YMLFile(plugin, "module_configuration/projectile_protection_ratio.yml");
-	}
-	
 	@Override
 	public void onEnable() {
 		super.onEnable();
 		
+        this.yml = new YMLFile(this.getPlugin(), "module_configuration/projectile_protection_ratio.yml");
 		yml.reload();
 		
-		this.dataHandler = this.getPlugin().getPlayerDataHandler();
+		this.dataHandler = ArzioLib.getInstance().getPlayerDataHandler();
 		this.projectileProtectionRatio = this.yml.getValueWithDefault("protection-ratio-per-enchantment-level", this.projectileProtectionRatio);
 		
 		yml.save();
@@ -53,10 +51,22 @@ public class ModuleAddonProjectileProtectionCompatibility extends ListenerModule
 			ItemStack stackHat = inventory.getStackInSpecialSlot(CDSpecialSlot.HAT);
 			ItemStack stackVest = inventory.getStackInSpecialSlot(CDSpecialSlot.VEST);
 			ItemStack stackClothing = inventory.getStackInSpecialSlot(CDSpecialSlot.CLOTHING);
-		
-			int totalProtectionLevel = stackHat.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE)
-										+ stackVest.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE)
-										+ stackClothing.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
+			ItemStack stackBoots = victim.getInventory().getBoots();
+			
+			int totalProtectionLevel = 0;
+			
+			if (stackHat != null) {
+			    totalProtectionLevel += stackHat.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
+			}
+			if (stackVest != null) {
+			    totalProtectionLevel += stackVest.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
+			}
+			if (stackClothing != null) {
+			    totalProtectionLevel += stackClothing.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
+			}
+			if (stackBoots != null) {
+			    totalProtectionLevel += stackBoots.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
+			}
 			
 			double protectionPercentage = (totalProtectionLevel * projectileProtectionRatio);
 			double amountNow = event.getDamage() * (1D - (protectionPercentage / 100.0D));
@@ -67,11 +77,6 @@ public class ModuleAddonProjectileProtectionCompatibility extends ListenerModule
 			
 			event.setDamage(amountNow);
 		}
-	}
-
-	@Override
-	public String getName() {
-		return "addon-projectile-protection-compatibility";
 	}
 
 }

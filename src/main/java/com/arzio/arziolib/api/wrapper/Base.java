@@ -9,6 +9,7 @@ public interface Base {
 	public boolean hasOwner();
 	public String getOwnerName();
 	public Player getOwner();
+	public boolean isOwner(Player player);
 	public boolean isValid();
 	public void destroy();
 	public boolean isPartOfBase(Block block);

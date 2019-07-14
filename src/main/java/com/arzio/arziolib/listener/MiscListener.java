@@ -11,11 +11,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.server.PluginDisableEvent;
 
 import com.arzio.arziolib.ArzioLib;
-import com.arzio.arziolib.UpdateChecker;
-import com.arzio.arziolib.UpdateChecker.UpdateState;
 import com.arzio.arziolib.api.ForgeListener;
+import com.arzio.arziolib.api.UpdateChecker.UpdateState;
 import com.arzio.arziolib.api.event.packet.CDPlayerDataSendEvent;
 import com.arzio.arziolib.api.event.packet.CDShowBulletHitEvent;
 import com.arzio.arziolib.api.util.CountdownTimer;
@@ -29,6 +29,11 @@ public class MiscListener implements ForgeListener {
 			event.setCancelled(true);
 		}
 	}
+	
+	@EventHandler
+	public void onPluginUnload(PluginDisableEvent event) {
+	    ArzioLib.getInstance().getTestHelper().clearTestCases(event.getPlugin());
+	}
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onAdminJoin(PlayerJoinEvent event) {
@@ -36,7 +41,7 @@ public class MiscListener implements ForgeListener {
 		if (event.getPlayer().isOp() || event.getPlayer().hasPermission("essentials.gamemode")) {
 			final Player player = event.getPlayer();
 
-			if (UpdateChecker.INSTANCE.getState() == UpdateState.NEEDS_UPDATE) {
+			if (ArzioLib.getInstance().getUpdateChecker().getState() == UpdateState.NEEDS_UPDATE) {
 				CountdownTimer timer = new CountdownTimer(ArzioLib.getInstance(), 5L,
 						new CountdownTimer.TimeCallback() {
 
@@ -50,15 +55,15 @@ public class MiscListener implements ForgeListener {
 									return;
 								}
 
-								String latestVersion = UpdateChecker.INSTANCE.getLatestVersionTag();
+								String latestVersion = ArzioLib.getInstance().getUpdateChecker().getLatestVersionTag();
 
 								player.sendMessage(" ");
-								player.sendMessage("§a[ArzioLib] §eA atualização " + latestVersion
-										+ " está pronta para ser baixada!");
+								player.sendMessage("Â§a[ArzioLib] Â§eA atualizaÃ§Ã£o " + latestVersion
+										+ " estÃ¡ pronta para ser baixada!");
 								player.sendMessage(
-										"§a[ArzioLib] §e§oThe " + latestVersion + " update is ready to be downloaded!");
+										"Â§a[ArzioLib] Â§eÂ§oThe " + latestVersion + " update is ready to be downloaded!");
 								player.sendMessage(
-										"§a[ArzioLib] §fDownload it here NOW: §bhttps://github.com/Arzio/ArzioLib/releases");
+										"Â§a[ArzioLib] Â§fDownload it here NOW: Â§bhttps://github.com/Arzio/ArzioLib/releases");
 								player.sendMessage(" ");
 
 								player.playSound(player.getLocation(), Sound.NOTE_PLING, 2F, 2F);

@@ -13,7 +13,8 @@ import com.arzio.arziolib.api.event.handler.CDPacketReceivedEvent;
 import com.arzio.arziolib.api.event.handler.CDPacketSentEvent;
 import com.arzio.arziolib.api.exception.CDAReflectionException;
 import com.arzio.arziolib.api.util.CDPacketDataWrapper;
-import com.arzio.arziolib.module.NamedModule;
+import com.arzio.arziolib.module.Module;
+import com.arzio.arziolib.module.RegisterModule;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.ListenerPriority;
@@ -25,7 +26,8 @@ import net.minecraft.server.v1_6_R3.EntityPlayer;
 import net.minecraft.server.v1_6_R3.INetworkManager;
 import net.minecraft.server.v1_6_R3.Packet250CustomPayload;
 
-public class ModuleCoreNetworkHandler extends NamedModule implements IPacketHandler{
+@RegisterModule(name = "core-network-handler")
+public class ModuleCoreNetworkHandler extends Module implements IPacketHandler{
 
 	private List<IPacketHandler> wrappedHandlers = new ArrayList<>();
 	private final PacketAdapter adapter;
@@ -34,14 +36,13 @@ public class ModuleCoreNetworkHandler extends NamedModule implements IPacketHand
 	private Method putMethod = null;
 	private Object serverPacketHandlers;
 	
-	public ModuleCoreNetworkHandler(ArzioLib plugin) {
-		super(plugin);
+	public ModuleCoreNetworkHandler() {
 		try {
 			this.detectMethodsAndFields();
 		} catch (Exception e) {
 			throw new CDAReflectionException(e);
 		}
-		adapter = new PacketAdapter(plugin, ListenerPriority.NORMAL, new PacketType[] { PacketType.Play.Server.CUSTOM_PAYLOAD }) {
+		adapter = new PacketAdapter(ArzioLib.getInstance(), ListenerPriority.NORMAL, new PacketType[] { PacketType.Play.Server.CUSTOM_PAYLOAD }) {
 			
 			@Override
 			public void onPacketSending(PacketEvent packetEvent) {
@@ -138,7 +139,7 @@ public class ModuleCoreNetworkHandler extends NamedModule implements IPacketHand
 	}
 
 	@Override
-	protected void onEnable() {
+	public void onEnable() {
 		ProtocolLibrary.getProtocolManager().addPacketListener(adapter);
 		try {
 			this.injectWrapper();
@@ -148,17 +149,12 @@ public class ModuleCoreNetworkHandler extends NamedModule implements IPacketHand
 	}
 
 	@Override
-	protected void onDisable() {
+	public void onDisable() {
 		ProtocolLibrary.getProtocolManager().removePacketListener(adapter);
 		try {
 			this.removeWrapper();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public String getName() {
-		return "core-network-handler";
 	}
 }

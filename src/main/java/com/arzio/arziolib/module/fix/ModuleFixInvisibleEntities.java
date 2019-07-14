@@ -8,13 +8,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.util.EntityUtil;
-import com.arzio.arziolib.module.ListenerModule;
+import com.arzio.arziolib.module.Module;
+import com.arzio.arziolib.module.RegisterModule;
 
-public class ModuleFixInvisibleEntities extends ListenerModule{
-
-	public ModuleFixInvisibleEntities(ArzioLib plugin) {
-		super(plugin);
-	}
+@RegisterModule(name = "fix-invisible-entities")
+public class ModuleFixInvisibleEntities extends Module{
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
@@ -34,11 +32,6 @@ public class ModuleFixInvisibleEntities extends ListenerModule{
 			}
 		};
 		runnable.runTaskLater(ArzioLib.getInstance(), 20L);
-	}
-
-	@Override
-	public String getName() {
-		return "fix-invisible-entities";
 	}
 
 }

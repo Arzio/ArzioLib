@@ -1,6 +1,6 @@
 package com.arzio.arziolib.api.wrapper;
 
-public interface Ammo extends CDItem {
+public interface Ammo extends CDSharedItem {
 
 	public double getPenetration();
 	

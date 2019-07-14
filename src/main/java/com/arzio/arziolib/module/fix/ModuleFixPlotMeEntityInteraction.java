@@ -5,23 +5,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
-import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.util.CDEntityType;
-import com.arzio.arziolib.module.ListenerModule;
+import com.arzio.arziolib.module.Module;
+import com.arzio.arziolib.module.RegisterModule;
 import com.worldcretornica.plotme.PlotManager;
 
 import fr.xephi.authme.api.API;
 
-public class ModuleFixPlotMeEntityInteraction extends ListenerModule {
-
-	public ModuleFixPlotMeEntityInteraction(ArzioLib plugin) {
-		super(plugin);
-	}
-
-	@Override
-	public String getName() {
-		return "fix-plotme-entity-interaction";
-	}
+@RegisterModule(name = "fix-plotme-entity-interaction")
+public class ModuleFixPlotMeEntityInteraction extends Module {
 
 	@EventHandler(ignoreCancelled = false, priority = EventPriority.MONITOR)
 	public void fixInteraction(PlayerInteractEntityEvent event) {

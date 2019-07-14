@@ -9,7 +9,8 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.util.CDDamageCause;
 import com.arzio.arziolib.api.util.reflection.ReflectionHelper;
-import com.arzio.arziolib.module.ListenerModule;
+import com.arzio.arziolib.module.Module;
+import com.arzio.arziolib.module.RegisterModule;
 
 import net.minecraft.server.v1_6_R3.DamageSource;
 import net.minecraft.server.v1_6_R3.EntityDamageSource;
@@ -19,11 +20,8 @@ import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
-public class ModuleFixDamageSourceDetection extends ListenerModule{
-
-	public ModuleFixDamageSourceDetection(ArzioLib plugin) {
-		super(plugin);
-	}
+@RegisterModule(name = "fix-damage-source-detection")
+public class ModuleFixDamageSourceDetection extends Module{
 
 	@ForgeSubscribe(priority = EventPriority.HIGHEST)
 	public void onAttack(LivingAttackEvent event) {
@@ -111,11 +109,4 @@ public class ModuleFixDamageSourceDetection extends ListenerModule{
 		}
 		return false;
 	}
-
-
-	@Override
-	public String getName() {
-		return "fix-damage-source-detection";
-	}
-
 }

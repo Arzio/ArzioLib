@@ -7,21 +7,18 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.event.CDLootDropEvent;
 import com.arzio.arziolib.api.event.EntityJoinWorldEvent;
 import com.arzio.arziolib.api.util.CDEntityType;
 import com.arzio.arziolib.api.util.CDLootType;
-import com.arzio.arziolib.module.ListenerModule;
+import com.arzio.arziolib.module.Module;
+import com.arzio.arziolib.module.RegisterModule;
 
-public class ModuleCoreCallCDLootDropEvent extends ListenerModule{
+@RegisterModule(name = "core-call-loot-drop-event")
+public class ModuleCoreCallCDLootDropEvent extends Module{
 
 	private Player lastPlayer = null;
 	private boolean willLootItemDrop = false;
-	
-	public ModuleCoreCallCDLootDropEvent(ArzioLib plugin) {
-		super(plugin);
-	}
 	
 	@EventHandler(priority=EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
@@ -50,12 +47,6 @@ public class ModuleCoreCallCDLootDropEvent extends ListenerModule{
 				this.lastPlayer = event.getPlayer();
 			}
 		}
-	}
-	
-
-	@Override
-	public String getName() {
-		return "core-call-loot-drop-event";
 	}
 
 }

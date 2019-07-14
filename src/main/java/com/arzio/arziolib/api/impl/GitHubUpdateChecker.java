@@ -1,4 +1,4 @@
-package com.arzio.arziolib;
+package com.arzio.arziolib.api.impl;
 
 import java.net.URL;
 import java.util.logging.Logger;
@@ -10,17 +10,27 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import com.arzio.arziolib.ArzioLib;
+import com.arzio.arziolib.api.UpdateChecker;
+
 /**
  * Works only for GitHub.
  */
-public enum UpdateChecker {
+public class GitHubUpdateChecker implements UpdateChecker {
 
-	INSTANCE;
-
-	public static final String API_URL = "https://api.github.com/repos/Arzio/ArzioLib/releases";
+	private final String apiURL;
+	private final String pluginPageURL;
 	private String latestVersionTag;
 	private UpdateState state = UpdateState.UP_TO_DATE;
+	private final Plugin plugin;
+	
+	public GitHubUpdateChecker(Plugin plugin, String apiURL, String pluginPageURL) {
+	    this.apiURL = apiURL;
+	    this.plugin = plugin;
+	    this.pluginPageURL = pluginPageURL;
+	}
 
+	@Override
 	public UpdateState getState() {
 		return this.state;
 	}
@@ -31,14 +41,16 @@ public enum UpdateChecker {
 	 * 
 	 * @return String with the latest plugin version
 	 */
+	@Override
 	public String getLatestVersionTag() {
 		return this.state == UpdateState.FAILED_TO_CHECK ? ArzioLib.getInstance().getDescription().getVersion()
 				: this.latestVersionTag;
 	}
 
+	@Override
 	public void checkUpdates(CheckMethod method) {
 		Logger logger = ArzioLib.getInstance().getLogger();
-		logger.info("Checking for ArzioLib updates...");
+		logger.info("Checking for "+plugin.getName()+" updates...");
 
 		Runnable runnable = new Runnable() {
 
@@ -48,26 +60,26 @@ public enum UpdateChecker {
 				Plugin plugin = ArzioLib.getInstance();
 
 				try {
-					JSONArray updates = (JSONArray) new JSONParser().parse(IOUtils.toString(new URL(API_URL)));
+					JSONArray updates = (JSONArray) new JSONParser().parse(IOUtils.toString(new URL(apiURL)));
 					JSONObject release = (JSONObject) updates.get(0); // Gets the first element of the array (most
 																		// updated version)
 
 					// Updates the latest version tag obtained from GitHub
-					UpdateChecker.INSTANCE.latestVersionTag = (String) release.get("tag_name");
+					GitHubUpdateChecker.this.latestVersionTag = (String) release.get("tag_name");
 
 					boolean isUpToDate = plugin.getDescription().getVersion().equalsIgnoreCase(latestVersionTag);
 					if (isUpToDate) {
-						UpdateChecker.INSTANCE.state = UpdateState.UP_TO_DATE;
-						plugin.getLogger().info("ArzioLib is up-to-date! :3");
+					    GitHubUpdateChecker.this.state = UpdateState.UP_TO_DATE;
+						plugin.getLogger().info(plugin.getName()+" is up-to-date!");
 					} else {
-						UpdateChecker.INSTANCE.state = UpdateState.NEEDS_UPDATE;
+					    GitHubUpdateChecker.this.state = UpdateState.NEEDS_UPDATE;
 						plugin.getLogger().info(
-								"There is a new ArzioLib version to download! Download it at https://github.com/Arzio/ArzioLib/releases");
+								"There is a new "+plugin.getName()+" version to download! Download it at "+pluginPageURL);
 					}
 				} catch (Exception e) {
-					UpdateChecker.INSTANCE.state = UpdateState.FAILED_TO_CHECK;
+				    GitHubUpdateChecker.this.state = UpdateState.FAILED_TO_CHECK;
 					plugin.getLogger().warning(
-							"ArzioLib could not get information about the latest updates. Check your firewall or internet connection!");
+							plugin.getName()+" could not get information about the latest updates. Check your firewall or internet connection!");
 					e.printStackTrace();
 				}
 			}
@@ -83,14 +95,20 @@ public enum UpdateChecker {
 		}
 	}
 
-	public static enum UpdateState {
-		UP_TO_DATE, NEEDS_UPDATE, FAILED_TO_CHECK;
-	}
+	@Override
+	public String getPluginPageURL() {
+        return pluginPageURL;
+    }
 
-	public static enum CheckMethod {
-		/** It will use the current thread to check for updates */
-		SYNC,
-		/** It will run in a async way, from Bukkit's scheduler */
-		ASYNC;
-	}
+	@Override
+    public String getApiURL() {
+        return apiURL;
+    }
+
+	@Override
+    public Plugin getPlugin() {
+        return plugin;
+    }
+
+
 }

@@ -62,7 +62,8 @@ public class InventoryCDAImpl implements InventoryCDA{
 	public ItemStack getStackInSpecialSlot(CDSpecialSlot slot) {
 		try {
 			net.minecraft.server.v1_6_R3.ItemStack[] items = CDClasses.inventoryCDAInventory.getValue(CDClasses.playerDataInventoryCDA.getValue(playerData.getPlayerDataInstance()));
-			return CraftItemStack.asBukkitCopy(items[slot.getSlotIndex()]);
+			net.minecraft.server.v1_6_R3.ItemStack item = items[slot.getSlotIndex()];
+			return item == null ? null : CraftItemStack.asBukkitCopy(item);
 		} catch (Exception e) {
 			throw new CDAReflectionException(e);
 		}

@@ -18,7 +18,8 @@ import com.arzio.arziolib.api.util.CDAttachmentType;
 import com.arzio.arziolib.api.wrapper.Gun;
 import com.arzio.arziolib.config.YMLFile;
 import com.arzio.arziolib.config.YMLFile.ConfigurationVisitor;
-import com.arzio.arziolib.module.ListenerModule;
+import com.arzio.arziolib.module.Module;
+import com.arzio.arziolib.module.RegisterModule;
 import com.arzio.arziolib.module.addon.ModuleAddonRealSound.SoundData.SoundTuple;
 import com.arzio.arziolib.module.addon.ModuleAddonRealSound.SoundData.SoundType;
 import com.comphenix.protocol.PacketType;
@@ -26,21 +27,16 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.reflect.StructureModifier;
 
-public class ModuleAddonRealSound extends ListenerModule{
+@RegisterModule(name = "addon-real-sound")
+public class ModuleAddonRealSound extends Module{
 
-	private final YMLFile yml;
+	private YMLFile yml;
 	private Map<String, SoundData> gunSoundDataMap = new HashMap<>();
 	private Logger logger = Logger.getLogger(ModuleAddonRealSound.class.getSimpleName());
 	
-	public ModuleAddonRealSound(ArzioLib plugin) {
-		super(plugin);
-		this.yml = new YMLFile(plugin, "module_configuration/sound_calibration.yml");
-	}
-	
 	@Override
 	public void onEnable() {
-		super.onEnable();
-		
+        this.yml = new YMLFile(this.getPlugin(), "module_configuration/sound_calibration.yml");
 		yml.saveDefaultFile();
 		yml.reload();
 		
@@ -66,11 +62,6 @@ public class ModuleAddonRealSound extends ListenerModule{
 				gunSoundDataMap.put(key.toLowerCase(), data);
 			}
 		});
-	}
-	
-	@Override
-	public void onDisable() {
-		super.onDisable();
 	}
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
@@ -202,11 +193,6 @@ public class ModuleAddonRealSound extends ListenerModule{
 				e.printStackTrace();
 			}
 		}
-	}
-
-	@Override
-	public String getName() {
-		return "addon-real-sound";
 	}
 
 	public static class SoundData {

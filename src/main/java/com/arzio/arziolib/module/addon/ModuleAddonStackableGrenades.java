@@ -1,22 +1,19 @@
 package com.arzio.arziolib.module.addon;
 
-import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.util.CDMaterial;
 import com.arzio.arziolib.api.util.CauldronUtils;
 import com.arzio.arziolib.config.YMLFile;
-import com.arzio.arziolib.module.NamedModule;
+import com.arzio.arziolib.module.Module;
+import com.arzio.arziolib.module.RegisterModule;
 
-public class ModuleAddonStackableGrenades extends NamedModule{
+@RegisterModule(name = "addon-stackable-grenades")
+public class ModuleAddonStackableGrenades extends Module{
 
-	private final YMLFile yml;
-	
-	public ModuleAddonStackableGrenades(ArzioLib plugin) {
-		super(plugin);
-		yml = new YMLFile(plugin, "module_configuration/stackable_grenades.yml");
-	}
+	private YMLFile yml;
 
 	@Override
 	public void onEnable() {
+        yml = new YMLFile(this.getPlugin(), "module_configuration/stackable_grenades.yml");
 		yml.reload();
 		
 		for (CDMaterial material : CDMaterial.GRENADES) {
@@ -25,15 +22,6 @@ public class ModuleAddonStackableGrenades extends NamedModule{
 		}
 		
 		yml.save();
-	}
-
-	@Override
-	public void onDisable() {
-	}
-
-	@Override
-	public String getName() {
-		return "addon-stackable-grenades";
 	}
 
 }

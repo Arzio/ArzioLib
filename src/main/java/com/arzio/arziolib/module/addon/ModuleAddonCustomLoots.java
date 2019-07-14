@@ -7,27 +7,23 @@ import java.util.logging.Logger;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.util.CDLootType;
 import com.arzio.arziolib.api.wrapper.LootChance;
 import com.arzio.arziolib.config.YMLFile;
 import com.arzio.arziolib.config.YMLFile.ConfigurationVisitor;
-import com.arzio.arziolib.module.NamedModule;
+import com.arzio.arziolib.module.Module;
+import com.arzio.arziolib.module.RegisterModule;
 
-public class ModuleAddonCustomLoots extends NamedModule{
+@RegisterModule(name = "addon-custom-loots")
+public class ModuleAddonCustomLoots extends Module{
 
-	private final YMLFile yml;
+	private YMLFile yml;
 	private final Logger logger = Logger.getLogger(ModuleAddonCustomLoots.class.getSimpleName());
-	
-	public ModuleAddonCustomLoots(ArzioLib plugin) {
-		super(plugin);
-		yml = new YMLFile(plugin, "module_configuration/custom_loots.yml");
-	}
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onEnable() {
-		
+        yml = new YMLFile(this.getPlugin(), "module_configuration/custom_loots.yml");
 		yml.reload();
 		
 		if (!yml.getFile().exists()) {
@@ -60,15 +56,6 @@ public class ModuleAddonCustomLoots extends NamedModule{
 			
 		}
 		logger.log(Level.INFO, "Loaded a total of "+amount.get()+" loot chances. If you want to reset the loot chances, delete the "+yml.getFile().getName()+" file and restart the server.");
-	}
-
-	@Override
-	public void onDisable() {
-	}
-
-	@Override
-	public String getName() {
-		return "addon-custom-loots";
 	}
 
 }

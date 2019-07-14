@@ -94,7 +94,7 @@ public class ItemStackHelperImpl implements ItemStackHelper {
 	}
 
 	@Override
-	public void setAttachment(ItemStack stack, CDAttachment attach) {
+	public void setAttachment(ItemStack stack, CDAttachmentType type, CDAttachment attach) {
 		NBTTagCompound compound = getGunTagCompound(stack);
 		if (compound == null) {
 			return;
@@ -105,7 +105,7 @@ public class ItemStackHelperImpl implements ItemStackHelper {
 			id = attach.getId();
 		}
 		
-		compound.setInt("attachmentSlot"+attach.getType().getId(), id);
+		compound.setInt("attachmentSlot"+type.getId(), id);
 	}
 
 	@Override
@@ -197,6 +197,9 @@ public class ItemStackHelperImpl implements ItemStackHelper {
 	public <T, R> AccessResult<R> accessItemInventory(InventoryCDA inventory, CDSpecialSlot slot, final InventoryNavigator<R> navigator) {
 		
 		ItemStack stack = inventory.getStackInSpecialSlot(slot);
+		if (stack == null) {
+		    return null;
+		}
 		
 		AccessResult<R> result = this.accessItemInventory(new ItemInventoryNavigator<R>(stack) {
 

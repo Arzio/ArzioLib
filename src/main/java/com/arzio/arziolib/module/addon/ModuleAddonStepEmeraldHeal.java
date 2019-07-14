@@ -10,16 +10,13 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.util.CDPotionEffectType;
 import com.arzio.arziolib.api.wrapper.PlayerDataHandler;
-import com.arzio.arziolib.module.ListenerModule;
+import com.arzio.arziolib.module.Module;
+import com.arzio.arziolib.module.RegisterModule;
 
-public class ModuleAddonStepEmeraldHeal extends ListenerModule {
+@RegisterModule(name = "addon-step-emerald-heal", defaultState = false)
+public class ModuleAddonStepEmeraldHeal extends Module {
 	
-	private final PlayerDataHandler playerDataHandler;
-	
-	public ModuleAddonStepEmeraldHeal(ArzioLib plugin, boolean defaultState) {
-		super(plugin, defaultState);
-		this.playerDataHandler = plugin.getPlayerDataHandler();
-	}
+	private PlayerDataHandler playerDataHandler = ArzioLib.getInstance().getPlayerDataHandler();
 	
 	@EventHandler(ignoreCancelled = true)
 	public void onWalkIntoEmerald(PlayerMoveEvent event) {
@@ -39,11 +36,6 @@ public class ModuleAddonStepEmeraldHeal extends ListenerModule {
 		}
 		event.getPlayer().setFoodLevel(20);
 		playerDataHandler.getPlayerData(player).setWaterLevel(20);
-	}
-
-	@Override
-	public String getName() {
-		return "addon-step-emerald-heal";
 	}
 
 }

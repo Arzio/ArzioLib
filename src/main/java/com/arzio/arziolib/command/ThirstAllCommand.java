@@ -14,7 +14,7 @@ public class ThirstAllCommand implements CommandExecutor {
 
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (!sender.hasPermission("arziolib.thirstall")) {
-			sender.sendMessage("§cYou do not have permission.");
+			sender.sendMessage("Â§cYou do not have permission.");
 			return true;
 		}
 
@@ -23,7 +23,7 @@ public class ThirstAllCommand implements CommandExecutor {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			player.playSound(player.getLocation(), Sound.DRINK, 1F, 1F);
 			handler.getPlayerData(player).setWaterLevel(20);
-			player.sendMessage("§a"+sender.getName()+" healed your water level.");
+			player.sendMessage("Â§a"+sender.getName()+" healed your water level.");
 		}
 
 		return true;

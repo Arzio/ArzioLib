@@ -1,6 +1,8 @@
 package com.arzio.arziolib.api.util;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.util.Map;
 import java.util.logging.Level;
 
 import org.bukkit.Location;
@@ -33,31 +35,55 @@ public enum CDEntityType {
 	GRENADE_GAS("grenadegas"),
 	CORPSE("corpse"),
 	GROUND_ITEM("grounditem"),
-	
-	/** 
-	 * @deprecated Head entity does not exists at server side anymore due to CD 1.2.8 update.
-	 */
-	@Deprecated
-	HEAD("head"),
-	
 	C4("c4"),
 	FLAME_THROWER_FIRE("flamethrowerfire"),
 	SUPPLY_DROP("supplydrop");
 	
 	private final String name;
 	private EntityType type;
+	private Class<? extends net.minecraft.server.v1_6_R3.Entity> entityClass;
 	
 	private CDEntityType(String name) {
 		this.name = name;
 		try {
 			this.type = EntityType.valueOf(this.getBukkitName().toUpperCase());
-		} catch (Exception e) {
+		} catch (IllegalArgumentException e) {
 			ArzioLib.getInstance().getLogger().log(Level.WARNING, "Bukkit entity type for the CD Entity '"+this.getName()+"' is deprecated or could not be found. This entity will not be detected properly by plugins in this CD version.");
+			return; // Do not continue.
 		}
+		this.findEntityClass();
+	}
+	
+	private void findEntityClass() {
+        try {
+            Field mapEntityNameToClass = EntityTypes.class.getDeclaredField("b");
+            mapEntityNameToClass.setAccessible(true);
+            Map map = (Map) mapEntityNameToClass.get(null);
+            
+            // First try
+            this.entityClass = (Class<? extends net.minecraft.server.v1_6_R3.Entity>) map.get(this.getName());
+            
+            // Second try
+            if (this.entityClass == null) {
+                this.entityClass = (Class<? extends net.minecraft.server.v1_6_R3.Entity>) map.get(this.getEntityModName());
+            }
+            
+            // Failed.
+            if (this.entityClass == null) {
+                throw new ClassNotFoundException("Entity class of CD Entity "+this.getName()+" not found!");
+            }
+        } catch (Exception e) {
+            ArzioLib.getInstance().getLogger().log(Level.WARNING, "Failed to get the class of the CD Entity "+this.getName()+".");
+            e.printStackTrace();
+        }
 	}
 	
 	public String getName() {
 		return this.name;
+	}
+	
+	public String getEntityModName() {
+	    return String.format("%s.%s", ArzioLib.MOD_ID, this.getName());
 	}
 	
 	public String getBukkitName() {
@@ -70,7 +96,7 @@ public enum CDEntityType {
 	
 	@SuppressWarnings("unchecked")
 	public Class<? extends net.minecraft.server.v1_6_R3.Entity> getNMSClass(){
-		return EntityTypes.a(this.asBukkitType().getTypeId());
+	    return entityClass;
 	}
 	
 	public boolean isTypeOf(Entity entity) {

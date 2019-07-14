@@ -8,18 +8,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.world.WorldInitEvent;
 
-import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.event.EntityJoinWorldEvent;
-import com.arzio.arziolib.module.ListenerModule;
+import com.arzio.arziolib.module.Module;
+import com.arzio.arziolib.module.RegisterModule;
 
 import net.minecraft.server.v1_6_R3.Entity;
 import net.minecraft.server.v1_6_R3.World;
 
-public class ModuleCoreCallEntityJoinWorldEvent extends ListenerModule{
-
-	public ModuleCoreCallEntityJoinWorldEvent(ArzioLib plugin) {
-		super(plugin);
-	}
+@RegisterModule(name = "core-call-entity-join-world-event")
+public class ModuleCoreCallEntityJoinWorldEvent extends Module{
 	
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onWorldInit(WorldInitEvent event) {
@@ -50,11 +47,6 @@ public class ModuleCoreCallEntityJoinWorldEvent extends ListenerModule{
 			
 			return super.add(e);
 		}
-	}
-
-	@Override
-	public String getName() {
-		return "core-call-entity-join-world-event";
 	}
 
 }

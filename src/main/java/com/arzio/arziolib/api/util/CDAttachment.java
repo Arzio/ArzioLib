@@ -55,7 +55,11 @@ public class CDAttachment {
 		return null;
 	}
 	
-	public static CDAttachment getByMaterial(Material material) {
+	public static CDAttachment getFromMaterial(CDMaterial material) {
+	    return getFromMaterial(material.asMaterial());
+	}
+	
+	public static CDAttachment getFromMaterial(Material material) {
 		for (CDAttachment attach : ATTACHMENTS) {
 			if (attach.getMaterial().asMaterial() == material) {
 				return attach;
@@ -68,7 +72,7 @@ public class CDAttachment {
 		if (stack == null) {
 			return null;
 		}
-		return getByMaterial(stack.getType());
+		return getFromMaterial(stack.getType());
 	}
 	
 	public static CDAttachment[] getAll() {

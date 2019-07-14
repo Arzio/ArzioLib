@@ -189,4 +189,9 @@ public class BaseImpl implements Base {
 		return hasPermission;
 	}
 
+    @Override
+    public boolean isOwner(Player player) {
+        return player.getName().equals(this.getOwnerName());
+    }
+
 }

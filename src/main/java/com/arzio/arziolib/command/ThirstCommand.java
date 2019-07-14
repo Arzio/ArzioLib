@@ -12,12 +12,12 @@ public class ThirstCommand implements CommandExecutor {
 
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (!(sender instanceof Player)) {
-			sender.sendMessage("§cThis command can only be used by players.");
+			sender.sendMessage("Â§cThis command can only be used by players.");
 			return true;
 		}
 		
 		if (!sender.hasPermission("arziolib.thirst")) {
-			sender.sendMessage("§cYou do not have permission.");
+			sender.sendMessage("Â§cYou do not have permission.");
 			return true;
 		}
 		

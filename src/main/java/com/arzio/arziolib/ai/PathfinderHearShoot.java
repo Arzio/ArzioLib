@@ -2,7 +2,8 @@ package com.arzio.arziolib.ai;
 
 import java.util.List;
 
-import com.arzio.arziolib.ArzioLib;
+import org.bukkit.plugin.Plugin;
+
 import com.arzio.arziolib.config.UserData;
 
 import net.minecraft.server.v1_6_R3.EntityCreature;
@@ -17,9 +18,9 @@ public class PathfinderHearShoot extends PathfinderGoal {
 	private double range = 50D;
 	private EntityLiving targetEntity;
 	private EntityInsentient holder;
-	private final ArzioLib plugin;
+	private Plugin plugin;
 
-	public PathfinderHearShoot(ArzioLib plugin, EntityCreature entitycreature) {
+	public PathfinderHearShoot(Plugin plugin, EntityCreature entitycreature) {
 		this.plugin = plugin;
 		this.holder = entitycreature;
 	}

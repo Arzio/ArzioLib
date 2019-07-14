@@ -18,13 +18,11 @@ import com.arzio.arziolib.api.util.CauldronUtils;
 import com.arzio.arziolib.api.wrapper.Ammo;
 import com.arzio.arziolib.api.wrapper.Gun;
 import com.arzio.arziolib.api.wrapper.ItemProvider;
-import com.arzio.arziolib.module.ListenerModule;
+import com.arzio.arziolib.module.Module;
+import com.arzio.arziolib.module.RegisterModule;
 
-public class ModuleAddonEquipGunsFromInventory extends ListenerModule {
-	
-	public ModuleAddonEquipGunsFromInventory(ArzioLib plugin) {
-		super(plugin);
-	}
+@RegisterModule(name = "addon-equip-guns-from-inventory")
+public class ModuleAddonEquipGunsFromInventory extends Module {
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onInventoryClick(InventoryClickEvent event){
@@ -81,7 +79,7 @@ public class ModuleAddonEquipGunsFromInventory extends ListenerModule {
 				event.setCancelled(true);
 				
 				CDAttachment oldAttachment = helper.getAttachment(clickedStack, attachment.getType());
-				helper.setAttachment(clickedStack, attachment);
+				helper.setAttachment(clickedStack, attachment.getType(), attachment);
 				event.setCursor(oldAttachment == null ? new ItemStack(Material.AIR) : new ItemStack(oldAttachment.getMaterial().asMaterial()));
 				
 				Player player = (Player) event.getWhoClicked();
@@ -120,11 +118,6 @@ public class ModuleAddonEquipGunsFromInventory extends ListenerModule {
 			}
 			
 		}
-	}
-
-	@Override
-	public String getName() {
-		return "addon-equip-guns-from-inventory";
 	}
 
 }

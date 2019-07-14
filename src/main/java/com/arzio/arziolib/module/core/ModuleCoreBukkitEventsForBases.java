@@ -8,16 +8,13 @@ import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.BaseProvider;
 import com.arzio.arziolib.api.event.packet.CDRequestBaseDestroyEvent;
 import com.arzio.arziolib.api.wrapper.Base;
-import com.arzio.arziolib.module.ListenerModule;
+import com.arzio.arziolib.module.Module;
+import com.arzio.arziolib.module.RegisterModule;
 
-public class ModuleCoreBukkitEventsForBases extends ListenerModule{
-	
-	private final BaseProvider baseProvider;
+@RegisterModule(name = "core-bukkit-events-for-bases")
+public class ModuleCoreBukkitEventsForBases extends Module{
 
-	public ModuleCoreBukkitEventsForBases(ArzioLib plugin, BaseProvider baseProvider) {
-		super(plugin);
-		this.baseProvider = baseProvider;
-	}
+    private BaseProvider baseProvider = ArzioLib.getInstance().getBaseProvider();
 	
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onBaseDestroyRequest(CDRequestBaseDestroyEvent event) {
@@ -35,11 +32,6 @@ public class ModuleCoreBukkitEventsForBases extends ListenerModule{
 		if (base != null) {
 			base.destroy();
 		}
-	}
-
-	@Override
-	public String getName() {
-		return "core-bukkit-events-for-bases";
 	}
 
 }

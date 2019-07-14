@@ -16,6 +16,9 @@ public class UserData {
 
 	public static final int FLAG_GUN_TRIGGER_HAS_RECOVERED_AMMO_LAST_TIME = 1;
 	public static final int FLAG_GUN_BULLET_HIT_HAS_RECOVERED_AMMO_LAST_TIME = 2;
+	public static final int FLAG_WHITELIST_DISABLED = 4;
+	public static final int FLAG_SHOW_NAMETAGS = 8;
+	public static final int FLAG_EARNED_FLY_MODE_DUE_TO_WG_FLAG = 16;
 	
 	private int playerFlags;
 	
@@ -26,7 +29,7 @@ public class UserData {
 	private Boolean hideParticles = false;
 	private Boolean hideClothes = false;
 
-	private float currentSoundLevel = 0F;
+	private double currentSoundLevel = 0D;
 	private Map<Gun, Long> lastShootMap = new HashMap<>();
 	
 	public UserData(String playerName) {
@@ -60,11 +63,11 @@ public class UserData {
 		}
 	}
 	
-	public float getCurrentSoundLevel() {
+	public double getCurrentSoundLevel() {
 		return this.currentSoundLevel;
 	}
 	
-	public void setCurrentSoundLevel(float value) {
+	public void setCurrentSoundLevel(double value) {
 		if (value < 0) {
 			value = 0;
 		}

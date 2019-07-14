@@ -23,24 +23,25 @@ import com.arzio.arziolib.api.event.packet.CDGunReloadEvent;
 import com.arzio.arziolib.api.event.packet.CDGunTriggerEvent;
 import com.arzio.arziolib.api.event.packet.CDPlayerDataSendEvent;
 import com.arzio.arziolib.api.event.packet.CDRequestBaseDestroyEvent;
+import com.arzio.arziolib.api.event.packet.CDSendNametagsEvent;
 import com.arzio.arziolib.api.event.packet.CDShowBulletHitEvent;
-import com.arzio.arziolib.api.event.packet.CDSwapGunEvent;
+import com.arzio.arziolib.api.event.packet.CDSwitchSlotEvent;
+import com.arzio.arziolib.api.event.packet.CDSyncItemsEvent;
 import com.arzio.arziolib.api.event.packet.PayloadPacketEvent;
 import com.arzio.arziolib.api.util.CDPacketDataWrapper;
 import com.arzio.arziolib.api.util.CDPacketType;
+import com.arzio.arziolib.api.util.CDSpecialSlot;
 import com.arzio.arziolib.api.wrapper.Base;
 import com.arzio.arziolib.api.wrapper.Gun;
-import com.arzio.arziolib.module.ListenerModule;
+import com.arzio.arziolib.module.Module;
+import com.arzio.arziolib.module.RegisterModule;
 
 import net.minecraft.server.v1_6_R3.Entity;
 
-public class ModuleCoreCDPacketEventCaller extends ListenerModule{
-
-	public ModuleCoreCDPacketEventCaller(ArzioLib plugin) {
-		super(plugin);
-	}
+@RegisterModule(name = "core-cd-packet-event-caller")
+public class ModuleCoreCDPacketEventCaller extends Module {
 	
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
 	public void onPacketSending(CDPacketSentEvent event) {
 		CDPacketType type = event.getPacketType();
 		
@@ -57,6 +58,12 @@ public class ModuleCoreCDPacketEventCaller extends ListenerModule{
 					
 					innerEvent = new CDPlayerDataSendEvent(from, event.getPlayer(), event.getData());
 					break;
+                case NAMETAG_VISIBILITY:
+                    innerEvent = new CDSendNametagsEvent(event.getPlayer(), event.getData());
+                    break;
+                case SYNC_ITEMS:
+                    innerEvent = new CDSyncItemsEvent(event.getPlayer(), event.getData());
+                    break;
 				case COMBATLOG_SHOW_TIMER:
 					innerEvent = new CDCombatlogShowTimer(event.getPlayer(), event.getData());
 					break;
@@ -81,7 +88,7 @@ public class ModuleCoreCDPacketEventCaller extends ListenerModule{
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
 	public void onPacketReceiving(CDPacketReceivedEvent event) {
 		ArzioLib plugin = ArzioLib.getInstance();
 		Player sender = event.getPlayer();
@@ -114,7 +121,27 @@ public class ModuleCoreCDPacketEventCaller extends ListenerModule{
 					
 					break;
 				case GUN_BULLET_HIT:
+					if (sender.isDead()) {
+						event.setCancelled(true);
+						return;
+					}
+					
 					if (heldGun == null) {
+						event.setCancelled(true);
+						return;
+					}
+					
+					byte sentSlotIdBulletHit = inputStream.readByte();
+					int sentItemIdBulletHit = inputStream.readInt();
+					
+					// Wrong slot ID. Discards the packet.
+					if (sender.getInventory().getHeldItemSlot() != sentSlotIdBulletHit) {
+						event.setCancelled(true);
+						return;
+					}
+					
+					// Wrong item ID. Discards the packet.
+					if (heldGun.getItem().getId() != sentItemIdBulletHit) {
 						event.setCancelled(true);
 						return;
 					}
@@ -122,6 +149,7 @@ public class ModuleCoreCDPacketEventCaller extends ListenerModule{
 					// Checks if the player can fire.
 					// This is uses the same way as CD.
 					if (!plugin.getItemStackHelper().canGunFire(sender.getItemInHand())) {
+						event.setCancelled(true);
 						return;
 					}
 					
@@ -153,7 +181,27 @@ public class ModuleCoreCDPacketEventCaller extends ListenerModule{
 					
 					break;
 				case GUN_TRIGGER:
+					if (sender.isDead()) {
+						event.setCancelled(true);
+						return;
+					}
+					
 					if (heldGun == null) {
+						event.setCancelled(true);
+						return;
+					}
+					
+					byte sentSlotIdGunTrigger = inputStream.readByte();
+					int sentItemIdGunTrigger = inputStream.readInt();
+					
+					// Wrong slot ID. Discards the packet.
+					if (sender.getInventory().getHeldItemSlot() != sentSlotIdGunTrigger) {
+						event.setCancelled(true);
+						return;
+					}
+					
+					// Wrong item ID. Discards the packet.
+					if (heldGun.getItem().getId() != sentItemIdGunTrigger) {
 						event.setCancelled(true);
 						return;
 					}
@@ -166,7 +214,16 @@ public class ModuleCoreCDPacketEventCaller extends ListenerModule{
 						return;
 					}
 					
-					innerEvent = new CDSwapGunEvent(sender, heldGun, dataWrapper);
+					boolean isGun = inputStream.readBoolean();
+					CDSpecialSlot slot = null;
+					
+					if (isGun) {
+					    slot = CDSpecialSlot.GUN;
+					} else {
+					    slot = CDSpecialSlot.MELEE;
+					}
+					
+					innerEvent = new CDSwitchSlotEvent(sender, slot, dataWrapper);
 					break;
 				case FLAMETHROWER_TRIGGER:
 					innerEvent = new CDFlamethrowerTriggerEvent(sender, dataWrapper);
@@ -189,11 +246,6 @@ public class ModuleCoreCDPacketEventCaller extends ListenerModule{
 				((PostEvent) innerEvent).afterPost();
 			}
 		}
-	}
-
-	@Override
-	public String getName() {
-		return "core-cd-packet-event-caller";
 	}
 
 }

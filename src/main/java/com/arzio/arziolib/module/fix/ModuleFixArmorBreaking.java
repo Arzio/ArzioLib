@@ -4,16 +4,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
 
-import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.event.packet.CDBulletHitEvent;
-import com.arzio.arziolib.module.ListenerModule;
+import com.arzio.arziolib.module.Module;
+import com.arzio.arziolib.module.RegisterModule;
 
-public class ModuleFixArmorBreaking extends ListenerModule{
-
-	public ModuleFixArmorBreaking(ArzioLib plugin) {
-		super(plugin);
-	}
-
+@RegisterModule(name = "fix-armor-breaking")
+public class ModuleFixArmorBreaking extends Module{
 	/**
 	 * Fixes the hidden armor durability when receiving bullet damage.
 	 * @param event
@@ -41,10 +37,5 @@ public class ModuleFixArmorBreaking extends ListenerModule{
 			stackLegs.setDurability((short) 1);
 			player.getEquipment().setLeggings(stackLegs);
 		}
-	}
-
-	@Override
-	public String getName() {
-		return "fix-armor-breaking";
 	}
 }

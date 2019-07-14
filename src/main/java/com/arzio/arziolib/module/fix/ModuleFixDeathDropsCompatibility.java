@@ -5,10 +5,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
-import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.event.CDPlayerPreDropEvent;
 import com.arzio.arziolib.api.util.reflection.ReflectionHelper;
-import com.arzio.arziolib.module.ListenerModule;
+import com.arzio.arziolib.module.Module;
+import com.arzio.arziolib.module.RegisterModule;
 
 import net.minecraft.server.v1_6_R3.Entity;
 import net.minecraft.server.v1_6_R3.EntityPlayer;
@@ -16,17 +16,14 @@ import net.minecraftforge.event.EventPriority;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
-public class ModuleFixDeathDropsCompatibility extends ListenerModule{
-	
-	public ModuleFixDeathDropsCompatibility(ArzioLib plugin) {
-		super(plugin);
-	}
+@RegisterModule(name = "fix-death-drops-compatibility")
+public class ModuleFixDeathDropsCompatibility extends Module{
 	
 	@EventHandler
 	public void onCommand(PlayerCommandPreprocessEvent event) {
 		if (event.getMessage().startsWith("/gamerule")) {
 			if (event.getMessage().contains("keepInventory") || event.getMessage().contains("keepinventory")) {
-				event.getPlayer().sendMessage("§cPLease, use '/rg flag keep-inventory' instead of /gamerule.");
+				event.getPlayer().sendMessage("Â§cPLease, use '/rg flag keep-inventory' instead of /gamerule.");
 				event.setCancelled(true);
 			}
 		}
@@ -47,11 +44,6 @@ public class ModuleFixDeathDropsCompatibility extends ListenerModule{
 		Bukkit.getPluginManager().callEvent(innerEvent);
 		
 		player.getWorld().setGameRuleValue("keepInventory", Boolean.toString(innerEvent.shouldKeepInventory()));
-	}
-
-	@Override
-	public String getName() {
-		return "fix-death-drops-compatibility";
 	}
 
 }

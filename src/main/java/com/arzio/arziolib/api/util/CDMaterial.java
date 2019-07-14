@@ -1,12 +1,18 @@
 package com.arzio.arziolib.api.util;
 
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
+import com.arzio.arziolib.api.wrapper.CDItem;
 
 public enum CDMaterial {
 	BLOODBAG(9931),
 	HANDCUFFS(9717),
 	M4A1(9256),
+	M107(9287),
+	AWP(9290),
 	M1_GARAND_MAGAZINE(9323),
+	TRENCH_GUN(9296),
 	MOSSBERG(9297),
 	CROSSBOW(9305),
 	TASER(9265),
@@ -31,23 +37,59 @@ public enum CDMaterial {
 	RARE_RESIDENTIAL_LOOT(1201),
 	MEDICAL_LOOT(1202),
 	POLICE_LOOT(1203),
-	MILITARY_LOOT(1204);
+	MILITARY_LOOT(1204),
+	FIREMAN_AXE(9362, CDHarvestType.WOOD),
+	HATCHET(9370, CDHarvestType.WOOD),
+	MINER_PICKAXE(9375, CDHarvestType.STONE),
+	SLEDGE_HAMMER(9367, CDHarvestType.STONE);
 	
 	public static CDMaterial[] GRENADES = new CDMaterial[] { FLASH_GRENADE, DECOY_GRENADE, SMOKE_GRENADE, FIRE_GRENADE, GRENADE, PIPE_GRENADE, GAS_GRENADE };
 
 	private int id;
+	private CDHarvestType harvestType;
 	
 	private CDMaterial(int id) {
 		this.id = id;
+		this.harvestType = CDHarvestType.NONE;
+	}
+	
+	private CDMaterial(int id, CDHarvestType harvestType) {
+	    this(id);
+	    this.harvestType = harvestType;
 	}
 	
 	public int getId() {
 		return this.id;
 	}
 	
+	public CDHarvestType getHarvestType() {
+	    return this.harvestType;
+	}
+	
 	@SuppressWarnings("deprecation")
 	public Material asMaterial() {
 		return Material.getMaterial(this.id);
+	}
+	
+	public boolean isTypeOf(CDItem item) {
+	    return this.isTypeOf(item.getItem());
+	}
+	
+	public boolean isTypeOf(ItemStack stack) {
+	    return this.isTypeOf(stack.getType());
+	}
+	
+	public boolean isTypeOf(Material material) {
+	    return this.asMaterial() == material;
+	}
+	
+	public static CDMaterial getFrom(Material material) {
+	    for (CDMaterial cdMaterial : CDMaterial.values()) {
+	        if (cdMaterial.asMaterial() == material) {
+	            return cdMaterial;
+	        }
+	    }
+	    return null;
 	}
 	
 }

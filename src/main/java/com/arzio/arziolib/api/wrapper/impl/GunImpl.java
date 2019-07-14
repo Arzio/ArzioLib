@@ -9,7 +9,7 @@ import com.arzio.arziolib.api.util.CauldronUtils;
 import com.arzio.arziolib.api.util.reflection.CDClasses;
 import com.arzio.arziolib.api.wrapper.Gun;
 
-public class GunImpl extends CDItemImpl implements Gun{
+public class GunImpl extends CDSharedItemImpl implements Gun{
 
 	public GunImpl(Material material) {
 		super(material);
@@ -46,7 +46,7 @@ public class GunImpl extends CDItemImpl implements Gun{
 	}
 
 	@Override
-	public float getRPM() {
+	public double getRPM() {
 		return CDClasses.itemGunRoundsPerMinute.getValue(this.getItemInstance());
 	}
 
@@ -63,7 +63,7 @@ public class GunImpl extends CDItemImpl implements Gun{
 	}
 
 	@Override
-	public float getSoundLevel() {
+	public double getSoundLevel() {
 		return CDClasses.itemGunSoundLevel.getValue(this.getItemInstance());
 	}
 
@@ -120,5 +120,90 @@ public class GunImpl extends CDItemImpl implements Gun{
 		
 		return foundAttachments;
 	}
+
+    @Override
+    public void setRPM(double rpm) {
+        CDClasses.itemGunRoundsPerMinute.setValue(this.getItemInstance(), (float) rpm);
+    }
+
+    @Override
+    public void setBulletsPerRound(int amount) {
+        CDClasses.itemGunBulletsPerRound.setValue(this.getItemInstance(), amount);
+    }
+
+    @Override
+    public int getMaximumBulletDistance() {
+        return CDClasses.itemGunBulletDistanceField.getValue(this.getItemInstance());
+    }
+
+    @Override
+    public void setMaximumBulletDistance(int distance) {
+        CDClasses.itemGunBulletDistanceField.setValue(this.getItemInstance(), distance);
+    }
+
+    @Override
+    public double getRecoil() {
+        return CDClasses.itemGunRecoilField.getValue(this.getItemInstance());
+    }
+
+    @Override
+    public void setRecoil(double recoil) {
+        CDClasses.itemGunRecoilField.setValue(this.getItemInstance(), (float) recoil);
+    }
+
+    @Override
+    public double getAccuracy() {
+        return CDClasses.itemGunAccuracyField.getValue(this.getItemInstance());
+    }
+
+    @Override
+    public void setAccuracy(double accuracy) {
+        CDClasses.itemGunAccuracyField.setValue(this.getItemInstance(), (float) accuracy);
+    }
+
+    @Override
+    public double getMovementPenalty() {
+        return CDClasses.itemGunMovementPenaltyField.getValue(this.getItemInstance());
+    }
+
+    @Override
+    public void setMovementPenalty(double amount) {
+        CDClasses.itemGunMovementPenaltyField.setValue(this.getItemInstance(), amount);
+    }
+
+    @Override
+    public double getZoomLevel() {
+        return CDClasses.itemGunZoomLevelField.getValue(this.getItemInstance());
+    }
+
+    @Override
+    public void setZoomLevel(double amount) {
+        CDClasses.itemGunZoomLevelField.setValue(this.getItemInstance(), (float) amount);
+    }
+
+    @Override
+    public void setSoundLevel(double soundLevel) {
+        CDClasses.itemGunSoundLevel.setValue(this.getItemInstance(), (float) soundLevel);
+    }
+
+    @Override
+    public boolean canSpreadWhileAiming() {
+        return CDClasses.itemGunSpreadWhileAimingField.getValue(this.getItemInstance());
+    }
+
+    @Override
+    public void setSpreadWhileAiming(boolean canSpread) {
+        CDClasses.itemGunSpreadWhileAimingField.setValue(this.getItemInstance(), canSpread);
+    }
+
+    @Override
+    public boolean hasCrosshair() {
+        return CDClasses.itemGunRenderCrosshairsField.getValue(this.getItemInstance());
+    }
+
+    @Override
+    public void setCrosshair(boolean hasCrosshair) {
+        CDClasses.itemGunRenderCrosshairsField.setValue(this.getItemInstance(), hasCrosshair);
+    }
 
 }

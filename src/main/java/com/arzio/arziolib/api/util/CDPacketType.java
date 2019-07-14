@@ -17,6 +17,8 @@ public enum CDPacketType {
 	PLAYER_DATA(packetPlayerDataToPlayerClass),
 	FLAMETHROWER_TRIGGER(packetFTTriggerClass),
 	COMBATLOG_SHOW_TIMER(packetACLCombatClass),
+    SYNC_ITEMS(packetSyncItemsClass),
+    NAMETAG_VISIBILITY(packetNametagVisibilityClass),
 	UNDEFINED(null);
 	
 	private int id;

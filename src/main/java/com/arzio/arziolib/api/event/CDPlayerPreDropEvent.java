@@ -5,8 +5,8 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
- * Evento que detecta quando o player ir· dropar itens do inventario especial.
- * O inventario especial È o inventario do mod que tem mochila, colete, capacete e roupa.
+ * Evento que detecta quando o player ir√° dropar itens do inventario especial.
+ * O inventario especial √© o inventario do mod que tem mochila, colete, capacete e roupa.
  * @author Arzio
  *
  */

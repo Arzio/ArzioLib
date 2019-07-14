@@ -16,6 +16,9 @@ import org.bukkit.plugin.Plugin;
 import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.ForgeBukkitEventManager;
 import com.arzio.arziolib.api.ForgeListener;
+import com.arzio.arziolib.api.event.IndirectCDEvent;
+import com.arzio.arziolib.api.exception.FinderException;
+import com.arzio.arziolib.api.util.reflection.finder.NameClassFinder;
 
 import guava10.com.google.common.collect.LinkedListMultimap;
 import guava10.com.google.common.collect.Multimap;
@@ -53,7 +56,20 @@ public class ForgeBukkitEventManagerImpl implements ForgeBukkitEventManager, Lis
 							"Method " + m + " has @ForgeSubscribe annotation, but requires " + parameterTypes.length
 									+ " arguments.  Event handler methods must require a single argument.");
 				}
-				Class<?> eventType = parameterTypes[0];
+				Class<?> eventType = null;
+				
+				if (m.isAnnotationPresent(IndirectCDEvent.class)) {
+				    IndirectCDEvent obf = m.getAnnotation(IndirectCDEvent.class);
+				    String cdClassName = obf.cdClassName();
+				    try {
+                        eventType = NameClassFinder.find(cdClassName).find(null);
+                    } catch (FinderException e) {
+                        throw new IllegalArgumentException(e);
+                    }
+				} else {
+				    eventType = parameterTypes[0];
+				}
+				
 				if (!Event.class.isAssignableFrom(eventType)) {
 					throw new IllegalArgumentException("Method " + m
 							+ " has @ForgeSubscribe annotation, but takes a argument that is not a Event " + eventType);
@@ -179,8 +195,8 @@ public class ForgeBukkitEventManagerImpl implements ForgeBukkitEventManager, Lis
 				}
 				try {
 					this.callback.invoke(instance, event);
-				} catch (Exception e) {
-					e.printStackTrace();
+				} catch (Throwable t) {
+					t.printStackTrace();
 				}
 			}
 		}

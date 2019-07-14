@@ -11,6 +11,10 @@ commands:
         description: Disables/Enables bullet particles for you
         usage: /particle
         aliases: [ particles, particula, particulas ]
+    test:
+        description: Runs a test case
+        usage: /test
+        aliases: [ te ]
     clothes:
         description: Disables/Enables other players clothes to increase your FPS
         usage: /clothes

@@ -6,31 +6,23 @@ import org.bukkit.block.BlockState;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.world.ChunkLoadEvent;
 
-import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.util.CDLootType;
-import com.arzio.arziolib.module.ListenerModule;
+import com.arzio.arziolib.module.Module;
+import com.arzio.arziolib.module.RegisterModule;
 
-public class ModuleAddonRespawnLoots extends ListenerModule {
+@RegisterModule(name = "addon-respawn-loots-on-chunk-load", defaultState = false)
+public class ModuleAddonRespawnLoots extends Module {
 
-	public ModuleAddonRespawnLoots(ArzioLib plugin, boolean state) {
-		super(plugin, state);
-	}
-	
-	@EventHandler
-	public void onChunkLoad(ChunkLoadEvent event){
-		for (BlockState state : event.getChunk().getTileEntities()) {
-			CDLootType lootType = CDLootType.getFrom(state.getBlock());
-			if (lootType != null) {
-				Location location = state.getLocation();
-				location.getBlock().setType(Material.AIR);
-				location.getBlock().setType(lootType.getMaterial().asMaterial());
-			}
-		}
-	}
-
-	@Override
-	public String getName() {
-		return "addon-respawn-loots-on-chunk-load";
-	}
+    @EventHandler
+    public void onChunkLoad(ChunkLoadEvent event) {
+        for (BlockState state : event.getChunk().getTileEntities()) {
+            CDLootType lootType = CDLootType.getFrom(state.getBlock());
+            if (lootType != null) {
+                Location location = state.getLocation();
+                location.getBlock().setType(Material.AIR);
+                location.getBlock().setType(lootType.getMaterial().asMaterial());
+            }
+        }
+    }
 
 }
