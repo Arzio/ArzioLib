@@ -21,7 +21,7 @@ public class ModuleAddonProjectileProtectionCompatibility extends Module {
 	
 	private PlayerDataHandler dataHandler;
 	private YMLFile yml;
-	private double projectileProtectionRatio = 2F;
+	private double projectileProtectionRatio = 1.5F;
 	
 	@Override
 	public void onEnable() {
