@@ -1,7 +1,7 @@
 package com.arzio.arziolib.api.wrapper.impl;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.entity.Player;
 
@@ -10,22 +10,16 @@ import com.arzio.arziolib.api.wrapper.PlayerDataHandler;
 
 public class PlayerDataHandlerImpl implements PlayerDataHandler {
 
-	private List<PlayerData> playerDataList = new LinkedList<>();
+	private Map<String, PlayerData> playerDataMap = new HashMap<>();
 	
 	@Override
 	public PlayerData getPlayerData(Player player) {
-		PlayerData found = null;
+		PlayerData found = playerDataMap.get(player.getName());
 		
-		for (PlayerData data : playerDataList) {
-			if (data.getPlayerName().equals(player.getName())) {
-				found = data;
-			}
-		}
-		
-		if (found == null) {
-			found = new PlayerDataImpl(player);
-			playerDataList.add(found);
-		}
+        if (found == null) {
+            found = new PlayerDataImpl(player);
+            playerDataMap.put(player.getName(), found);
+        }
 		
 		return found;
 	}
