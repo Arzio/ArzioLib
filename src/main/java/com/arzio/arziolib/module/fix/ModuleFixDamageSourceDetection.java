@@ -36,7 +36,7 @@ public class ModuleFixDamageSourceDetection extends Module{
 		DamageCause cause = DamageCause.CUSTOM; // The initial cause is CUSTOM to reduce
 												// problems in newer versions with new damage types
 												// which aren't covered by the custom damage cause enum below.
-		CDDamageCause customCause = CDDamageCause.getDamageCause(source);
+		CDDamageCause customCause = CDDamageCause.getFrom(source);
 		
 		if (customCause != null) {
 			cause = customCause.asBukkitDamageCause();
