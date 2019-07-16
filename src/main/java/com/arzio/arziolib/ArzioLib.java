@@ -233,11 +233,20 @@ public class ArzioLib extends JavaPlugin {
         }, 20L * 20L, 20L * 20L); // Warns OPs every 20 seconds in case of load errors in modules
         
         ArzioLibTests.registerTests();
-        try {
-            ArzioLibTests.runTests(Bukkit.getConsoleSender());
-        } catch (TestException e) {
-            e.printStackTrace(Bukkit.getConsoleSender());
-        }
+        
+        // Runs the tests after 20 ticks.
+        // The tests should run right after the plugin load phase.
+        Bukkit.getScheduler().runTaskLater(this, new Runnable() {
+            
+            @Override
+            public void run() {
+                try {
+                    ArzioLibTests.runTests(Bukkit.getConsoleSender());
+                } catch (TestException e) {
+                    e.printStackTrace(Bukkit.getConsoleSender());
+                }
+            }
+        }, 20L);
     }
 
     @Override
