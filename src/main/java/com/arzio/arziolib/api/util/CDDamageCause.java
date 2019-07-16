@@ -21,7 +21,7 @@ public enum CDDamageCause {
 	
 	private CDDamageCause(String id) {
 		this.id = id;
-		this.cause = EnumHelper.addEnum(DamageCause.class, this.name());
+		this.cause = EnumHelper.addEnum(new Class[][] { {DamageCause.class} } , DamageCause.class, this.name());
 	}
 	
 	public boolean isTypeOf(EntityDamageEvent event) {
