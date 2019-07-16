@@ -90,6 +90,7 @@ public enum CDEntityType {
 		return ArzioLib.MOD_CONTAINER.getModId()+"_"+this.getName();
 	}
 	
+	@Deprecated
 	public EntityType asBukkitType() {
 		return this.type;
 	}
@@ -99,6 +100,14 @@ public enum CDEntityType {
 	    return entityClass;
 	}
 	
+	public Constructor<? extends net.minecraft.server.v1_6_R3.Entity> getConstructor() throws CDAReflectionException {
+        try {
+            return this.getNMSClass().getDeclaredConstructor(net.minecraft.server.v1_6_R3.World.class);
+        } catch (NoSuchMethodException | SecurityException e) {
+            throw new CDAReflectionException(e);
+        }
+	}
+	
 	public boolean isTypeOf(Entity entity) {
 		return getTypeOf(entity) == this;
 	}
@@ -106,10 +115,9 @@ public enum CDEntityType {
 	public Entity spawnEntity(Location location) throws CDAReflectionException{
 		Class<? extends net.minecraft.server.v1_6_R3.Entity> entityClass = this.getNMSClass();
 		try {
-			Constructor<?> constructor = entityClass.getDeclaredConstructor(net.minecraft.server.v1_6_R3.World.class);
 			
 			CraftWorld craftWorld = (CraftWorld) location.getWorld();
-			net.minecraft.server.v1_6_R3.Entity entity = (net.minecraft.server.v1_6_R3.Entity) constructor.newInstance(craftWorld.getHandle());
+			net.minecraft.server.v1_6_R3.Entity entity = (net.minecraft.server.v1_6_R3.Entity) this.getConstructor().newInstance(craftWorld.getHandle());
 			entity.setLocation(location.getX(), location.getY(), location.getZ(), location.getPitch(), location.getYaw());
 			
 			craftWorld.getHandle().addEntity(entity, SpawnReason.CUSTOM);
