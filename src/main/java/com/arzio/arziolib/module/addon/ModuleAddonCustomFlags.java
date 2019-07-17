@@ -107,6 +107,8 @@ public class ModuleAddonCustomFlags extends Module {
 		OPEN_CD_INVENTORY_FLAG.register();
 		CLEAR_CD_INVENTORY_FLAG.register();
 		CLEAR_MINECRAFT_INVENTORY_FLAG.register();
+		TASER_FLAG.register();
+		HANDCUFFS_FLAG.register();
 	}
 	
 	@RepeatingTask(delay = 20L, period = 20L)
