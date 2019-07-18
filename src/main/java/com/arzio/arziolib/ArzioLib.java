@@ -31,6 +31,7 @@ import com.arzio.arziolib.api.wrapper.impl.LootProviderImpl;
 import com.arzio.arziolib.api.wrapper.impl.PlayerDataHandlerImpl;
 import com.arzio.arziolib.command.ArzioLibCommand;
 import com.arzio.arziolib.command.ClothesCommand;
+import com.arzio.arziolib.command.NoDelayCommand;
 import com.arzio.arziolib.command.ParticlesCommand;
 import com.arzio.arziolib.command.PingCommand;
 import com.arzio.arziolib.command.TestCommand;
@@ -60,6 +61,7 @@ import com.arzio.arziolib.module.addon.ModuleAddonSimpleClansFlags;
 import com.arzio.arziolib.module.addon.ModuleAddonSimpleClansNametags;
 import com.arzio.arziolib.module.addon.ModuleAddonStackableGrenades;
 import com.arzio.arziolib.module.addon.ModuleAddonStepEmeraldHeal;
+import com.arzio.arziolib.module.addon.ModuleAddonTCPNoDelay;
 import com.arzio.arziolib.module.addon.ModuleAddonZombieFollowGrenades;
 import com.arzio.arziolib.module.addon.ModuleAddonZombieHearGuns;
 import com.arzio.arziolib.module.addon.ModuleAddonZombieSpawnBlockBlacklist;
@@ -149,6 +151,7 @@ public class ArzioLib extends JavaPlugin {
         this.moduleManager.registerModule(ModuleAddonRestrictGMInventoryWithPermission.class);
         this.moduleManager.registerModule(ModuleAddonStackableGrenades.class);
         this.moduleManager.registerModule(ModuleAddonStepEmeraldHeal.class);
+        this.moduleManager.registerModule(ModuleAddonTCPNoDelay.class);
         this.moduleManager.registerModule(ModuleAddonZombieFollowGrenades.class);
         this.moduleManager.registerModule(ModuleAddonZombieHearGuns.class);
         this.moduleManager.registerModule(ModuleAddonZombieSpawnBlockBlacklist.class);
@@ -190,6 +193,7 @@ public class ArzioLib extends JavaPlugin {
         this.getCommand("thirst").setExecutor(new ThirstCommand());
         this.getCommand("thirstall").setExecutor(new ThirstAllCommand());
         this.getCommand("test").setExecutor(new TestCommand());
+        this.getCommand("nodelay").setExecutor(new NoDelayCommand());
 
         this.getLogger().info("Loading done! :3");
         this.getLogger().info("This plugin was made by Arzio <3");

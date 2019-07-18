@@ -34,3 +34,6 @@ commands:
     ping:
         description: Command to check your ping
         usage: /ping
+    nodelay:
+        description: Disables/Enables TCP NODELAY feature for you
+        usage: /nodelay

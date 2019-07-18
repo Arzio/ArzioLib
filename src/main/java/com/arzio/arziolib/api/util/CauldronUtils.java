@@ -2,6 +2,7 @@ package com.arzio.arziolib.api.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_6_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_6_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_6_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_6_R3.inventory.CraftInventory;
 import org.bukkit.craftbukkit.v1_6_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
@@ -17,6 +19,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.arzio.arziolib.api.exception.CDAReflectionException;
+import com.arzio.arziolib.api.util.reflection.ReflectedField;
+import com.arzio.arziolib.api.util.reflection.finder.ContentFinder;
 
 import cpw.mods.fml.common.IPlayerTracker;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -24,11 +28,13 @@ import guava10.com.google.common.primitives.Ints;
 import net.minecraft.server.v1_6_R3.Entity;
 import net.minecraft.server.v1_6_R3.EntityTypes;
 import net.minecraft.server.v1_6_R3.IInventory;
+import net.minecraft.server.v1_6_R3.INetworkManager;
 import net.minecraft.server.v1_6_R3.Item;
 import net.minecraft.server.v1_6_R3.NBTTagCompound;
 
 public class CauldronUtils {
 
+    private static ReflectedField<Socket> socketField = null;
 	private static Field handleField = null;
 	
 	public static Entity getNMSEntity(org.bukkit.entity.Entity entity) {
@@ -180,4 +186,15 @@ public class CauldronUtils {
 	public static List<Integer> materialArrayToIntegerList(Material[] materials){
 		return Ints.asList(materialArrayToIntArray(materials));
 	}
+	
+    public static Socket getPlayerSocket(Player player) {
+        INetworkManager networkManager = ((CraftPlayer) player).getHandle().playerConnection.networkManager;
+
+        if (socketField == null) {
+            socketField = new ReflectedField<>(networkManager.getClass(),
+                    new ContentFinder.FieldBuilder<>().withType(Socket.class).build());
+        }
+        
+        return socketField.getValue(networkManager);
+    }
 }
