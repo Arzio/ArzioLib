@@ -10,11 +10,15 @@ public class ReflectedMethod {
 	private Method method;
 	
 	public ReflectedMethod(ReflectedClass clazz, ContentFinder<Method> finder) {
-		try {
-			this.method = finder.find(clazz.getReferencedClass());
-		} catch (FinderException e) {
-			e.printStackTrace();
-		}
+	    this(clazz.getReferencedClass(), finder);
+	}
+	
+	public ReflectedMethod(Class<?> clazz, ContentFinder<Method> finder) {
+        try {
+            this.method = finder.find(clazz);
+        } catch (FinderException e) {
+            e.printStackTrace();
+        }
 	}
 	
 	public Method getReferencedMethod() {
