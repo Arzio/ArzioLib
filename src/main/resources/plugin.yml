@@ -5,7 +5,7 @@ author: Arzio
 load: STARTUP
 depend: [ProtocolLib, WorldGuard, WGCustomFlags]
 softdepend: [PlotMe, AuthMe]
-description: Library tools for Crafting Dead servers.
+description: Library of tools for Crafting Dead servers.
 commands:
     particle:
         description: Disables/Enables bullet particles for you
