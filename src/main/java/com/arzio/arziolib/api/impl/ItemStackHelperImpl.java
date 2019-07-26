@@ -159,7 +159,7 @@ public class ItemStackHelperImpl implements ItemStackHelper {
 				}
 				
 				// Create the temporary inventory
-				int rows = 1 + ((outermostSlot - 1) / 9);
+				int rows = 1 + ((outermostSlot) / 9);
 				Inventory inventory = Bukkit.createInventory(null, rows * 9);
 				
 				// Load the items into the temporary inventory
