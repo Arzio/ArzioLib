@@ -49,7 +49,10 @@ public class ModuleAddonEquipGunsFromInventory extends Module {
 				if (!innerEvent.isCancelled()) {
 					event.setCancelled(true);
 					event.setCursor(currentClip);
+					
 					helper.setGunClip(clickedStack, new ItemStack(Material.AIR));
+					event.setCurrentItem(clickedStack); // updates the inventory slot, fixing a CD duplication glitch.
+					
 					CauldronUtils.playSound(event.getWhoClicked().getLocation(), clickedGun.getReloadSound(), 1F, 1.4F);
 				}
 			}
@@ -80,6 +83,7 @@ public class ModuleAddonEquipGunsFromInventory extends Module {
 				
 				CDAttachment oldAttachment = helper.getAttachment(clickedStack, attachment.getType());
 				helper.setAttachment(clickedStack, attachment.getType(), attachment);
+				event.setCurrentItem(clickedStack);
 				event.setCursor(oldAttachment == null ? new ItemStack(Material.AIR) : new ItemStack(oldAttachment.getMaterial().asMaterial()));
 				
 				Player player = (Player) event.getWhoClicked();
@@ -110,7 +114,9 @@ public class ModuleAddonEquipGunsFromInventory extends Module {
 					
 					ItemStack currentClip = helper.getGunClip(clickedStack);
 					event.setCursor(currentClip != null ? currentClip : new ItemStack(Material.AIR));
+					
 					helper.setGunClip(clickedStack, cursorItem);
+					event.setCurrentItem(clickedStack); // updates the inventory slot, fixing a CD duplication glitch.
 					
 					CauldronUtils.playSound(event.getWhoClicked().getLocation(), clickedGun.getReloadSound(), 2F, 1F);
 				}
