@@ -3,6 +3,7 @@ package com.arzio.arziolib.api.region;
 import org.bukkit.Location;
 
 import com.sk89q.worldguard.protection.flags.Flag;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 public class EasyFlag<T>{
 
@@ -39,6 +40,18 @@ public class EasyFlag<T>{
 
     public T getValue(Location location) {
 	    return Flags.getFlagValue(flag, location);
+	}
+
+	public T getValue(ProtectedRegion region){
+		return Flags.getFlagValue(flag, region);
+	}
+
+	public boolean exists(Location location) {
+	    return Flags.flagExists(this.getFlag(), location);
+	}
+
+	public boolean exists(ProtectedRegion region) {
+	    return Flags.flagExists(this.getFlag(), region);
 	}
 	
 }

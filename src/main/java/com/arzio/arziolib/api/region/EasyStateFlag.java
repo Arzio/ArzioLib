@@ -32,8 +32,4 @@ public class EasyStateFlag extends EasyFlag<State>{
 	public boolean isDenied(Location location) {
 		return Flags.isFlagDenied((StateFlag) this.getFlag(), location);
 	}
-	
-	public boolean exists(Location location) {
-	    return Flags.flagExists(this.getFlag(), location);
-	}
 }

@@ -15,6 +15,7 @@ import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 public class Flags {
     
@@ -50,6 +51,10 @@ public class Flags {
 	    ApplicableRegionSet set = getRegionSet(location);
 		return set == null ? null : set.getFlag(flag);
 	}
+
+	public static <T> T getFlagValue(Flag<T> flag, ProtectedRegion region) {
+	    return region.getFlag(flag);
+	}
 	
     public static boolean isFlagInState(StateFlag flag, ApplicableRegionSet regionSet, State state) {
         State currentState = regionSet.getFlag(flag);
@@ -60,6 +65,10 @@ public class Flags {
 		ApplicableRegionSet regionSet = getRegionSet(location);
 		return regionSet == null ? false : isFlagInState(flag, regionSet, state);
 	}
+
+	public static boolean flagExists(Flag<?> flag, ProtectedRegion region) {
+        return getFlagValue(flag, region) != null;
+    }
 	
     public static boolean flagExists(Flag<?> flag, Location location) {
         return getFlagValue(flag, location) != null;
