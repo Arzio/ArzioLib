@@ -24,6 +24,8 @@ import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Set;
+
 import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.event.CDDefineNametagsEvent;
 import com.arzio.arziolib.api.event.CDPlayerPreDropEvent;
@@ -35,8 +37,8 @@ import com.arzio.arziolib.api.event.packet.CDFlamethrowerTriggerEvent;
 import com.arzio.arziolib.api.event.packet.CDGrenadeThrowEvent;
 import com.arzio.arziolib.api.event.packet.CDGunReloadEvent;
 import com.arzio.arziolib.api.event.packet.CDGunTriggerEvent;
+import com.arzio.arziolib.api.region.EasySetFlag;
 import com.arzio.arziolib.api.region.EasyStateFlag;
-import com.arzio.arziolib.api.region.EasyStringFlag;
 import com.arzio.arziolib.api.region.Flags;
 import com.arzio.arziolib.api.util.CDDamageCause;
 import com.arzio.arziolib.api.util.CDInventoryType;
@@ -77,10 +79,10 @@ public class ModuleAddonCustomFlags extends Module {
     public static final EasyStateFlag CLEAR_MINECRAFT_INVENTORY_FLAG = new EasyStateFlag("clear-minecraft-inventory");
     public static final EasyStateFlag TASER_FLAG = new EasyStateFlag("taser");
 	public static final EasyStateFlag HANDCUFFS_FLAG = new EasyStateFlag("handcuffs");
-	public static final EasyStringFlag PLAYER_ENTER_COMMAND_FLAG = new EasyStringFlag("player-enter-command");
-	public static final EasyStringFlag PLAYER_LEAVE_COMMAND_FLAG = new EasyStringFlag("player-leave-command");
-	public static final EasyStringFlag SERVER_ENTER_COMMAND_FLAG = new EasyStringFlag("server-enter-command");
-	public static final EasyStringFlag SERVER_LEAVE_COMMAND_FLAG = new EasyStringFlag("server-leave-command");
+	public static final EasySetFlag<String> PLAYER_ENTER_COMMANDS_FLAG = new EasySetFlag<>("player-enter-commands");
+	public static final EasySetFlag<String> PLAYER_LEAVE_COMMANDS_FLAG = new EasySetFlag<>("player-leave-commands");
+	public static final EasySetFlag<String> SERVER_ENTER_COMMANDS_FLAG = new EasySetFlag<>("server-enter-commands");
+	public static final EasySetFlag<String> SERVER_LEAVE_COMMANDS_FLAG = new EasySetFlag<>("server-leave-commands");
     
 	
 	private final PlayerDataHandler playerDataHandler;
@@ -116,10 +118,10 @@ public class ModuleAddonCustomFlags extends Module {
 		CLEAR_MINECRAFT_INVENTORY_FLAG.register();
 		TASER_FLAG.register();
 		HANDCUFFS_FLAG.register();
-		PLAYER_ENTER_COMMAND_FLAG.register();
-		PLAYER_LEAVE_COMMAND_FLAG.register();
-		SERVER_ENTER_COMMAND_FLAG.register();
-		SERVER_LEAVE_COMMAND_FLAG.register();
+		PLAYER_ENTER_COMMANDS_FLAG.register();
+		PLAYER_LEAVE_COMMANDS_FLAG.register();
+		SERVER_ENTER_COMMANDS_FLAG.register();
+		SERVER_LEAVE_COMMANDS_FLAG.register();
 	}
 	
 	@RepeatingTask(delay = 20L, period = 20L)
@@ -279,7 +281,7 @@ public class ModuleAddonCustomFlags extends Module {
 	    Player player = event.getPlayer();
 	    
 	    if (event.isFlying() && !player.isOp()) {
-	        if (FLY_FLAG.isDenied(player.getLocation())) {
+	        if (FLY_FLAG.isDenied(player.getLocation()) && !player.hasPermission("arziolib.bypass.fly.deny")) {
 	            player.setAllowFlight(false);
                 player.teleport(player.getLocation()); // fixes ping desync
                 player.sendMessage("§cFly mode is disabled here.");
@@ -290,21 +292,25 @@ public class ModuleAddonCustomFlags extends Module {
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
 	public void handleServerCommandFlag(RegionBorderEvent event){
-		String commandToExecute = (event.getType() == CrossType.ENTER) ?
-		 	SERVER_ENTER_COMMAND_FLAG.getValue(event.getRegion()) : SERVER_LEAVE_COMMAND_FLAG.getValue(event.getRegion());
+		Set<String> commandsToExecute = (event.getType() == CrossType.ENTER) ?
+		 	SERVER_ENTER_COMMANDS_FLAG.getValue(event.getRegion()) : SERVER_LEAVE_COMMANDS_FLAG.getValue(event.getRegion());
 
-		if (commandToExecute != null){
-			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commandToExecute.replace("/", "").replace("%player%", event.getPlayer().getName()));
+		if (commandsToExecute != null){
+			for (String command : commandsToExecute){
+				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("/", "").replace("%player%", event.getPlayer().getName()));
+			}
 		}
 	}
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
 	public void handlePlayerCommandFlag(RegionBorderEvent event){
-		String commandToExecute = (event.getType() == CrossType.ENTER) ? 
-			PLAYER_ENTER_COMMAND_FLAG.getValue(event.getRegion()) : PLAYER_LEAVE_COMMAND_FLAG.getValue(event.getRegion());
+		Set<String> commandsToExecute = (event.getType() == CrossType.ENTER) ? 
+			PLAYER_ENTER_COMMANDS_FLAG.getValue(event.getRegion()) : PLAYER_LEAVE_COMMANDS_FLAG.getValue(event.getRegion());
 
-		if (commandToExecute != null){
-			Bukkit.dispatchCommand(event.getPlayer(), commandToExecute.replace("/", ""));
+		if (commandsToExecute != null){
+			for (String command : commandsToExecute){
+				Bukkit.dispatchCommand(event.getPlayer(), command.replace("/", ""));
+			}
 		}
 	}
 	
