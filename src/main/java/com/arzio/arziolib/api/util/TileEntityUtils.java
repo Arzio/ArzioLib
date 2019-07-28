@@ -8,6 +8,10 @@ import net.minecraft.server.v1_6_R3.TileEntity;
 
 public class TileEntityUtils {
 
+	public boolean hasTile(Block block){
+		return getTile(block) != null;
+	}
+
 	public static TileEntity getTile(Block from) {
 		CraftWorld cWorld = (CraftWorld) from.getWorld();
 		return cWorld.getTileEntityAt(from.getX(), from.getY(), from.getZ());
