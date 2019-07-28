@@ -49,6 +49,7 @@ import com.arzio.arziolib.module.addon.ModuleAddonCustomBaseMaterials;
 import com.arzio.arziolib.module.addon.ModuleAddonCustomFlags;
 import com.arzio.arziolib.module.addon.ModuleAddonCustomGunsAndAmmos;
 import com.arzio.arziolib.module.addon.ModuleAddonCustomLoots;
+import com.arzio.arziolib.module.addon.ModuleAddonDisableLegBreak;
 import com.arzio.arziolib.module.addon.ModuleAddonEquipGunsFromInventory;
 import com.arzio.arziolib.module.addon.ModuleAddonInfinityEnchantCompatiblity;
 import com.arzio.arziolib.module.addon.ModuleAddonKeepEXPAfterDeath;
@@ -141,6 +142,7 @@ public class ArzioLib extends JavaPlugin {
         this.moduleManager.registerModule(ModuleAddonCustomFlags.class);
         this.moduleManager.registerModule(ModuleAddonCustomGunsAndAmmos.class);
         this.moduleManager.registerModule(ModuleAddonCustomLoots.class);
+        this.moduleManager.registerModule(ModuleAddonDisableLegBreak.class);
         this.moduleManager.registerModule(ModuleAddonEquipGunsFromInventory.class);
         this.moduleManager.registerModule(ModuleAddonInfinityEnchantCompatiblity.class);
         this.moduleManager.registerModule(ModuleAddonKeepEXPAfterDeath.class);
