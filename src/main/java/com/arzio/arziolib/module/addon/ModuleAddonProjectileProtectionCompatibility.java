@@ -22,6 +22,7 @@ public class ModuleAddonProjectileProtectionCompatibility extends Module {
 	private PlayerDataHandler dataHandler;
 	private YMLFile yml;
 	private double projectileProtectionRatio = 1.5F;
+	private boolean considerBoots;
 	
 	@Override
 	public void onEnable() {
@@ -32,6 +33,7 @@ public class ModuleAddonProjectileProtectionCompatibility extends Module {
 		
 		this.dataHandler = ArzioLib.getInstance().getPlayerDataHandler();
 		this.projectileProtectionRatio = this.yml.getValueWithDefault("protection-ratio-per-enchantment-level", this.projectileProtectionRatio);
+		this.considerBoots = this.yml.getValueWithDefault("consider-boots", true);
 		
 		yml.save();
 	}
@@ -64,7 +66,7 @@ public class ModuleAddonProjectileProtectionCompatibility extends Module {
 			if (stackClothing != null) {
 			    totalProtectionLevel += stackClothing.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
 			}
-			if (stackBoots != null) {
+			if (this.considerBoots && stackBoots != null) {
 			    totalProtectionLevel += stackBoots.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
 			}
 			
@@ -78,5 +80,21 @@ public class ModuleAddonProjectileProtectionCompatibility extends Module {
 			event.setDamage(amountNow);
 		}
 	}
+
+    public double getProjectileProtectionRatio() {
+        return projectileProtectionRatio;
+    }
+
+    public void setProjectileProtectionRatio(double projectileProtectionRatio) {
+        this.projectileProtectionRatio = projectileProtectionRatio;
+    }
+
+    public boolean shouldConsiderBoots() {
+        return considerBoots;
+    }
+
+    public void setConsiderBoots(boolean considerBoots) {
+        this.considerBoots = considerBoots;
+    }
 
 }
