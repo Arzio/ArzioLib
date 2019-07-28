@@ -28,6 +28,7 @@ import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.event.CDDefineNametagsEvent;
 import com.arzio.arziolib.api.event.CDPlayerPreDropEvent;
 import com.arzio.arziolib.api.event.RegionBorderEvent;
+import com.arzio.arziolib.api.event.RegionBorderEvent.CrossType;
 import com.arzio.arziolib.api.event.packet.CDBulletHitEvent;
 import com.arzio.arziolib.api.event.packet.CDBulletHitEvent.HitType;
 import com.arzio.arziolib.api.event.packet.CDFlamethrowerTriggerEvent;
@@ -35,6 +36,7 @@ import com.arzio.arziolib.api.event.packet.CDGrenadeThrowEvent;
 import com.arzio.arziolib.api.event.packet.CDGunReloadEvent;
 import com.arzio.arziolib.api.event.packet.CDGunTriggerEvent;
 import com.arzio.arziolib.api.region.EasyStateFlag;
+import com.arzio.arziolib.api.region.EasyStringFlag;
 import com.arzio.arziolib.api.region.Flags;
 import com.arzio.arziolib.api.util.CDDamageCause;
 import com.arzio.arziolib.api.util.CDInventoryType;
@@ -74,8 +76,13 @@ public class ModuleAddonCustomFlags extends Module {
     public static final EasyStateFlag CLEAR_CD_INVENTORY_FLAG = new EasyStateFlag("clear-cd-inventory");
     public static final EasyStateFlag CLEAR_MINECRAFT_INVENTORY_FLAG = new EasyStateFlag("clear-minecraft-inventory");
     public static final EasyStateFlag TASER_FLAG = new EasyStateFlag("taser");
-    public static final EasyStateFlag HANDCUFFS_FLAG = new EasyStateFlag("handcuffs");
+	public static final EasyStateFlag HANDCUFFS_FLAG = new EasyStateFlag("handcuffs");
+	public static final EasyStringFlag PLAYER_ENTER_COMMAND_FLAG = new EasyStringFlag("player-enter-command");
+	public static final EasyStringFlag PLAYER_LEAVE_COMMAND_FLAG = new EasyStringFlag("player-leave-command");
+	public static final EasyStringFlag SERVER_ENTER_COMMAND_FLAG = new EasyStringFlag("server-enter-command");
+	public static final EasyStringFlag SERVER_LEAVE_COMMAND_FLAG = new EasyStringFlag("server-leave-command");
     
+	
 	private final PlayerDataHandler playerDataHandler;
 	private final UserDataProvider userDataProvider;
 	
@@ -109,6 +116,10 @@ public class ModuleAddonCustomFlags extends Module {
 		CLEAR_MINECRAFT_INVENTORY_FLAG.register();
 		TASER_FLAG.register();
 		HANDCUFFS_FLAG.register();
+		PLAYER_ENTER_COMMAND_FLAG.register();
+		PLAYER_LEAVE_COMMAND_FLAG.register();
+		SERVER_ENTER_COMMAND_FLAG.register();
+		SERVER_LEAVE_COMMAND_FLAG.register();
 	}
 	
 	@RepeatingTask(delay = 20L, period = 20L)
@@ -275,6 +286,26 @@ public class ModuleAddonCustomFlags extends Module {
                 event.setCancelled(true);
 	        }
 	    }
+	}
+
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+	public void handleServerCommandFlag(RegionBorderEvent event){
+		String commandToExecute = (event.getType() == CrossType.ENTER) ?
+		 	SERVER_ENTER_COMMAND_FLAG.getValue(event.getRegion()) : SERVER_LEAVE_COMMAND_FLAG.getValue(event.getRegion());
+
+		if (commandToExecute != null){
+			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commandToExecute.replace("/", "").replace("%player%", event.getPlayer().getName()));
+		}
+	}
+
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+	public void handlePlayerCommandFlag(RegionBorderEvent event){
+		String commandToExecute = (event.getType() == CrossType.ENTER) ? 
+			PLAYER_ENTER_COMMAND_FLAG.getValue(event.getRegion()) : PLAYER_LEAVE_COMMAND_FLAG.getValue(event.getRegion());
+
+		if (commandToExecute != null){
+			Bukkit.dispatchCommand(event.getPlayer(), commandToExecute.replace("/", ""));
+		}
 	}
 	
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
