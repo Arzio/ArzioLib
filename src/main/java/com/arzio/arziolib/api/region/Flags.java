@@ -62,8 +62,7 @@ public class Flags {
     }
 	
 	public static boolean isFlagInState(StateFlag flag, Location location, State state) {
-		ApplicableRegionSet regionSet = getRegionSet(location);
-		return regionSet == null ? false : isFlagInState(flag, regionSet, state);
+		return getFlagValue(flag, location) == state;
 	}
 
 	public static boolean flagExists(Flag<?> flag, ProtectedRegion region) {
