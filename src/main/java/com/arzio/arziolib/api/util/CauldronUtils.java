@@ -40,6 +40,18 @@ public class CauldronUtils {
 	public static Entity getNMSEntity(org.bukkit.entity.Entity entity) {
 		return ((CraftEntity) entity).getHandle();
 	}
+
+	public static List<Player> getPlayersWithPermission(String permission){
+		List<Player> players = new ArrayList<>();
+		
+		for (Player player : Bukkit.getOnlinePlayers()){
+			if (player.hasPermission(permission)){
+				players.add(player);
+			}
+		}
+
+		return players;
+	}
 	
 	public static List<Player> getOperators(){
 	    List<Player> operators = new ArrayList<>();

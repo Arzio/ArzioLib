@@ -214,7 +214,7 @@ public class ArzioLib extends JavaPlugin {
 
         }, 600L * 20L, 600L * 20L); // Checks for update every 10 minutes
         
-        // Automatically checks for updates in a async way every 10 minutes
+        // Warn about errored modules to some admins
         Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
 
             @Override
@@ -223,7 +223,7 @@ public class ArzioLib extends JavaPlugin {
                 
                 if (!erroredModules.isEmpty()) {
                     if (getModuleManager().shouldWarnForErroredModules()) {
-                        for (Player player : CauldronUtils.getOperators()) {
+                        for (Player player : CauldronUtils.getPlayersWithPermission("arziolib.warnings")) {
                             player.sendMessage(" ");
                             player.sendMessage("§e["+getName()+"] §cThe following modules could not get loaded or unloaded:");
                             for (ModuleContainer module : erroredModules) {
