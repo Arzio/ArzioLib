@@ -236,7 +236,7 @@ public class ArzioLib extends JavaPlugin {
                 }
             }
 
-        }, 20L * 20L, 20L * 20L); // Warns OPs every 20 seconds in case of load errors in modules
+        }, 20L * 20L, 20L * 20L); // Warns admins every 20 seconds in case of load errors in modules
         
         ArzioLibTests.registerTests();
         
