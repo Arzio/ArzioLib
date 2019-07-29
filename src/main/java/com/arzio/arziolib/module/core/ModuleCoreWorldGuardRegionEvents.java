@@ -11,9 +11,11 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import com.arzio.arziolib.api.event.RegionBorderEvent;
@@ -39,58 +41,99 @@ public class ModuleCoreWorldGuardRegionEvents extends Module{
 	    return regions;
 	}
 	
-	private void handleMovement(PlayerMoveEvent event) {
-	    Location to = event.getTo();
-	    
-	    Set<ProtectedRegion> currentPlayerRegions = this.getRegionsAtPlayer(event.getPlayer());
-	    Set<ProtectedRegion> futureRegions = new HashSet<>();
-	    
-	    // Detecting Enter event
-        for (ProtectedRegion futureRegion : Flags.getRegionSet(to)) {
+	private void updateRegions(Player player, Location locationFrom, Location locationTo) {
+        ProtectedRegion globalFrom = Flags.getRegionManager(locationFrom.getWorld()).getRegion("__global__");
+        ProtectedRegion globalTo = Flags.getRegionManager(locationTo.getWorld()).getRegion("__global__");
+
+        Set<ProtectedRegion> currentPlayerRegions = this.getRegionsAtPlayer(player);
+        Set<ProtectedRegion> futureRegions = new HashSet<>();
+
+        boolean isGoingToAnotherWorld = (globalFrom != globalTo);
+        
+        // Player is going to another world.
+        // Call Leave Event for every region before checking for regions!
+        if (isGoingToAnotherWorld){
+            for (ProtectedRegion currentRegion : currentPlayerRegions){
+                RegionBorderEvent leaveEvent = new RegionBorderEvent(currentRegion, CrossType.LEAVE, player, locationFrom, locationTo);
+                Bukkit.getPluginManager().callEvent(leaveEvent);
+            }
+
+            currentPlayerRegions.clear();
+        }
+        
+        // Detecting Enter event in non-global regions
+        for (ProtectedRegion futureRegion : Flags.getRegionSet(locationTo)) {
             futureRegions.add(futureRegion);
-            
+
             if (!currentPlayerRegions.contains(futureRegion)) {
                 currentPlayerRegions.add(futureRegion);
-                
-                RegionBorderEvent borderEvent = new RegionBorderEvent(futureRegion, CrossType.ENTER, event.getPlayer(), event.getFrom(), to);
-                Bukkit.getPluginManager().callEvent(borderEvent);
+
+                RegionBorderEvent enterEvent = new RegionBorderEvent(futureRegion, CrossType.ENTER, player, locationFrom, locationTo);
+                Bukkit.getPluginManager().callEvent(enterEvent);
             }
+        }
+
+        // Detecting __global__ region Enter event
+        futureRegions.add(globalTo);
+        if (!currentPlayerRegions.contains(globalTo)) {
+            currentPlayerRegions.add(globalTo);
+            
+            RegionBorderEvent enterEvent = new RegionBorderEvent(globalTo, CrossType.ENTER, player, locationFrom, locationTo);
+            Bukkit.getPluginManager().callEvent(enterEvent);
         }
 	    
-        // Detecting Leave event
-        Iterator<ProtectedRegion> itCurrentPlayerRegions = currentPlayerRegions.iterator();
-        while (itCurrentPlayerRegions.hasNext()) {
-            ProtectedRegion currentRegion = itCurrentPlayerRegions.next();
+        // Detecting Leave event in non-global regions
+        Iterator<ProtectedRegion> currentRegionsIterator = currentPlayerRegions.iterator();
+        while (currentRegionsIterator.hasNext()) {
+            ProtectedRegion currentRegion = currentRegionsIterator.next();
             
             if (!futureRegions.contains(currentRegion)) {
-                itCurrentPlayerRegions.remove();
-                
-                RegionBorderEvent borderEvent = new RegionBorderEvent(currentRegion, CrossType.LEAVE, event.getPlayer(), event.getFrom(), to);
-                Bukkit.getPluginManager().callEvent(borderEvent);
+                currentRegionsIterator.remove();
+
+                RegionBorderEvent leaveEvent = new RegionBorderEvent(currentRegion, CrossType.LEAVE, player, locationFrom, locationTo);
+                Bukkit.getPluginManager().callEvent(leaveEvent);
             }
+        }
+
+        // Detecting __global__ region Leave event
+        if (!futureRegions.contains(globalFrom)) {
+            currentPlayerRegions.remove(globalFrom);
+            
+            RegionBorderEvent leaveEvent = new RegionBorderEvent(globalFrom, CrossType.LEAVE, player, locationFrom, locationTo);
+            Bukkit.getPluginManager().callEvent(leaveEvent);
         }
 	}
 	
-	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onMove(PlayerMoveEvent event) {
-	    this.handleMovement(event);
+	    this.updateRegions(event.getPlayer(), event.getFrom(), event.getTo());
 	}
 	
-	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onTeleport(PlayerTeleportEvent event) {
-        this.handleMovement(event);
+        this.updateRegions(event.getPlayer(), event.getFrom(), event.getTo());
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onPortal(PlayerPortalEvent event) {
-        this.handleMovement(event);
+        this.updateRegions(event.getPlayer(), event.getFrom(), event.getTo());
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onJoin(PlayerJoinEvent event){
+        this.updateRegions(event.getPlayer(), event.getPlayer().getLocation(), event.getPlayer().getLocation());
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onRespawn(PlayerRespawnEvent event){
+        this.updateRegions(event.getPlayer(), event.getPlayer().getLocation(), event.getRespawnLocation());
     }
 	
 	@EventHandler
 	public void onQuit(PlayerQuitEvent event) {
 	    // This needs to happen. Otherwise, it will cause a memory leak.
 	    this.playerRegions.remove(event.getPlayer());
-	}
+    }
 	
     @Override
     public void onEnable() {
