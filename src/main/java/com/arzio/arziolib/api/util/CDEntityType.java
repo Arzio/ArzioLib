@@ -113,7 +113,6 @@ public enum CDEntityType {
 	}
 	
 	public Entity spawnEntity(Location location) throws CDAReflectionException{
-		Class<? extends net.minecraft.server.v1_6_R3.Entity> entityClass = this.getNMSClass();
 		try {
 			
 			CraftWorld craftWorld = (CraftWorld) location.getWorld();
