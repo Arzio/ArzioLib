@@ -16,31 +16,30 @@ public class PlayerDataImpl implements PlayerData{
     public static final int MAX_NORMALIZED_WATER_LEVEL = 20;
 	public static final int MAX_WATER_LEVEL = 36000;
 	public static final int WATER_LEVEL_RATIO_DIFFERENCE = MAX_WATER_LEVEL / MAX_NORMALIZED_WATER_LEVEL;
-	private String playerName;
+	private Player player;
 	private final InventoryCDAImpl inventoryCDA;
-	private boolean isNametagsHidden = true;
+	private boolean areNametagsHidden = true;
 	
 	public PlayerDataImpl(Player player) {
-		this(player.getName());
-	}
-	
-	public PlayerDataImpl(String playerName) {
-		this.playerName = playerName;
+		this.player = player;
 		this.inventoryCDA = new InventoryCDAImpl(this);
 	}
 	
 	public Object getPlayerDataInstance() {
-		return CDClasses.playerDataHandlerGetPlayerData.invoke(null, this.playerName);
+		if (!this.player.isOnline()){
+			throw new IllegalStateException("Player is not online!");
+		}
+		return CDClasses.playerDataHandlerGetPlayerData.invoke(null, this.player.getName());
 	}
 	
 	@Override
 	public String getPlayerName() {
-		return playerName;
+		return player.getName();
 	}
 
 	@Override
 	public Player getPlayer() {
-		return Bukkit.getPlayerExact(playerName);
+		return this.player;
 	}
 
 	@Override
@@ -61,13 +60,13 @@ public class PlayerDataImpl implements PlayerData{
 	@Override
 	public void setNametagsHidden(boolean isPossible) {
 	    if (CDPacketHelper.sendNametagPacket(this.getPlayer(), isPossible)) {
-	        this.isNametagsHidden = isPossible;
+	        this.areNametagsHidden = isPossible;
 	    }
 	}
 	
     @Override
     public boolean isNametagsHidden() {
-        return this.isNametagsHidden;
+        return this.areNametagsHidden;
     }
 
 	@Override
@@ -110,34 +109,34 @@ public class PlayerDataImpl implements PlayerData{
 			CDClasses.playerDataWaterLevels.getValue(this.getPlayerDataInstance()), result);
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((playerName == null) ? 0 : playerName.hashCode());
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((player == null) ? 0 : player.hashCode());
+        return result;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		PlayerDataImpl other = (PlayerDataImpl) obj;
-		if (playerName == null) {
-			if (other.playerName != null)
-				return false;
-		} else if (!playerName.equals(other.playerName))
-			return false;
-		return true;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        PlayerDataImpl other = (PlayerDataImpl) obj;
+        if (player == null) {
+            if (other.player != null)
+                return false;
+        } else if (!player.equals(other.player))
+            return false;
+        return true;
+    }
 
     @Override
     public void resendViewableNametags() {
-        this.setNametagsHidden(this.isNametagsHidden);
+        this.setNametagsHidden(this.areNametagsHidden);
     }
 
     @Override
