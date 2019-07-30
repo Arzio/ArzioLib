@@ -53,6 +53,7 @@ import com.arzio.arziolib.module.addon.ModuleAddonDisableLegBreak;
 import com.arzio.arziolib.module.addon.ModuleAddonEquipGunsFromInventory;
 import com.arzio.arziolib.module.addon.ModuleAddonInfinityEnchantCompatiblity;
 import com.arzio.arziolib.module.addon.ModuleAddonKeepEXPAfterDeath;
+import com.arzio.arziolib.module.addon.ModuleAddonKickPlayersBeforeServerStop;
 import com.arzio.arziolib.module.addon.ModuleAddonProjectileProtectionCompatibility;
 import com.arzio.arziolib.module.addon.ModuleAddonRealSound;
 import com.arzio.arziolib.module.addon.ModuleAddonRespawnAtBase;
@@ -124,7 +125,7 @@ public class ArzioLib extends JavaPlugin {
 
         this.testHelper = new TestHelperImpl();
         this.userDataProvider = new UserDataProvider();
-        this.playerDataHandler = new PlayerDataHandlerImpl();
+        this.playerDataHandler = new PlayerDataHandlerImpl(this);
         this.forgeBukkitEventManager = new ForgeBukkitEventManagerImpl(this);
         this.itemProvider = new ItemProviderImpl();
         this.craftingDead = new CraftingDeadMainImpl();
@@ -146,6 +147,7 @@ public class ArzioLib extends JavaPlugin {
         this.moduleManager.registerModule(ModuleAddonEquipGunsFromInventory.class);
         this.moduleManager.registerModule(ModuleAddonInfinityEnchantCompatiblity.class);
         this.moduleManager.registerModule(ModuleAddonKeepEXPAfterDeath.class);
+        this.moduleManager.registerModule(ModuleAddonKickPlayersBeforeServerStop.class);
         this.moduleManager.registerModule(ModuleAddonProjectileProtectionCompatibility.class);
         this.moduleManager.registerModule(ModuleAddonRealSound.class);
         this.moduleManager.registerModule(ModuleAddonRespawnAtBase.class);
