@@ -1,9 +1,9 @@
 package com.arzio.arziolib.api.impl;
 
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -21,7 +21,7 @@ import com.arzio.arziolib.api.wrapper.impl.BaseImpl;
 
 public class BaseProviderImpl implements BaseProvider{
 
-	private Map<Block, Base> dataInCache = new HashMap<Block, Base>();
+	private Map<Block, Base> dataInCache = new ConcurrentHashMap<Block, Base>();
 	
 	@Override
 	public Base getBaseFromPlayer(Player player) {

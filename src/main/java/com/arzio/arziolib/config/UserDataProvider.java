@@ -1,7 +1,7 @@
 package com.arzio.arziolib.config;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.entity.Player;
 
@@ -9,7 +9,7 @@ import com.arzio.arziolib.ArzioLib;
 
 public class UserDataProvider {
 
-	private Map<String, UserData> dataInCache = new HashMap<String, UserData>();
+	private Map<String, UserData> dataInCache = new ConcurrentHashMap<String, UserData>();
 	
 	public UserData getUserData(Player player) {
 		return this.getUserData(player.getName());

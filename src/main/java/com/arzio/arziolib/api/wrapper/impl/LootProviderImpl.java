@@ -1,7 +1,7 @@
 package com.arzio.arziolib.api.wrapper.impl;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.arzio.arziolib.api.exception.CDAReflectionException;
 import com.arzio.arziolib.api.util.CDLootType;
@@ -11,7 +11,7 @@ import com.arzio.arziolib.api.wrapper.LootProvider;
 
 public class LootProviderImpl implements LootProvider{
 
-	private Map<CDLootType, Loot> lootMap = new HashMap<CDLootType, Loot>();
+	private Map<CDLootType, Loot> lootMap = new ConcurrentHashMap<CDLootType, Loot>();
 	
 	@Override
 	public Loot getLoot(CDLootType type) {

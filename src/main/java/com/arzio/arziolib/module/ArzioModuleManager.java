@@ -2,9 +2,9 @@ package com.arzio.arziolib.module;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 import com.arzio.arziolib.ArzioLib;
@@ -12,7 +12,7 @@ import com.arzio.arziolib.config.YMLFile;
 
 public class ArzioModuleManager implements ModuleManager{
 
-	private Map<Class<? extends Module>, ModuleContainer> moduleMap = new HashMap<>();
+	private Map<Class<? extends Module>, ModuleContainer> moduleMap = new ConcurrentHashMap<>();
 	private final YMLFile yml;
 	private final ArzioLib plugin;
 	private boolean shouldWarnErrors;

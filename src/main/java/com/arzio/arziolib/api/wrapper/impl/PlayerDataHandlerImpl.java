@@ -1,7 +1,7 @@
 package com.arzio.arziolib.api.wrapper.impl;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -17,7 +17,7 @@ import com.arzio.arziolib.api.wrapper.PlayerDataHandler;
 
 public class PlayerDataHandlerImpl implements PlayerDataHandler, Listener {
 
-	private Map<Player, PlayerDataImpl> playerDataMap = new HashMap<>();
+	private Map<Player, PlayerDataImpl> playerDataMap = new ConcurrentHashMap<>();
 	
 	public PlayerDataHandlerImpl(Plugin plugin) {
 	    Bukkit.getPluginManager().registerEvents(this, plugin);

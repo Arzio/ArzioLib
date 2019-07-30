@@ -1,7 +1,7 @@
 package com.arzio.arziolib.api.wrapper.impl;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -14,7 +14,7 @@ import net.minecraft.server.v1_6_R3.Item;
 
 public class ItemProviderImpl implements ItemProvider {
 
-	private Map<Material, CDItem> materialProviderMap = new LinkedHashMap<>();
+	private Map<Material, CDItem> materialProviderMap = new ConcurrentHashMap<>();
 	
 	@Override
 	public <T extends CDItem> T getStackAs(Class<T> clazz, ItemStack stack) {
