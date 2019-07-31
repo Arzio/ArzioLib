@@ -82,6 +82,7 @@ import com.arzio.arziolib.module.fix.ModuleFixInvisibleEntities;
 import com.arzio.arziolib.module.fix.ModuleFixItemUsageOnRegions;
 import com.arzio.arziolib.module.fix.ModuleFixPlotMeEntityInteraction;
 import com.arzio.arziolib.module.fix.ModuleFixPvPOnWorldsWithoutPvP;
+import com.arzio.arziolib.module.fix.ModuleFixShutdownKickMessageColor;
 import com.mewin.WGCustomFlags.WGCustomFlagsPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
@@ -184,6 +185,7 @@ public class ArzioLib extends JavaPlugin {
             this.moduleManager.registerModule(ModuleFixPlotMeEntityInteraction.class);
         }
         this.moduleManager.registerModule(ModuleFixPvPOnWorldsWithoutPvP.class);
+        this.moduleManager.registerModule(ModuleFixShutdownKickMessageColor.class);
 
         // Toggle them all!
         this.moduleManager.toggleAll(ToggleAction.TOGGLE_FROM_CONFIG);

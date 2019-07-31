@@ -1,13 +1,11 @@
 package com.arzio.arziolib.module.addon;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_6_R3.CraftServer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.server.PluginDisableEvent;
-import org.spigotmc.SpigotConfig;
 
 import com.arzio.arziolib.module.Module;
 import com.arzio.arziolib.module.RegisterModule;
@@ -22,15 +20,9 @@ public class ModuleAddonKickPlayersBeforeServerStop extends Module {
 
 		if (isServerStopping){
 			for (Player player : Bukkit.getOnlinePlayers()){
-				player.kickPlayer(SpigotConfig.restartMessage);
+				player.kickPlayer(Bukkit.getServer().getShutdownMessage());
 			}
 		}
-	}
-
-	@Override
-	public void onEnable(){
-		// Globally translates color codes of the restart message
-		SpigotConfig.restartMessage = ChatColor.translateAlternateColorCodes('&', SpigotConfig.restartMessage);
 	}
 
 }
