@@ -22,9 +22,15 @@ public class ModuleAddonKickPlayersBeforeServerStop extends Module {
 
 		if (isServerStopping){
 			for (Player player : Bukkit.getOnlinePlayers()){
-				player.kickPlayer(ChatColor.translateAlternateColorCodes('&', SpigotConfig.restartMessage));
+				player.kickPlayer(SpigotConfig.restartMessage);
 			}
 		}
+	}
+
+	@Override
+	public void onEnable(){
+		// Globally translates color codes of the restart message
+		SpigotConfig.restartMessage = ChatColor.translateAlternateColorCodes('&', SpigotConfig.restartMessage);
 	}
 
 }
