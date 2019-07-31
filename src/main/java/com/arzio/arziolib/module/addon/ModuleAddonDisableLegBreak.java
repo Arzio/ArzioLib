@@ -19,8 +19,11 @@ public class ModuleAddonDisableLegBreak extends Module {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent event){
-		if (event.getPlayer().hasPotionEffect(legBreakPotion)){
-			event.getPlayer().removePotionEffect(legBreakPotion);
+		Player player = event.getPlayer();
+
+		if (player.hasPotionEffect(legBreakPotion)){
+			player.removePotionEffect(legBreakPotion);
+			player.removePotionEffect(PotionEffectType.BLINDNESS);
 		}
 	}
 
@@ -31,6 +34,7 @@ public class ModuleAddonDisableLegBreak extends Module {
 
 			if (player.hasPotionEffect(legBreakPotion)){
 				player.removePotionEffect(legBreakPotion);
+				player.removePotionEffect(PotionEffectType.BLINDNESS);
 			}
 		}
 	}
