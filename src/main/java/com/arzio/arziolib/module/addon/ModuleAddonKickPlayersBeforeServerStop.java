@@ -1,6 +1,7 @@
 package com.arzio.arziolib.module.addon;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_6_R3.CraftServer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -30,7 +31,7 @@ public class ModuleAddonKickPlayersBeforeServerStop extends Module {
 
 		if (isServerStopping && Bukkit.getOnlinePlayers().length > 0){
 			for (Player player : Bukkit.getOnlinePlayers()){
-				player.kickPlayer(this.kickMessage);
+				player.kickPlayer(ChatColor.translateAlternateColorCodes('&', this.kickMessage));
 			}
 		}
 	}
