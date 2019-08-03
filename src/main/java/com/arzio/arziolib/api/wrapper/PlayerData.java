@@ -15,6 +15,7 @@ public interface PlayerData {
 	public int getBaseZ();
 	
 	public InventoryCDA getInventory();
+	public Base getBase();
 	
 	public void setNametagsHidden(boolean isPossible);
 	public boolean isNametagsHidden();

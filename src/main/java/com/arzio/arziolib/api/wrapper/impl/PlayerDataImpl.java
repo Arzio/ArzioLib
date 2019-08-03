@@ -5,9 +5,11 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.util.CDBaseMaterial;
 import com.arzio.arziolib.api.util.CDPacketHelper;
 import com.arzio.arziolib.api.util.reflection.CDClasses;
+import com.arzio.arziolib.api.wrapper.Base;
 import com.arzio.arziolib.api.wrapper.InventoryCDA;
 import com.arzio.arziolib.api.wrapper.PlayerData;
 
@@ -141,7 +143,12 @@ public class PlayerDataImpl implements PlayerData{
 
     @Override
     public int getMaxWaterLevel() {
-        return MAX_NORMALIZED_WATER_LEVEL;
-    }
+     	return MAX_NORMALIZED_WATER_LEVEL;
+	}
+
+	@Override
+	public Base getBase() {
+		return ArzioLib.getInstance().getBaseProvider().getBaseFromCenter(this.getBaseLocation());
+	}
 
 }
