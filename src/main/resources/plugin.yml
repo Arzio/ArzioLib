@@ -4,7 +4,7 @@ version: {PROJECT_VERSION}
 author: Arzio
 load: STARTUP
 depend: [ProtocolLib, WorldGuard, WGCustomFlags]
-softdepend: [PlotMe, AuthMe]
+softdepend: [PlotMe, AuthMe, Essentials]
 description: Library of tools for Crafting Dead servers.
 commands:
     particle:
