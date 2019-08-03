@@ -48,6 +48,7 @@ dependencies {
 	compile downloadedFile('cauldron-1.6.4-1.965.21.204-server.jar', 'https://minecraft.maeyanie.com/cauldron/cauldron-1.6.4-1.965.21.204-server.jar')
 	compile downloadedFile('asm-all-4.1.jar', 'http://central.maven.org/maven2/org/ow2/asm/asm-all/4.1/asm-all-4.1.jar')
 	compile downloadedFile('SimpleClans-Legacy-2.4.1.jar', 'https://dev.bukkit.org/projects/simpleclans/files/614479/download')
+	compile downloadedFile('Essentials-2.12.2.zip', 'https://dev.bukkit.org/projects/essentials/files/758474/download')
 }
 
 processResources {
