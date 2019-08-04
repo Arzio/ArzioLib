@@ -41,7 +41,7 @@ public class ModuleAddonBiomeChanger extends Module {
 
 	@Override
 	public void onEnable() {
-        yml = new YMLFile(this.getPlugin(), "module_configuration/world_biomes.yml");
+		yml = new YMLFile(this.getPlugin(), "module_configuration/world_biomes.yml");
 		yml.saveDefaultFile();
 	}
 

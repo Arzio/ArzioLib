@@ -22,7 +22,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 @RegisterModule(name = "fix-damage-source-detection")
 public class ModuleFixDamageSourceDetection extends Module{
-    
+	
 	@ForgeSubscribe(priority = EventPriority.HIGHEST)
 	public void onAttack(LivingAttackEvent event) {
 		DamageSource source = ReflectionHelper.getValueFromEvent(event, DamageSource.class);

@@ -74,22 +74,22 @@ public class ModuleAddonCustomFlags extends Module {
 	public static final EasyStateFlag OLD_CD_BUILD_FLAG = new EasyStateFlag("cd-build");
 	public static final EasyStateFlag FLY_FLAG = new EasyStateFlag("fly");
 	public static final EasyStateFlag CAN_RELOAD_GUNS_FLAG = new EasyStateFlag("can-reload-guns");
-    public static final EasyStateFlag OPEN_CD_INVENTORY_FLAG = new EasyStateFlag("open-cd-inventory");
-    public static final EasyStateFlag CLEAR_CD_INVENTORY_FLAG = new EasyStateFlag("clear-cd-inventory");
-    public static final EasyStateFlag CLEAR_MINECRAFT_INVENTORY_FLAG = new EasyStateFlag("clear-minecraft-inventory");
-    public static final EasyStateFlag TASER_FLAG = new EasyStateFlag("taser");
+	public static final EasyStateFlag OPEN_CD_INVENTORY_FLAG = new EasyStateFlag("open-cd-inventory");
+	public static final EasyStateFlag CLEAR_CD_INVENTORY_FLAG = new EasyStateFlag("clear-cd-inventory");
+	public static final EasyStateFlag CLEAR_MINECRAFT_INVENTORY_FLAG = new EasyStateFlag("clear-minecraft-inventory");
+	public static final EasyStateFlag TASER_FLAG = new EasyStateFlag("taser");
 	public static final EasyStateFlag HANDCUFFS_FLAG = new EasyStateFlag("handcuffs");
 	public static final EasySetFlag<String> PLAYER_ENTER_COMMANDS_FLAG = new EasySetFlag<>("player-enter-commands");
 	public static final EasySetFlag<String> PLAYER_LEAVE_COMMANDS_FLAG = new EasySetFlag<>("player-leave-commands");
 	public static final EasySetFlag<String> SERVER_ENTER_COMMANDS_FLAG = new EasySetFlag<>("server-enter-commands");
 	public static final EasySetFlag<String> SERVER_LEAVE_COMMANDS_FLAG = new EasySetFlag<>("server-leave-commands");
-    
+	
 	
 	private final PlayerDataHandler playerDataHandler;
 	private final UserDataProvider userDataProvider;
 	
 	public ModuleAddonCustomFlags() {
-	    this.playerDataHandler = ArzioLib.getInstance().getPlayerDataHandler();
+		this.playerDataHandler = ArzioLib.getInstance().getPlayerDataHandler();
 		this.userDataProvider = ArzioLib.getInstance().getUserDataProvider();
 	}
 	
@@ -126,123 +126,123 @@ public class ModuleAddonCustomFlags extends Module {
 	
 	@RepeatingTask(delay = 20L, period = 20L)
 	public void healThirst() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (HEAL_THIRST_FLAG.isAllowed(player.getLocation())) {
-                PlayerData data = playerDataHandler.getPlayerData(player);
-                data.setWaterLevel(data.getMaxWaterLevel());
-            }
-        }
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			if (HEAL_THIRST_FLAG.isAllowed(player.getLocation())) {
+				PlayerData data = playerDataHandler.getPlayerData(player);
+				data.setWaterLevel(data.getMaxWaterLevel());
+			}
+		}
 	}
 	
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
-    public void disableTaserTrigger(CDGunTriggerEvent event) {
-        if (CDMaterial.TASER.isTypeOf(event.getHeldGun()) && TASER_FLAG.isDenied(event.getPlayer().getLocation())){
-            event.getPlayer().sendMessage("§cYou cannot use Taser here!");
-            event.setCancelled(true);
-        }
-    }
-    
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
-    public void disableTaserHit(CDBulletHitEvent event) {
-        if (CDMaterial.TASER.isTypeOf(event.getHeldGun()) && TASER_FLAG.isDenied(event.getPlayer().getLocation())){
-            event.setCancelled(true);
-        }
-    }
-    
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
-    public void disableHandcuffs(PlayerInteractEntityEvent event) {
-        // Continue only if the clicked entity is a player
-        if (!(event.getRightClicked() instanceof Player)) {
-            return;
-        }
-        
-        ItemStack stack = event.getPlayer().getItemInHand();
-        
-        // Check if the clicker is holding any item
-        if (stack == null) {
-            return;
-        }
-        
-        if (CDMaterial.HANDCUFFS.isTypeOf(stack)) {
-            if (HANDCUFFS_FLAG.isDenied(event.getPlayer().getLocation()) || HANDCUFFS_FLAG.isDenied(event.getRightClicked().getLocation())) {
-                event.setCancelled(true);
-                event.getPlayer().sendMessage("§cYou cannot use handcuffs here!");
-            }
-        }
-    }
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+	public void disableTaserTrigger(CDGunTriggerEvent event) {
+		if (CDMaterial.TASER.isTypeOf(event.getHeldGun()) && TASER_FLAG.isDenied(event.getPlayer().getLocation())){
+			event.getPlayer().sendMessage("§cYou cannot use Taser here!");
+			event.setCancelled(true);
+		}
+	}
 	
-    @EventHandler
-    public void cdBuildHanging(HangingBreakByEntityEvent event) {
-        if (event.getRemover() instanceof Player) {
-            Player player = (Player) event.getRemover();
-            
-            if (player.isOp()) {
-                return;
-            }
-            if (OLD_CD_BUILD_FLAG.isAllowed(player.getLocation())) {
-                event.setCancelled(true);
-            }
-        }
-    }
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+	public void disableTaserHit(CDBulletHitEvent event) {
+		if (CDMaterial.TASER.isTypeOf(event.getHeldGun()) && TASER_FLAG.isDenied(event.getPlayer().getLocation())){
+			event.setCancelled(true);
+		}
+	}
 	
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    public void onCDInventory(InventoryOpenEvent event) {
-        
-        HumanEntity player = event.getPlayer();
-        
-        if (CDInventoryType.PLAYER_INVENTORY.isTypeOf(event.getView())) {
-            if (OPEN_CD_INVENTORY_FLAG.isDenied(event.getPlayer().getLocation())) {
-                event.setCancelled(true);
-                
-                if (player instanceof Player) {
-                    ((Player) player).sendMessage("§cYou cannot open your inventory here.");
-                }
-            }
-        }
-    }
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+	public void disableHandcuffs(PlayerInteractEntityEvent event) {
+		// Continue only if the clicked entity is a player
+		if (!(event.getRightClicked() instanceof Player)) {
+			return;
+		}
+		
+		ItemStack stack = event.getPlayer().getItemInHand();
+		
+		// Check if the clicker is holding any item
+		if (stack == null) {
+			return;
+		}
+		
+		if (CDMaterial.HANDCUFFS.isTypeOf(stack)) {
+			if (HANDCUFFS_FLAG.isDenied(event.getPlayer().getLocation()) || HANDCUFFS_FLAG.isDenied(event.getRightClicked().getLocation())) {
+				event.setCancelled(true);
+				event.getPlayer().sendMessage("§cYou cannot use handcuffs here!");
+			}
+		}
+	}
 	
-    @EventHandler
-    public void onBlockBreak(BlockBreakEvent event) {
-        Player player = event.getPlayer();
-        if (player.isOp()) {
-            return;
-        }
-        
-        Block block = event.getBlock();       
-        
-        if (OLD_CD_BUILD_FLAG.isAllowed(block.getLocation())) {
+	@EventHandler
+	public void cdBuildHanging(HangingBreakByEntityEvent event) {
+		if (event.getRemover() instanceof Player) {
+			Player player = (Player) event.getRemover();
+			
+			if (player.isOp()) {
+				return;
+			}
+			if (OLD_CD_BUILD_FLAG.isAllowed(player.getLocation())) {
+				event.setCancelled(true);
+			}
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onCDInventory(InventoryOpenEvent event) {
+		
+		HumanEntity player = event.getPlayer();
+		
+		if (CDInventoryType.PLAYER_INVENTORY.isTypeOf(event.getView())) {
+			if (OPEN_CD_INVENTORY_FLAG.isDenied(event.getPlayer().getLocation())) {
+				event.setCancelled(true);
+				
+				if (player instanceof Player) {
+					((Player) player).sendMessage("§cYou cannot open your inventory here.");
+				}
+			}
+		}
+	}
+	
+	@EventHandler
+	public void onBlockBreak(BlockBreakEvent event) {
+		Player player = event.getPlayer();
+		if (player.isOp()) {
+			return;
+		}
+		
+		Block block = event.getBlock();	   
+		
+		if (OLD_CD_BUILD_FLAG.isAllowed(block.getLocation())) {
 
-            if (player.getGameMode() != GameMode.CREATIVE) {
-                ItemStack heldStack = player.getItemInHand();
-                if (heldStack != null) {
-                    CDMaterial material = CDMaterial.getFrom(heldStack.getType());
-                    if (material != null && material.getHarvestType().canHarvest(block)) {
-                        return; // do not cancel the event
-                    }
-                }
-            }
-            
-            event.setCancelled(true);
-        }
-    }
-    
-    @EventHandler
-    public void onBlockPlaced(BlockPlaceEvent event) {
-        if (event.getPlayer().isOp()) {
-            return;
-        }
-        if (OLD_CD_BUILD_FLAG.isAllowed(event.getBlock().getLocation())) {
-            event.setCancelled(true);
-        }
-    }
-    
-    @EventHandler
-    public void onGunReload(CDGunReloadEvent event) {
-        if (CAN_RELOAD_GUNS_FLAG.isDenied(event.getPlayer().getLocation())) {
-            event.getPlayer().sendMessage("§cYou cannot reload guns here.");
-            event.setCancelled(true);
-        }
-    }
+			if (player.getGameMode() != GameMode.CREATIVE) {
+				ItemStack heldStack = player.getItemInHand();
+				if (heldStack != null) {
+					CDMaterial material = CDMaterial.getFrom(heldStack.getType());
+					if (material != null && material.getHarvestType().canHarvest(block)) {
+						return; // do not cancel the event
+					}
+				}
+			}
+			
+			event.setCancelled(true);
+		}
+	}
+	
+	@EventHandler
+	public void onBlockPlaced(BlockPlaceEvent event) {
+		if (event.getPlayer().isOp()) {
+			return;
+		}
+		if (OLD_CD_BUILD_FLAG.isAllowed(event.getBlock().getLocation())) {
+			event.setCancelled(true);
+		}
+	}
+	
+	@EventHandler
+	public void onGunReload(CDGunReloadEvent event) {
+		if (CAN_RELOAD_GUNS_FLAG.isDenied(event.getPlayer().getLocation())) {
+			event.getPlayer().sendMessage("§cYou cannot reload guns here.");
+			event.setCancelled(true);
+		}
+	}
 	
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onInventoryOpen(InventoryOpenEvent event) {
@@ -278,22 +278,22 @@ public class ModuleAddonCustomFlags extends Module {
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
 	public void toggleFlightEvent(PlayerToggleFlightEvent event) {
-	    Player player = event.getPlayer();
-	    
-	    if (event.isFlying() && !player.isOp()) {
-	        if (FLY_FLAG.isDenied(player.getLocation()) && !player.hasPermission("arziolib.bypass.fly.deny")) {
-	            player.setAllowFlight(false);
-                player.teleport(player.getLocation()); // fixes ping desync
-                player.sendMessage("§cFly mode is disabled here.");
-                event.setCancelled(true);
-	        }
-	    }
+		Player player = event.getPlayer();
+		
+		if (event.isFlying() && !player.isOp()) {
+			if (FLY_FLAG.isDenied(player.getLocation()) && !player.hasPermission("arziolib.bypass.fly.deny")) {
+				player.setAllowFlight(false);
+				player.teleport(player.getLocation()); // fixes ping desync
+				player.sendMessage("§cFly mode is disabled here.");
+				event.setCancelled(true);
+			}
+		}
 	}
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
 	public void handleServerCommandFlag(RegionBorderEvent event){
 		Set<String> commandsToExecute = (event.getType() == CrossType.ENTER) ?
-		 	SERVER_ENTER_COMMANDS_FLAG.getValue(event.getRegion()) : SERVER_LEAVE_COMMANDS_FLAG.getValue(event.getRegion());
+			 SERVER_ENTER_COMMANDS_FLAG.getValue(event.getRegion()) : SERVER_LEAVE_COMMANDS_FLAG.getValue(event.getRegion());
 
 		if (commandsToExecute != null){
 			for (String command : commandsToExecute){
@@ -314,95 +314,95 @@ public class ModuleAddonCustomFlags extends Module {
 		}
 	}
 	
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
-    public void handleFlyFlag(RegionBorderEvent event) {
-        Player player = event.getPlayer();
-        Location destination = event.getFutureLocation();
-        
-        if (FLY_FLAG.isAllowed(destination)) {
-            if (!player.getAllowFlight()) {
-                UserData data = UserData.getFrom(player);
-                data.addFlag(UserData.FLAG_EARNED_FLY_MODE_DUE_TO_WG_FLAG);
-                
-                player.setAllowFlight(true);
-                player.sendMessage("§6Fly mode is enabled here.");
-            }
-        } else {
-            if (player.getAllowFlight()) {
-                UserData data = UserData.getFrom(player);
-                if (data.hasFlag(UserData.FLAG_EARNED_FLY_MODE_DUE_TO_WG_FLAG)) {
-                    data.removeFlag(UserData.FLAG_EARNED_FLY_MODE_DUE_TO_WG_FLAG);
-                    
-                    player.setAllowFlight(false);
-                    player.sendMessage("§6Fly mode is disabled here.");
-                }
-            }
-        }
-    }
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+	public void handleFlyFlag(RegionBorderEvent event) {
+		Player player = event.getPlayer();
+		Location destination = event.getFutureLocation();
+		
+		if (FLY_FLAG.isAllowed(destination)) {
+			if (!player.getAllowFlight()) {
+				UserData data = UserData.getFrom(player);
+				data.addFlag(UserData.FLAG_EARNED_FLY_MODE_DUE_TO_WG_FLAG);
+				
+				player.setAllowFlight(true);
+				player.sendMessage("§6Fly mode is enabled here.");
+			}
+		} else {
+			if (player.getAllowFlight()) {
+				UserData data = UserData.getFrom(player);
+				if (data.hasFlag(UserData.FLAG_EARNED_FLY_MODE_DUE_TO_WG_FLAG)) {
+					data.removeFlag(UserData.FLAG_EARNED_FLY_MODE_DUE_TO_WG_FLAG);
+					
+					player.setAllowFlight(false);
+					player.sendMessage("§6Fly mode is disabled here.");
+				}
+			}
+		}
+	}
 	
 	@EventHandler(ignoreCancelled = false, priority = EventPriority.HIGHEST)
 	public void disableWhitelist(CDDefineNametagsEvent event) {
-	    if (DISABLE_NAMETAG_WHITELIST.isAllowed(event.getPlayer().getLocation())) {
-	        event.clearWhitelist();
-	    }
+		if (DISABLE_NAMETAG_WHITELIST.isAllowed(event.getPlayer().getLocation())) {
+			event.clearWhitelist();
+		}
 	}
 	
-    @EventHandler
-    public void preventNametagFlagCaching(PlayerQuitEvent event) {
-        UserData data = UserData.getFrom(event.getPlayer());
-        
-        data.removeFlag(UserData.FLAG_SHOW_NAMETAGS);
-        data.removeFlag(UserData.FLAG_WHITELIST_DISABLED);
-    }
+	@EventHandler
+	public void preventNametagFlagCaching(PlayerQuitEvent event) {
+		UserData data = UserData.getFrom(event.getPlayer());
+		
+		data.removeFlag(UserData.FLAG_SHOW_NAMETAGS);
+		data.removeFlag(UserData.FLAG_WHITELIST_DISABLED);
+	}
 	
-    @EventHandler
-    public void resendNametagsOnJoin(PlayerJoinEvent event) {
-        PlayerData data = playerDataHandler.getPlayerData(event.getPlayer());
-        data.resendViewableNametags();
-    }
-    
-    @EventHandler(ignoreCancelled = true)
-    public void hideNameTag(RegionBorderEvent event) {
-        Player player = event.getPlayer();
-        Location destination = event.getFutureLocation();
-        ApplicableRegionSet regionSet = Flags.getRegionSet(destination);
+	@EventHandler
+	public void resendNametagsOnJoin(PlayerJoinEvent event) {
+		PlayerData data = playerDataHandler.getPlayerData(event.getPlayer());
+		data.resendViewableNametags();
+	}
+	
+	@EventHandler(ignoreCancelled = true)
+	public void hideNameTag(RegionBorderEvent event) {
+		Player player = event.getPlayer();
+		Location destination = event.getFutureLocation();
+		ApplicableRegionSet regionSet = Flags.getRegionSet(destination);
 
-        if (regionSet != null) {
-            UserData userData = userDataProvider.getUserData(player);
+		if (regionSet != null) {
+			UserData userData = userDataProvider.getUserData(player);
 
-            boolean areNametagsVisibleHere = SHOW_NAMETAGS_FLAG.isAllowed(regionSet);
-            boolean areNametagsShownForThePlayer = userData.hasFlag(UserData.FLAG_SHOW_NAMETAGS);
-            boolean shouldUpdateNametags = false;
+			boolean areNametagsVisibleHere = SHOW_NAMETAGS_FLAG.isAllowed(regionSet);
+			boolean areNametagsShownForThePlayer = userData.hasFlag(UserData.FLAG_SHOW_NAMETAGS);
+			boolean shouldUpdateNametags = false;
 
-            if (areNametagsVisibleHere) {
-                if (!areNametagsShownForThePlayer) {
-                    userData.addFlag(UserData.FLAG_SHOW_NAMETAGS);
-                    shouldUpdateNametags = true;
-                }
-            } else {
-                boolean isWhitelistDisabledHere = DISABLE_NAMETAG_WHITELIST.isAllowed(regionSet);
-                boolean playerHasWhitelist = !userData.hasFlag(UserData.FLAG_WHITELIST_DISABLED);
+			if (areNametagsVisibleHere) {
+				if (!areNametagsShownForThePlayer) {
+					userData.addFlag(UserData.FLAG_SHOW_NAMETAGS);
+					shouldUpdateNametags = true;
+				}
+			} else {
+				boolean isWhitelistDisabledHere = DISABLE_NAMETAG_WHITELIST.isAllowed(regionSet);
+				boolean playerHasWhitelist = !userData.hasFlag(UserData.FLAG_WHITELIST_DISABLED);
 
-                if (areNametagsShownForThePlayer) {
-                    userData.removeFlag(UserData.FLAG_SHOW_NAMETAGS);
-                    shouldUpdateNametags = true;
-                }
-                if (isWhitelistDisabledHere && playerHasWhitelist) {
-                    userData.addFlag(UserData.FLAG_WHITELIST_DISABLED);
-                    shouldUpdateNametags = true;
-                }
-                if (!isWhitelistDisabledHere && !playerHasWhitelist) {
-                    userData.removeFlag(UserData.FLAG_WHITELIST_DISABLED);
-                    shouldUpdateNametags = true;
-                }
-            }
+				if (areNametagsShownForThePlayer) {
+					userData.removeFlag(UserData.FLAG_SHOW_NAMETAGS);
+					shouldUpdateNametags = true;
+				}
+				if (isWhitelistDisabledHere && playerHasWhitelist) {
+					userData.addFlag(UserData.FLAG_WHITELIST_DISABLED);
+					shouldUpdateNametags = true;
+				}
+				if (!isWhitelistDisabledHere && !playerHasWhitelist) {
+					userData.removeFlag(UserData.FLAG_WHITELIST_DISABLED);
+					shouldUpdateNametags = true;
+				}
+			}
 
-            if (shouldUpdateNametags) {
-                playerDataHandler.getPlayerData(player)
-                        .setNametagsHidden(!areNametagsVisibleHere);
-            }
-        }
-    }
+			if (shouldUpdateNametags) {
+				playerDataHandler.getPlayerData(player)
+						.setNametagsHidden(!areNametagsVisibleHere);
+			}
+		}
+	}
 	
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void flagGrenadeThrowing(CDGrenadeThrowEvent event) {
@@ -414,15 +414,15 @@ public class ModuleAddonCustomFlags extends Module {
 	
 	@EventHandler(ignoreCancelled = true)
 	public void clearItems(RegionBorderEvent event) {
-	    Player player = event.getPlayer();
-	    
-	    if (CLEAR_CD_INVENTORY_FLAG.isAllowed(event.getFutureLocation())) {
-	        PlayerData data = playerDataHandler.getPlayerData(player);
-	        data.getInventory().clearSpecialSlots();
-	    }
-        if (CLEAR_MINECRAFT_INVENTORY_FLAG.isAllowed(event.getFutureLocation())) {
-            player.getInventory().clear();
-        }
+		Player player = event.getPlayer();
+		
+		if (CLEAR_CD_INVENTORY_FLAG.isAllowed(event.getFutureLocation())) {
+			PlayerData data = playerDataHandler.getPlayerData(player);
+			data.getInventory().clearSpecialSlots();
+		}
+		if (CLEAR_MINECRAFT_INVENTORY_FLAG.isAllowed(event.getFutureLocation())) {
+			player.getInventory().clear();
+		}
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH)

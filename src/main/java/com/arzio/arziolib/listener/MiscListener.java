@@ -32,7 +32,7 @@ public class MiscListener implements ForgeListener {
 	
 	@EventHandler
 	public void onPluginUnload(PluginDisableEvent event) {
-	    ArzioLib.getInstance().getTestHelper().clearTestCases(event.getPlugin());
+		ArzioLib.getInstance().getTestHelper().clearTestCases(event.getPlugin());
 	}
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)

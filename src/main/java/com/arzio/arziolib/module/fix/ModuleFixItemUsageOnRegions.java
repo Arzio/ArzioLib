@@ -26,50 +26,50 @@ import net.minecraftforge.event.ForgeSubscribe;
 @RegisterModule(name = "fix-item-usage-on-regions-without-pvp")
 public class ModuleFixItemUsageOnRegions extends Module {
 	
-    @ForgeSubscribe
-    @IndirectCDEvent(cdClassName = "EventFlamethrowerSetFire")
-    public void fixFlamethrowerDamageOnSafezones(Event event) {
-        EntityPlayer attacker = ReflectionHelper.getValueFromEvent(event, EntityPlayer.class);
-        EntityLiving entityHit = ReflectionHelper.getValueFromEvent(event, EntityLiving.class);
-        
-        Player playerAttacker = attacker.getBukkitEntity();
-        LivingEntity living = (LivingEntity) entityHit.getBukkitEntity();
-        
-        // Both 'hit' and 'attacker' are players
-        if (living instanceof Player) {
-            if (!Flags.canRegionHavePvP(playerAttacker.getLocation()) || !Flags.canRegionHavePvP(living.getLocation())) {
-                event.setCanceled(true);
-            }
-        }
-    }
+	@ForgeSubscribe
+	@IndirectCDEvent(cdClassName = "EventFlamethrowerSetFire")
+	public void fixFlamethrowerDamageOnSafezones(Event event) {
+		EntityPlayer attacker = ReflectionHelper.getValueFromEvent(event, EntityPlayer.class);
+		EntityLiving entityHit = ReflectionHelper.getValueFromEvent(event, EntityLiving.class);
+		
+		Player playerAttacker = attacker.getBukkitEntity();
+		LivingEntity living = (LivingEntity) entityHit.getBukkitEntity();
+		
+		// Both 'hit' and 'attacker' are players
+		if (living instanceof Player) {
+			if (!Flags.canRegionHavePvP(playerAttacker.getLocation()) || !Flags.canRegionHavePvP(living.getLocation())) {
+				event.setCanceled(true);
+			}
+		}
+	}
 	
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
-    public void fixTaserTriggerInSafezones(CDGunTriggerEvent event) {
-        if (CDMaterial.TASER.isTypeOf(event.getHeldGun())) {
-            if (!Flags.canRegionHavePvP(event.getPlayer().getLocation())) {
-                event.setCancelled(true);
-                event.getPlayer().sendMessage("�cYou cannot use Taser in safe zones!");
-            }
-        }
-    }
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+	public void fixTaserTriggerInSafezones(CDGunTriggerEvent event) {
+		if (CDMaterial.TASER.isTypeOf(event.getHeldGun())) {
+			if (!Flags.canRegionHavePvP(event.getPlayer().getLocation())) {
+				event.setCancelled(true);
+				event.getPlayer().sendMessage("�cYou cannot use Taser in safe zones!");
+			}
+		}
+	}
 	
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
-    public void fixTaserHitInSafezones(CDBulletHitEvent event) {
-        if (CDMaterial.TASER.isTypeOf(event.getHeldGun())) {
-            
-            boolean shouldCancel = false;
-            
-            if (event.getHitType() == HitType.ENTITY) {
-                shouldCancel = !Flags.canRegionHavePvP(event.getPlayer().getLocation()) || !Flags.canRegionHavePvP(event.getEntityHit().getLocation());
-            } else {
-                shouldCancel = !Flags.canRegionHavePvP(event.getPlayer().getLocation());
-            }
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+	public void fixTaserHitInSafezones(CDBulletHitEvent event) {
+		if (CDMaterial.TASER.isTypeOf(event.getHeldGun())) {
+			
+			boolean shouldCancel = false;
+			
+			if (event.getHitType() == HitType.ENTITY) {
+				shouldCancel = !Flags.canRegionHavePvP(event.getPlayer().getLocation()) || !Flags.canRegionHavePvP(event.getEntityHit().getLocation());
+			} else {
+				shouldCancel = !Flags.canRegionHavePvP(event.getPlayer().getLocation());
+			}
 
-            if (shouldCancel) {
-                event.setCancelled(true);
-            }
-        }
-    }
+			if (shouldCancel) {
+				event.setCancelled(true);
+			}
+		}
+	}
 	
 	@EventHandler
 	public void onGrenadeThrowing(CDGrenadeThrowEvent event) {

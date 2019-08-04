@@ -13,16 +13,16 @@ import com.arzio.arziolib.module.RegisterModule;
 @RegisterModule(name = "addon-respawn-loots-on-chunk-load", defaultState = false)
 public class ModuleAddonRespawnLoots extends Module {
 
-    @EventHandler
-    public void onChunkLoad(ChunkLoadEvent event) {
-        for (BlockState state : event.getChunk().getTileEntities()) {
-            CDLootType lootType = CDLootType.getFrom(state.getBlock());
-            if (lootType != null) {
-                Location location = state.getLocation();
-                location.getBlock().setType(Material.AIR);
-                location.getBlock().setType(lootType.getMaterial().asMaterial());
-            }
-        }
-    }
+	@EventHandler
+	public void onChunkLoad(ChunkLoadEvent event) {
+		for (BlockState state : event.getChunk().getTileEntities()) {
+			CDLootType lootType = CDLootType.getFrom(state.getBlock());
+			if (lootType != null) {
+				Location location = state.getLocation();
+				location.getBlock().setType(Material.AIR);
+				location.getBlock().setType(lootType.getMaterial().asMaterial());
+			}
+		}
+	}
 
 }

@@ -43,7 +43,7 @@ public class ModuleAddonZombieSpawnBlockBlacklist extends Module {
 	public void onEnable() {
 		super.onEnable();
 		
-        this.yml = new YMLFile(this.getPlugin(), "module_configuration/zombie_spawn_block_blacklist.yml");
+		this.yml = new YMLFile(this.getPlugin(), "module_configuration/zombie_spawn_block_blacklist.yml");
 		yml.saveDefaultFile();
 		yml.reload();
 		

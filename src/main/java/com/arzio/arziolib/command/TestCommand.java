@@ -22,71 +22,71 @@ public class TestCommand implements CommandExecutor {
 		}
 		
 		if (args.length < 1) {
-		    sender.sendMessage("§aTest commands:");
-		    sender.sendMessage("§f/test <TestCase name> §8- §fTests this test case");
-		    sender.sendMessage("§f/test group <group name> §8- §fTests all test cases from a group");
-		    sender.sendMessage("§f/test all <plugin name> §8- §fTests all test cases from a plugin");
-		    sender.sendMessage("§aAlias: §f/te");
-		    return true;
+			sender.sendMessage("§aTest commands:");
+			sender.sendMessage("§f/test <TestCase name> §8- §fTests this test case");
+			sender.sendMessage("§f/test group <group name> §8- §fTests all test cases from a group");
+			sender.sendMessage("§f/test all <plugin name> §8- §fTests all test cases from a plugin");
+			sender.sendMessage("§aAlias: §f/te");
+			return true;
 		}
 		
 		TestHelper testHelper = ArzioLib.getInstance().getTestHelper();
 		String whichTest = args[0];
 		
 		if (whichTest.equalsIgnoreCase("all")) {
-		    
-		    if (args.length < 2) {
-	            sender.sendMessage("§cWrong input. Try '/test all <plugin name>'");
-	            return true;
-		    }
-		    
-		    String pluginName = StringHelper.appendStringFromIndex(args, 1, args.length);
-		    Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
-		    
-		    if (plugin == null) {
-                sender.sendMessage("§cPlugin not found.");
-                return true;
-		    }
-		    
-		    try {
-		        sender.sendMessage("§7Running all test cases from "+plugin.getName()+"...");
-                testHelper.runTestCases(plugin, sender);
-                sender.sendMessage("§aPassed all test cases from plugin "+plugin.getName()+"!");
-            } catch (TestException e) {
-                e.printStackTrace(sender);
-            }
-		    
+			
+			if (args.length < 2) {
+				sender.sendMessage("§cWrong input. Try '/test all <plugin name>'");
+				return true;
+			}
+			
+			String pluginName = StringHelper.appendStringFromIndex(args, 1, args.length);
+			Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
+			
+			if (plugin == null) {
+				sender.sendMessage("§cPlugin not found.");
+				return true;
+			}
+			
+			try {
+				sender.sendMessage("§7Running all test cases from "+plugin.getName()+"...");
+				testHelper.runTestCases(plugin, sender);
+				sender.sendMessage("§aPassed all test cases from plugin "+plugin.getName()+"!");
+			} catch (TestException e) {
+				e.printStackTrace(sender);
+			}
+			
 		} else if (whichTest.equalsIgnoreCase("group")){
 		
-            if (args.length < 2) {
-                sender.sendMessage("§cWrong input. Try '/test group <group name>'");
-                return true;
-            }
-            
-            String groupName = StringHelper.appendStringFromIndex(args, 1, args.length);
-            
-            try {
-                sender.sendMessage("§7Running all test cases from group "+groupName+"...");
-                testHelper.runTestCases(groupName, sender);
-                sender.sendMessage("§aPassed all test cases from group "+groupName+"!");
-            } catch (TestException e) {
-                e.printStackTrace(sender);
-            }
+			if (args.length < 2) {
+				sender.sendMessage("§cWrong input. Try '/test group <group name>'");
+				return true;
+			}
+			
+			String groupName = StringHelper.appendStringFromIndex(args, 1, args.length);
+			
+			try {
+				sender.sendMessage("§7Running all test cases from group "+groupName+"...");
+				testHelper.runTestCases(groupName, sender);
+				sender.sendMessage("§aPassed all test cases from group "+groupName+"!");
+			} catch (TestException e) {
+				e.printStackTrace(sender);
+			}
 		
-	    } else {
-		    TestCase testCase = testHelper.getTestCase(whichTest);
-		    if (testCase == null) {
-		        sender.sendMessage("§cTest case not found.");
-		        return true;
-		    }
-		    
-	        try {
-	            sender.sendMessage("§7Running test "+testCase.getCommandName()+"...");
-	            testCase.run(sender);
-	            sender.sendMessage("§aTest "+testCase.getCommandName()+" passed!");
-	        } catch (TestException e) {
-	            e.printStackTrace(sender);
-	        }
+		} else {
+			TestCase testCase = testHelper.getTestCase(whichTest);
+			if (testCase == null) {
+				sender.sendMessage("§cTest case not found.");
+				return true;
+			}
+			
+			try {
+				sender.sendMessage("§7Running test "+testCase.getCommandName()+"...");
+				testCase.run(sender);
+				sender.sendMessage("§aTest "+testCase.getCommandName()+" passed!");
+			} catch (TestException e) {
+				e.printStackTrace(sender);
+			}
 		}
 		
 		return true;

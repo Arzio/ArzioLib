@@ -13,15 +13,15 @@ import com.arzio.arziolib.module.RegisterModule;
 @RegisterModule(name = "fix-zombie-height")
 public class ModuleFixZombieHeight extends Module {
 
-    @EventHandler
-    public void onZombieJoinWorld(EntityJoinWorldEvent event) {
-        Entity entity = event.getEntity();
+	@EventHandler
+	public void onZombieJoinWorld(EntityJoinWorldEvent event) {
+		Entity entity = event.getEntity();
 
-        for (CDEntityType type : CDEntityType.getZombieTypes()) {
-            if (type.isTypeOf(entity)) {
-                EntityUtil.setEntitySize(entity, 0.8F, 1.9F);
-                break;
-            }
-        }
-    }
+		for (CDEntityType type : CDEntityType.getZombieTypes()) {
+			if (type.isTypeOf(entity)) {
+				EntityUtil.setEntitySize(entity, 0.8F, 1.9F);
+				break;
+			}
+		}
+	}
 }

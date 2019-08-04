@@ -25,11 +25,11 @@ public enum CDDamageCause {
 	}
 	
 	public boolean isTypeOf(EntityDamageEvent event) {
-	    return this.isTypeOf(event.getCause());
+		return this.isTypeOf(event.getCause());
 	}
 	
 	public boolean isTypeOf(DamageCause cause) {
-	    return this.asBukkitDamageCause() == cause;
+		return this.asBukkitDamageCause() == cause;
 	}
 	
 	public DamageCause asBukkitDamageCause() {
@@ -45,12 +45,12 @@ public enum CDDamageCause {
 	}
 	
 	public static boolean isBullet(EntityDamageEvent event) {
-	    return isBullet(event.getCause());
+		return isBullet(event.getCause());
 	}
 	
-    public static boolean isBullet(DamageCause cause) {
-        return CDDamageCause.BULLET_BODY.isTypeOf(cause) || CDDamageCause.BULLET_HEADSHOT.isTypeOf(cause);
-    }
+	public static boolean isBullet(DamageCause cause) {
+		return CDDamageCause.BULLET_BODY.isTypeOf(cause) || CDDamageCause.BULLET_HEADSHOT.isTypeOf(cause);
+	}
 	
 	public static CDDamageCause getFrom(DamageSource source) {
 		for (CDDamageCause cause : CDDamageCause.values()) {
@@ -62,11 +62,11 @@ public enum CDDamageCause {
 	}
 	
 	public static CDDamageCause getFrom(DamageCause bukkitCause) {
-	    for (CDDamageCause cause : CDDamageCause.values()) {
-	        if (cause.isTypeOf(bukkitCause)) {
-	            return cause;
-	        }
-	    }
-	    return null;
+		for (CDDamageCause cause : CDDamageCause.values()) {
+			if (cause.isTypeOf(bukkitCause)) {
+				return cause;
+			}
+		}
+		return null;
 	}
 }

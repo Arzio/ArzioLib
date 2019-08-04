@@ -28,23 +28,23 @@ import net.minecraft.server.v1_6_R3.EntityCreature;
 @RegisterModule(name = "addon-zombie-hear-guns")
 public class ModuleAddonZombieHearGuns extends Module{
 	
-    private Plugin plugin;
-    private ItemProvider itemProvider;
-    private ItemStackHelper itemStackHelper;
-    
-    @Override
-    public void onEnable() {
-        this.plugin = ArzioLib.getInstance();
-        this.itemProvider = ArzioLib.getInstance().getItemProvider();
-        this.itemStackHelper = ArzioLib.getInstance().getItemStackHelper();
-    }
-    
+	private Plugin plugin;
+	private ItemProvider itemProvider;
+	private ItemStackHelper itemStackHelper;
+	
+	@Override
+	public void onEnable() {
+		this.plugin = ArzioLib.getInstance();
+		this.itemProvider = ArzioLib.getInstance().getItemProvider();
+		this.itemStackHelper = ArzioLib.getInstance().getItemStackHelper();
+	}
+	
 	@RepeatingTask(delay = 10L, period = 10L)
 	public void updateSoundLevel() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            UserData data = UserData.getFrom(player);
-            data.setCurrentSoundLevel(data.getCurrentSoundLevel() - 20F);
-        }
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			UserData data = UserData.getFrom(player);
+			data.setCurrentSoundLevel(data.getCurrentSoundLevel() - 20F);
+		}
 	}
 	
 	@EventHandler

@@ -8,14 +8,14 @@ import com.arzio.arziolib.api.wrapper.CDSharedItem;
 
 public class CDSharedItemImpl extends CDItemImpl implements CDSharedItem{
 
-    public CDSharedItemImpl(Material material) {
-        super(material);
-    }
+	public CDSharedItemImpl(Material material) {
+		super(material);
+	}
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public void updateStats(Player player) {
-        CDPacketHelper.updateSharedItems(player, this);
-    }
+	@SuppressWarnings("unchecked")
+	@Override
+	public void updateStats(Player player) {
+		CDPacketHelper.updateSharedItems(player, this);
+	}
 
 }

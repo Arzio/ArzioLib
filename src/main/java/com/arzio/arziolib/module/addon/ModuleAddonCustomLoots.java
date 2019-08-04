@@ -23,7 +23,7 @@ public class ModuleAddonCustomLoots extends Module{
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onEnable() {
-        yml = new YMLFile(this.getPlugin(), "module_configuration/custom_loots.yml");
+		yml = new YMLFile(this.getPlugin(), "module_configuration/custom_loots.yml");
 		yml.reload();
 		
 		if (!yml.getFile().exists()) {

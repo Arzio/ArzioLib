@@ -54,8 +54,8 @@ public enum CDMaterial {
 	}
 	
 	private CDMaterial(int id, CDHarvestType harvestType) {
-	    this(id);
-	    this.harvestType = harvestType;
+		this(id);
+		this.harvestType = harvestType;
 	}
 	
 	public int getId() {
@@ -63,7 +63,7 @@ public enum CDMaterial {
 	}
 	
 	public CDHarvestType getHarvestType() {
-	    return this.harvestType;
+		return this.harvestType;
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -72,24 +72,24 @@ public enum CDMaterial {
 	}
 	
 	public boolean isTypeOf(CDItem item) {
-	    return this.isTypeOf(item.getItem());
+		return this.isTypeOf(item.getItem());
 	}
 	
 	public boolean isTypeOf(ItemStack stack) {
-	    return this.isTypeOf(stack.getType());
+		return this.isTypeOf(stack.getType());
 	}
 	
 	public boolean isTypeOf(Material material) {
-	    return this.asMaterial() == material;
+		return this.asMaterial() == material;
 	}
 	
 	public static CDMaterial getFrom(Material material) {
-	    for (CDMaterial cdMaterial : CDMaterial.values()) {
-	        if (cdMaterial.asMaterial() == material) {
-	            return cdMaterial;
-	        }
-	    }
-	    return null;
+		for (CDMaterial cdMaterial : CDMaterial.values()) {
+			if (cdMaterial.asMaterial() == material) {
+				return cdMaterial;
+			}
+		}
+		return null;
 	}
 	
 }

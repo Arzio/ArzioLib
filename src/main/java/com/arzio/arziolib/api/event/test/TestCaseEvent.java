@@ -6,13 +6,13 @@ import com.arzio.arziolib.api.TestCase;
 
 public abstract class TestCaseEvent extends Event {
 
-    private final TestCase testCase;
-    
-    public TestCaseEvent(TestCase testCase) {
-        this.testCase = testCase;
-    }
-    
-    public TestCase getTestCase() {
-        return this.testCase;
-    }
+	private final TestCase testCase;
+	
+	public TestCaseEvent(TestCase testCase) {
+		this.testCase = testCase;
+	}
+	
+	public TestCase getTestCase() {
+		return this.testCase;
+	}
 }

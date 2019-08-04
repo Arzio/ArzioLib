@@ -12,15 +12,15 @@ import com.arzio.arziolib.module.RegisterModule;
 
 @RegisterModule(name = "addon-use-tcp-nodelay")
 public class ModuleAddonTCPNoDelay extends Module {
-    
+	
 	@EventHandler(ignoreCancelled = true)
 	public void disableTCPNagleAlgorithm(PlayerJoinEvent event){
-	    Socket socket = CauldronUtils.getPlayerSocket(event.getPlayer());
+		Socket socket = CauldronUtils.getPlayerSocket(event.getPlayer());
 		
 		try {
-		    socket.setTcpNoDelay(true);
+			socket.setTcpNoDelay(true);
 		} catch (SocketException e) {
-		    e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 

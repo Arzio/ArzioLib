@@ -13,7 +13,7 @@ public class ModuleAddonStackableGrenades extends Module{
 
 	@Override
 	public void onEnable() {
-        yml = new YMLFile(this.getPlugin(), "module_configuration/stackable_grenades.yml");
+		yml = new YMLFile(this.getPlugin(), "module_configuration/stackable_grenades.yml");
 		yml.reload();
 		
 		for (CDMaterial material : CDMaterial.GRENADES) {

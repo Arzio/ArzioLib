@@ -19,54 +19,54 @@ import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 
 @RegisterModule(name = "addon-simpleclans-nametags")
 public class ModuleAddonSimpleClansNametags extends Module {
-    
-    private PlayerDataHandler dataHandler = ArzioLib.getInstance().getPlayerDataHandler();
+	
+	private PlayerDataHandler dataHandler = ArzioLib.getInstance().getPlayerDataHandler();
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
-    public void onDefineNametags(CDDefineNametagsEvent event) {
-        ClanManager clanManager = SimpleClans.getInstance().getClanManager();
-        ClanPlayer clanPlayer = clanManager.getClanPlayer(event.getPlayer());
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+	public void onDefineNametags(CDDefineNametagsEvent event) {
+		ClanManager clanManager = SimpleClans.getInstance().getClanManager();
+		ClanPlayer clanPlayer = clanManager.getClanPlayer(event.getPlayer());
 
-        if (clanPlayer != null) {
-            for (ClanPlayer clan : clanPlayer.getClan().getAllMembers()) {
-                event.add(clan.getName());
-            }
-            for (ClanPlayer clan : clanPlayer.getClan().getAllAllyMembers()) {
-                event.add(clan.getName());
-            }
-        }
-    }
+		if (clanPlayer != null) {
+			for (ClanPlayer clan : clanPlayer.getClan().getAllMembers()) {
+				event.add(clan.getName());
+			}
+			for (ClanPlayer clan : clanPlayer.getClan().getAllAllyMembers()) {
+				event.add(clan.getName());
+			}
+		}
+	}
 
-    @EventHandler
-    public void onJoinClan(SimpleClansJoinEvent event) {
-        Player thePlayer = event.getClanPlayer().toPlayer();
-        
-        // Sometimes the event is triggered when the player is offline.
-        if (thePlayer != null) {
-            PlayerData data = dataHandler.getPlayerData(thePlayer);
-            data.resendViewableNametags();
-        }
-        
-        for (ClanPlayer clanPlayer : event.getClan().getOnlineMembers()) {
-            PlayerData memberData = dataHandler.getPlayerData(clanPlayer.toPlayer());
-            memberData.resendViewableNametags();
-        }
-    }
+	@EventHandler
+	public void onJoinClan(SimpleClansJoinEvent event) {
+		Player thePlayer = event.getClanPlayer().toPlayer();
+		
+		// Sometimes the event is triggered when the player is offline.
+		if (thePlayer != null) {
+			PlayerData data = dataHandler.getPlayerData(thePlayer);
+			data.resendViewableNametags();
+		}
+		
+		for (ClanPlayer clanPlayer : event.getClan().getOnlineMembers()) {
+			PlayerData memberData = dataHandler.getPlayerData(clanPlayer.toPlayer());
+			memberData.resendViewableNametags();
+		}
+	}
 
-    @EventHandler
-    public void onLeaveClan(SimpleClansLeaveEvent event) {
-        Player thePlayer = event.getClanPlayer().toPlayer();
-        
-        // Sometimes the event is triggered when the player is offline.
-        if (thePlayer != null) {
-            PlayerData data = dataHandler.getPlayerData(thePlayer);
-            data.resendViewableNametags();
-        }
+	@EventHandler
+	public void onLeaveClan(SimpleClansLeaveEvent event) {
+		Player thePlayer = event.getClanPlayer().toPlayer();
+		
+		// Sometimes the event is triggered when the player is offline.
+		if (thePlayer != null) {
+			PlayerData data = dataHandler.getPlayerData(thePlayer);
+			data.resendViewableNametags();
+		}
 
-        for (ClanPlayer clanPlayer : event.getClan().getOnlineMembers()) {
-            PlayerData memberData = dataHandler.getPlayerData(clanPlayer.toPlayer());
-            memberData.resendViewableNametags();
-        }
-    }
+		for (ClanPlayer clanPlayer : event.getClan().getOnlineMembers()) {
+			PlayerData memberData = dataHandler.getPlayerData(clanPlayer.toPlayer());
+			memberData.resendViewableNametags();
+		}
+	}
 
 }

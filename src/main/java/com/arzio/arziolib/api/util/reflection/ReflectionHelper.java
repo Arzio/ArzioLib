@@ -213,51 +213,51 @@ public class ReflectionHelper {
 		BiMap<String, String> biMap = HashBiMap.create();
 		
 		try (ZipFile zipIn = new ZipFile(file)){
-            Enumeration<? extends ZipEntry> entry = zipIn.entries();
-            while (entry.hasMoreElements()) {
-                ZipEntry next = entry.nextElement();
-                if (next.isDirectory()) {
-                    continue;
-                }
+			Enumeration<? extends ZipEntry> entry = zipIn.entries();
+			while (entry.hasMoreElements()) {
+				ZipEntry next = entry.nextElement();
+				if (next.isDirectory()) {
+					continue;
+				}
 
-                byte[] data = IOUtils.toByteArray(zipIn.getInputStream(next));
-                String name = next.getName();
-                
-                if (name.endsWith(".class")) {
-                	
-                    try {
-                        ClassReader reader = new ClassReader(data);
-                        ClassNode classNode = new ClassNode();
-                        reader.accept(classNode, ClassReader.SKIP_FRAMES);
+				byte[] data = IOUtils.toByteArray(zipIn.getInputStream(next));
+				String name = next.getName();
+				
+				if (name.endsWith(".class")) {
+					
+					try {
+						ClassReader reader = new ClassReader(data);
+						ClassNode classNode = new ClassNode();
+						reader.accept(classNode, ClassReader.SKIP_FRAMES);
 
-                        String sourceFileName = classNode.sourceFile;
-                        if (sourceFileName.endsWith(".java")) {
-                            sourceFileName = sourceFileName.substring(0, sourceFileName.lastIndexOf("."));
-                        }
+						String sourceFileName = classNode.sourceFile;
+						if (sourceFileName.endsWith(".java")) {
+							sourceFileName = sourceFileName.substring(0, sourceFileName.lastIndexOf("."));
+						}
 
-                        String reconstructedName = sourceFileName;
-                        String originalClassName = name.replace('/', '.').replaceAll(".class", "");
-                        
-                        biMap.put(reconstructedName, originalClassName);
-                    } catch (Exception e) {
-                       e.printStackTrace();
-                    }
-                }
-            }
+						String reconstructedName = sourceFileName;
+						String originalClassName = name.replace('/', '.').replaceAll(".class", "");
+						
+						biMap.put(reconstructedName, originalClassName);
+					} catch (Exception e) {
+					   e.printStackTrace();
+					}
+				}
+			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-        return biMap;
+		return biMap;
 	}
-    
+	
 	public static <T> T safeCast(Object o, Class<T> clazz) {
-	    return clazz != null && clazz.isInstance(o) ? clazz.cast(o) : null;
+		return clazz != null && clazz.isInstance(o) ? clazz.cast(o) : null;
 	}
 	
 	public static <T> T unsafeCast(Object o, Class<T> clazz) {
-	    return clazz.cast(o);
+		return clazz.cast(o);
 	}
 }

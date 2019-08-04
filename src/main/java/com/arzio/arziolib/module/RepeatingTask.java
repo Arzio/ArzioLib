@@ -8,6 +8,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface RepeatingTask {
-    public long delay();
-    public long period();
+	public long delay();
+	public long period();
 }

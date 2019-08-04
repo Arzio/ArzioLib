@@ -34,7 +34,7 @@ import net.minecraft.server.v1_6_R3.NBTTagCompound;
 
 public class CauldronUtils {
 
-    private static ReflectedField<Socket> socketField = null;
+	private static ReflectedField<Socket> socketField = null;
 	private static Field handleField = null;
 	
 	public static Entity getNMSEntity(org.bukkit.entity.Entity entity) {
@@ -54,26 +54,26 @@ public class CauldronUtils {
 	}
 	
 	public static List<Player> getOperators(){
-	    List<Player> operators = new ArrayList<>();
-	    
-	    for (Player player : Bukkit.getOnlinePlayers()) {
-	        if (player.isOp()) {
-	            operators.add(player);
-	        }
-	    }
-	    
-	    return operators;
+		List<Player> operators = new ArrayList<>();
+		
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			if (player.isOp()) {
+				operators.add(player);
+			}
+		}
+		
+		return operators;
 	}
 	
 	public static void playSound(Location location, String sound, float volume, float pitch) {
-	    if ((location == null) || (sound == null)) {
-	        return;
-	      }
-	      double x = location.getX();
-	      double y = location.getY();
-	      double z = location.getZ();
-	      
-	      ((CraftWorld)location.getWorld()).getHandle().makeSound(x, y, z, sound, volume, pitch);
+		if ((location == null) || (sound == null)) {
+			return;
+		  }
+		  double x = location.getX();
+		  double y = location.getY();
+		  double z = location.getZ();
+		  
+		  ((CraftWorld)location.getWorld()).getHandle().makeSound(x, y, z, sound, volume, pitch);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -199,14 +199,14 @@ public class CauldronUtils {
 		return Ints.asList(materialArrayToIntArray(materials));
 	}
 	
-    public static Socket getPlayerSocket(Player player) {
-        INetworkManager networkManager = ((CraftPlayer) player).getHandle().playerConnection.networkManager;
+	public static Socket getPlayerSocket(Player player) {
+		INetworkManager networkManager = ((CraftPlayer) player).getHandle().playerConnection.networkManager;
 
-        if (socketField == null) {
-            socketField = new ReflectedField<>(networkManager.getClass(),
-                    new ContentFinder.FieldBuilder<>().withType(Socket.class).build());
-        }
-        
-        return socketField.getValue(networkManager);
-    }
+		if (socketField == null) {
+			socketField = new ReflectedField<>(networkManager.getClass(),
+					new ContentFinder.FieldBuilder<>().withType(Socket.class).build());
+		}
+		
+		return socketField.getValue(networkManager);
+	}
 }

@@ -50,21 +50,21 @@ public class ArzioLibCommand implements CommandExecutor{
 						sender.sendMessage("§4Found more than 1 module with this partial name:");
 						
 						for (ModuleContainer container : modulesFound) {
-						    sender.sendMessage("§c - "+container.getName());
+							sender.sendMessage("§c - "+container.getName());
 						}
 						
 						return true;
 					}
 					
 					try {
-                        modulesFound.get(0).reload();
-                        sender.sendMessage("§aModule reloaded!");
-                    } catch (Throwable t) {
-                        sender.sendMessage("§4Failed to reload the module. Check console for error logs.");
-                        sender.sendMessage("§cStacktrace:");
-                        ThrowableHelper.printStackTrace(t, sender);
-                        t.printStackTrace();
-                    }
+						modulesFound.get(0).reload();
+						sender.sendMessage("§aModule reloaded!");
+					} catch (Throwable t) {
+						sender.sendMessage("§4Failed to reload the module. Check console for error logs.");
+						sender.sendMessage("§cStacktrace:");
+						ThrowableHelper.printStackTrace(t, sender);
+						t.printStackTrace();
+					}
 					
 				} else {
 					sender.sendMessage("§aReloading configuration...");
@@ -95,33 +95,33 @@ public class ArzioLibCommand implements CommandExecutor{
 				
 				return true;
 			}
-            if (args[0].equalsIgnoreCase("modules")) {
-                if (!(sender.hasPermission("arziolib.modules"))) {
-                    sender.sendMessage("§cYou don't have permission to use this command.");
-                    return true;
-                }
-                
-                List<ModuleContainer> modules = plugin.getModuleManager().getAllModules();
+			if (args[0].equalsIgnoreCase("modules")) {
+				if (!(sender.hasPermission("arziolib.modules"))) {
+					sender.sendMessage("§cYou don't have permission to use this command.");
+					return true;
+				}
+				
+				List<ModuleContainer> modules = plugin.getModuleManager().getAllModules();
 
-                sender.sendMessage("§6Total of "+modules.size()+" modules:");
-                for (ModuleContainer module : modules) {
-                    String status = "[ENABLED]";
-                    String color = "§a";
-                    
-                    if (!module.isEnabled()) {
-                        status = "[DISABLED]";
-                        color = "§7";
-                    }
-                    if (module.isErrored()) {
-                        status = "[ERRORED]";
-                        color = "§c";
-                    }
-                    
-                    sender.sendMessage("§7 - "+color+module.getName()+" §l"+status);
-                }
-                
-                return true;
-            }
+				sender.sendMessage("§6Total of "+modules.size()+" modules:");
+				for (ModuleContainer module : modules) {
+					String status = "[ENABLED]";
+					String color = "§a";
+					
+					if (!module.isEnabled()) {
+						status = "[DISABLED]";
+						color = "§7";
+					}
+					if (module.isErrored()) {
+						status = "[ERRORED]";
+						color = "§c";
+					}
+					
+					sender.sendMessage("§7 - "+color+module.getName()+" §l"+status);
+				}
+				
+				return true;
+			}
 			if (args[0].equalsIgnoreCase("clearall")) {
 				if (!(sender.hasPermission("arziolib.clearall"))) {
 					sender.sendMessage("§cYou don't have permission to use this command.");

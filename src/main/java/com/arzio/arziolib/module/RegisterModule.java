@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface RegisterModule {
-    public String name();
-    public Class<? extends ModuleContainer> container() default ModuleContainer.class;
-    public boolean defaultState() default true;
+	public String name();
+	public Class<? extends ModuleContainer> container() default ModuleContainer.class;
+	public boolean defaultState() default true;
 }

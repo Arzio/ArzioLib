@@ -55,27 +55,27 @@ public enum CDEntityType {
 	}
 	
 	private void findEntityClass() {
-        try {
-            Field mapEntityNameToClass = EntityTypes.class.getDeclaredField("b");
-            mapEntityNameToClass.setAccessible(true);
-            Map map = (Map) mapEntityNameToClass.get(null);
-            
-            // First try
-            this.entityClass = (Class<? extends net.minecraft.server.v1_6_R3.Entity>) map.get(this.getName());
-            
-            // Second try
-            if (this.entityClass == null) {
-                this.entityClass = (Class<? extends net.minecraft.server.v1_6_R3.Entity>) map.get(this.getEntityModName());
-            }
-            
-            // Failed.
-            if (this.entityClass == null) {
-                throw new ClassNotFoundException("Entity class of CD Entity "+this.getName()+" not found!");
-            }
-        } catch (Exception e) {
-            ArzioLib.getInstance().getLogger().log(Level.WARNING, "Failed to get the class of the CD Entity "+this.getName()+".");
-            e.printStackTrace();
-        }
+		try {
+			Field mapEntityNameToClass = EntityTypes.class.getDeclaredField("b");
+			mapEntityNameToClass.setAccessible(true);
+			Map map = (Map) mapEntityNameToClass.get(null);
+			
+			// First try
+			this.entityClass = (Class<? extends net.minecraft.server.v1_6_R3.Entity>) map.get(this.getName());
+			
+			// Second try
+			if (this.entityClass == null) {
+				this.entityClass = (Class<? extends net.minecraft.server.v1_6_R3.Entity>) map.get(this.getEntityModName());
+			}
+			
+			// Failed.
+			if (this.entityClass == null) {
+				throw new ClassNotFoundException("Entity class of CD Entity "+this.getName()+" not found!");
+			}
+		} catch (Exception e) {
+			ArzioLib.getInstance().getLogger().log(Level.WARNING, "Failed to get the class of the CD Entity "+this.getName()+".");
+			e.printStackTrace();
+		}
 	}
 	
 	public String getName() {
@@ -83,7 +83,7 @@ public enum CDEntityType {
 	}
 	
 	public String getEntityModName() {
-	    return String.format("%s.%s", ArzioLib.MOD_ID, this.getName());
+		return String.format("%s.%s", ArzioLib.MOD_ID, this.getName());
 	}
 	
 	public String getBukkitName() {
@@ -97,15 +97,15 @@ public enum CDEntityType {
 	
 	@SuppressWarnings("unchecked")
 	public Class<? extends net.minecraft.server.v1_6_R3.Entity> getNMSClass(){
-	    return entityClass;
+		return entityClass;
 	}
 	
 	public Constructor<? extends net.minecraft.server.v1_6_R3.Entity> getConstructor() throws CDAReflectionException {
-        try {
-            return this.getNMSClass().getDeclaredConstructor(net.minecraft.server.v1_6_R3.World.class);
-        } catch (NoSuchMethodException | SecurityException e) {
-            throw new CDAReflectionException(e);
-        }
+		try {
+			return this.getNMSClass().getDeclaredConstructor(net.minecraft.server.v1_6_R3.World.class);
+		} catch (NoSuchMethodException | SecurityException e) {
+			throw new CDAReflectionException(e);
+		}
 	}
 	
 	public boolean isTypeOf(Entity entity) {
@@ -127,62 +127,62 @@ public enum CDEntityType {
 	}
 	
 	public static CDEntityType getTypeOf(Entity entity) {
-        if (entity == null)
-            return null;
-        
-        String entityTypeName = entity.getType().name();
-        for (CDEntityType type : CDEntityType.values()) {
-        	EntityType bukkitType = type.asBukkitType();
-        	
-        	// Prevents nullpointer if the entity type does not exists anymore.
-        	if (bukkitType != null && bukkitType.name().equalsIgnoreCase(entityTypeName)) {
-        		return type;
-        	}
-        }
-        
-        // Entity type not found with a simple search.
-        // We need to search it deeper.
-        EntityType bukkitType = EntityUtil.getCompatibleEntityType(entity);
-        
-        if (bukkitType == null) {
-        	return null;
-        }
-        
-        String bukkitEntityTypeName = bukkitType.name();
-        for (CDEntityType type : CDEntityType.values()) {
-        	EntityType entityType = type.asBukkitType();
-        	
-        	// Prevents nullpointer if the entity type does not exists anymore.
-        	if (entityType != null && entityType.name().equalsIgnoreCase(bukkitEntityTypeName)) {
-        		return type;
-        	}
-        }
-        return null;
-    }
-	
-	public static boolean isZombie(Entity entity) {
-	    for (CDEntityType zombieType : getZombieTypes()) {
-	        if (zombieType.isTypeOf(entity)) {
-	            return true;
-	        }
-	    }
-	    return false;
+		if (entity == null)
+			return null;
+		
+		String entityTypeName = entity.getType().name();
+		for (CDEntityType type : CDEntityType.values()) {
+			EntityType bukkitType = type.asBukkitType();
+			
+			// Prevents nullpointer if the entity type does not exists anymore.
+			if (bukkitType != null && bukkitType.name().equalsIgnoreCase(entityTypeName)) {
+				return type;
+			}
+		}
+		
+		// Entity type not found with a simple search.
+		// We need to search it deeper.
+		EntityType bukkitType = EntityUtil.getCompatibleEntityType(entity);
+		
+		if (bukkitType == null) {
+			return null;
+		}
+		
+		String bukkitEntityTypeName = bukkitType.name();
+		for (CDEntityType type : CDEntityType.values()) {
+			EntityType entityType = type.asBukkitType();
+			
+			// Prevents nullpointer if the entity type does not exists anymore.
+			if (entityType != null && entityType.name().equalsIgnoreCase(bukkitEntityTypeName)) {
+				return type;
+			}
+		}
+		return null;
 	}
 	
-    public static boolean isGrenade(Entity entity) {
-        for (CDEntityType zombieType : getGrenadeTypes()) {
-            if (zombieType.isTypeOf(entity)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    public static CDEntityType[] getZombieTypes() {
-    	return new CDEntityType[] { CD_ZOMBIE, CD_ZOMBIE_FAST, CD_ZOMBIE_TANK, CD_ZOMBIE_WEAK };
-    }
-    
-    public static CDEntityType[] getGrenadeTypes() {
-    	return new CDEntityType[] { GRENADE, GRENADE_DECOY, GRENADE_FIRE, GRENADE_FLASH, GRENADE_GAS, GRENADE_PIPE_BOMB, GRENADE_SMOKE };
-    }
+	public static boolean isZombie(Entity entity) {
+		for (CDEntityType zombieType : getZombieTypes()) {
+			if (zombieType.isTypeOf(entity)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean isGrenade(Entity entity) {
+		for (CDEntityType zombieType : getGrenadeTypes()) {
+			if (zombieType.isTypeOf(entity)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static CDEntityType[] getZombieTypes() {
+		return new CDEntityType[] { CD_ZOMBIE, CD_ZOMBIE_FAST, CD_ZOMBIE_TANK, CD_ZOMBIE_WEAK };
+	}
+	
+	public static CDEntityType[] getGrenadeTypes() {
+		return new CDEntityType[] { GRENADE, GRENADE_DECOY, GRENADE_FIRE, GRENADE_FLASH, GRENADE_GAS, GRENADE_PIPE_BOMB, GRENADE_SMOKE };
+	}
 }

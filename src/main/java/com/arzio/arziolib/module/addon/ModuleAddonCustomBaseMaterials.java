@@ -15,7 +15,7 @@ public class ModuleAddonCustomBaseMaterials extends Module{
 
 	@Override
 	public void onEnable() {
-        this.yml = new YMLFile(this.getPlugin(), "module_configuration/base_materials.yml");
+		this.yml = new YMLFile(this.getPlugin(), "module_configuration/base_materials.yml");
 		
 		for (CDBaseMaterial material : CDBaseMaterial.MATERIAL_SET){
 			material.setId(yml.getValueWithDefault("material."+material.getName()+".id", material.getId()));

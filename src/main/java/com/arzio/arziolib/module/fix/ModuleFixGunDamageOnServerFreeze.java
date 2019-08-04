@@ -27,7 +27,7 @@ public class ModuleFixGunDamageOnServerFreeze extends Module{
 	public void onEnable() {
 		super.onEnable();
 		
-        this.yml = new YMLFile(this.getPlugin(), "module_configuration/suspend-bullets-on-server-freeze.yml");
+		this.yml = new YMLFile(this.getPlugin(), "module_configuration/suspend-bullets-on-server-freeze.yml");
 		yml.reload();
 		
 		this.minimumFreezeTime = yml.getValueWithDefault("minimum-freeze-time-in-millis-until-suspend", 700);

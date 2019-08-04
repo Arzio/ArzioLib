@@ -34,11 +34,11 @@ public class AmmoImpl extends CDSharedItemImpl implements Ammo{
 		CDClasses.itemMagazineBulletAmountField.setValue(this.getItemInstance(), amount);
 		
 		try {
-		    Field durabilityField = net.minecraft.server.v1_6_R3.Item.class.getDeclaredField("durability");
-		    durabilityField.setAccessible(true);
-		    durabilityField.setInt(this.getItemInstance(), amount + 1);
+			Field durabilityField = net.minecraft.server.v1_6_R3.Item.class.getDeclaredField("durability");
+			durabilityField.setAccessible(true);
+			durabilityField.setInt(this.getItemInstance(), amount + 1);
 		} catch (Exception e) {
-		    throw new CDAReflectionException(e);
+			throw new CDAReflectionException(e);
 		}
 		
 	}

@@ -9,26 +9,26 @@ import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.ForgeListener;
 
 public abstract class Module implements ForgeListener, Listener {
-    
-    public void onEnable() {
-        
-    }
-    
-    public void onDisable() {
-        
-    }
-    
-    public Plugin getPlugin() {
-        return ArzioLib.getInstance();
-    }
-    
-    public static Module fromClass(Class<? extends Module> moduleClass) throws Throwable {
-        Constructor<? extends Module> constructor = moduleClass.getConstructor();
-        
-        if (constructor == null) {
-            throw new IllegalArgumentException("The class "+moduleClass.getSimpleName()+" does not have a default/empty constructor!");
-        }
-        
-        return constructor.newInstance();
-    }
+	
+	public void onEnable() {
+		
+	}
+	
+	public void onDisable() {
+		
+	}
+	
+	public Plugin getPlugin() {
+		return ArzioLib.getInstance();
+	}
+	
+	public static Module fromClass(Class<? extends Module> moduleClass) throws Throwable {
+		Constructor<? extends Module> constructor = moduleClass.getConstructor();
+		
+		if (constructor == null) {
+			throw new IllegalArgumentException("The class "+moduleClass.getSimpleName()+" does not have a default/empty constructor!");
+		}
+		
+		return constructor.newInstance();
+	}
 }

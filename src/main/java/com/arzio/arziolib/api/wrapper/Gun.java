@@ -51,7 +51,7 @@ public interface Gun extends CDSharedItem {
 	public boolean hasCrosshair();
 	public void setCrosshair(boolean hasCrosshair);
 	
-    public String getShootSound();
+	public String getShootSound();
 	public void setShootSound(String soundName);
 	
 	public String getSilencedSound();

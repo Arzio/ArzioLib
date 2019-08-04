@@ -25,9 +25,9 @@ public class GitHubUpdateChecker implements UpdateChecker {
 	private final Plugin plugin;
 	
 	public GitHubUpdateChecker(Plugin plugin, String apiURL, String pluginPageURL) {
-	    this.apiURL = apiURL;
-	    this.plugin = plugin;
-	    this.pluginPageURL = pluginPageURL;
+		this.apiURL = apiURL;
+		this.plugin = plugin;
+		this.pluginPageURL = pluginPageURL;
 	}
 
 	@Override
@@ -69,15 +69,15 @@ public class GitHubUpdateChecker implements UpdateChecker {
 
 					boolean isUpToDate = plugin.getDescription().getVersion().equalsIgnoreCase(latestVersionTag);
 					if (isUpToDate) {
-					    GitHubUpdateChecker.this.state = UpdateState.UP_TO_DATE;
+						GitHubUpdateChecker.this.state = UpdateState.UP_TO_DATE;
 						plugin.getLogger().info(plugin.getName()+" is up-to-date!");
 					} else {
-					    GitHubUpdateChecker.this.state = UpdateState.NEEDS_UPDATE;
+						GitHubUpdateChecker.this.state = UpdateState.NEEDS_UPDATE;
 						plugin.getLogger().info(
 								"There is a new "+plugin.getName()+" version to download! Download it at "+pluginPageURL);
 					}
 				} catch (Exception e) {
-				    GitHubUpdateChecker.this.state = UpdateState.FAILED_TO_CHECK;
+					GitHubUpdateChecker.this.state = UpdateState.FAILED_TO_CHECK;
 					plugin.getLogger().warning(
 							plugin.getName()+" could not get information about the latest updates. Check your firewall or internet connection!");
 					e.printStackTrace();
@@ -97,18 +97,18 @@ public class GitHubUpdateChecker implements UpdateChecker {
 
 	@Override
 	public String getPluginPageURL() {
-        return pluginPageURL;
-    }
+		return pluginPageURL;
+	}
 
 	@Override
-    public String getApiURL() {
-        return apiURL;
-    }
+	public String getApiURL() {
+		return apiURL;
+	}
 
 	@Override
-    public Plugin getPlugin() {
-        return plugin;
-    }
+	public Plugin getPlugin() {
+		return plugin;
+	}
 
 
 }

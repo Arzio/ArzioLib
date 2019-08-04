@@ -36,7 +36,7 @@ public class ModuleAddonRealSound extends Module{
 	
 	@Override
 	public void onEnable() {
-        this.yml = new YMLFile(this.getPlugin(), "module_configuration/sound_calibration.yml");
+		this.yml = new YMLFile(this.getPlugin(), "module_configuration/sound_calibration.yml");
 		yml.saveDefaultFile();
 		yml.reload();
 		

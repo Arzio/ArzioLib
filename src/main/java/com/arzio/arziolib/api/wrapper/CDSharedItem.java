@@ -4,6 +4,6 @@ import org.bukkit.entity.Player;
 
 public interface CDSharedItem extends CDItem {
 
-    public void updateStats(Player player);
-    
+	public void updateStats(Player player);
+	
 }

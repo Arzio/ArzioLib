@@ -59,15 +59,15 @@ public class ForgeBukkitEventManagerImpl implements ForgeBukkitEventManager, Lis
 				Class<?> eventType = null;
 				
 				if (m.isAnnotationPresent(IndirectCDEvent.class)) {
-				    IndirectCDEvent obf = m.getAnnotation(IndirectCDEvent.class);
-				    String cdClassName = obf.cdClassName();
-				    try {
-                        eventType = NameClassFinder.find(cdClassName).find(null);
-                    } catch (FinderException e) {
-                        throw new IllegalArgumentException(e);
-                    }
+					IndirectCDEvent obf = m.getAnnotation(IndirectCDEvent.class);
+					String cdClassName = obf.cdClassName();
+					try {
+						eventType = NameClassFinder.find(cdClassName).find(null);
+					} catch (FinderException e) {
+						throw new IllegalArgumentException(e);
+					}
 				} else {
-				    eventType = parameterTypes[0];
+					eventType = parameterTypes[0];
 				}
 				
 				if (!Event.class.isAssignableFrom(eventType)) {
@@ -148,13 +148,13 @@ public class ForgeBukkitEventManagerImpl implements ForgeBukkitEventManager, Lis
 		@SuppressWarnings("unchecked")
 		ConcurrentHashMap<Object, ArrayList<IEventListener>> listeners = (ConcurrentHashMap<Object, ArrayList<IEventListener>>) listenersField.get(MinecraftForge.EVENT_BUS);
 		
-        ArrayList<IEventListener> others = listeners.get(event.getListenerInstance());
-        if (others == null)
-        {
-            others = new ArrayList<IEventListener>();
-            listeners.put(event.getListenerInstance(), others);
-        }
-        others.add(event);
+		ArrayList<IEventListener> others = listeners.get(event.getListenerInstance());
+		if (others == null)
+		{
+			others = new ArrayList<IEventListener>();
+			listeners.put(event.getListenerInstance(), others);
+		}
+		others.add(event);
 	}
 	
 	public static class EventListenerImpl implements IEventListener {

@@ -49,7 +49,7 @@ public class CDBaseMaterial {
 	}
 	
 	public Material asMaterial() {
-	    return Material.getMaterial(this.id);
+		return Material.getMaterial(this.id);
 	}
 	
 	@Override
@@ -118,12 +118,12 @@ public class CDBaseMaterial {
 	public static boolean isCenter(int id) {
 		return id == BASE_CENTER.getId();
 	}
-    
-    public static CDBaseMaterial addMaterial(String name, int id) {
-        CDBaseMaterial material = new CDBaseMaterial(name, id);
-        MATERIAL_SET.add(material);
-        return material;
-    }
+	
+	public static CDBaseMaterial addMaterial(String name, int id) {
+		CDBaseMaterial material = new CDBaseMaterial(name, id);
+		MATERIAL_SET.add(material);
+		return material;
+	}
 	
 	public static int[] getBaseMaterialIds() {
 		int[] array = new int[CDBaseMaterial.MATERIAL_SET.size()];

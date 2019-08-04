@@ -15,7 +15,7 @@ import com.arzio.arziolib.api.wrapper.PlayerData;
 
 public class PlayerDataImpl implements PlayerData{
 
-    public static final int MAX_NORMALIZED_WATER_LEVEL = 20;
+	public static final int MAX_NORMALIZED_WATER_LEVEL = 20;
 	public static final int MAX_WATER_LEVEL = 36000;
 	public static final int WATER_LEVEL_RATIO_DIFFERENCE = MAX_WATER_LEVEL / MAX_NORMALIZED_WATER_LEVEL;
 	private Player player;
@@ -61,15 +61,15 @@ public class PlayerDataImpl implements PlayerData{
 
 	@Override
 	public void setNametagsHidden(boolean isPossible) {
-	    if (CDPacketHelper.sendNametagPacket(this.getPlayer(), isPossible)) {
-	        this.areNametagsHidden = isPossible;
-	    }
+		if (CDPacketHelper.sendNametagPacket(this.getPlayer(), isPossible)) {
+			this.areNametagsHidden = isPossible;
+		}
 	}
 	
-    @Override
-    public boolean isNametagsHidden() {
-        return this.areNametagsHidden;
-    }
+	@Override
+	public boolean isNametagsHidden() {
+		return this.areNametagsHidden;
+	}
 
 	@Override
 	public boolean hasBase() {
@@ -79,10 +79,10 @@ public class PlayerDataImpl implements PlayerData{
 	@Override
 	public Location getBaseLocation() {
 		for (World world : Bukkit.getServer().getWorlds()) {
-    		if (CDBaseMaterial.isCenter(world.getBlockAt(this.getBaseX(), this.getBaseY(), this.getBaseZ()))) {
-    			return new Location(world, this.getBaseX(), this.getBaseY(), this.getBaseZ());
-    		}
-    	}
+			if (CDBaseMaterial.isCenter(world.getBlockAt(this.getBaseX(), this.getBaseY(), this.getBaseZ()))) {
+				return new Location(world, this.getBaseX(), this.getBaseY(), this.getBaseZ());
+			}
+		}
 		return null;
 	}
 
@@ -111,39 +111,39 @@ public class PlayerDataImpl implements PlayerData{
 			CDClasses.playerDataWaterLevels.getValue(this.getPlayerDataInstance()), result);
 	}
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((player == null) ? 0 : player.hashCode());
-        return result;
-    }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((player == null) ? 0 : player.hashCode());
+		return result;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        PlayerDataImpl other = (PlayerDataImpl) obj;
-        if (player == null) {
-            if (other.player != null)
-                return false;
-        } else if (!player.equals(other.player))
-            return false;
-        return true;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PlayerDataImpl other = (PlayerDataImpl) obj;
+		if (player == null) {
+			if (other.player != null)
+				return false;
+		} else if (!player.equals(other.player))
+			return false;
+		return true;
+	}
 
-    @Override
-    public void resendViewableNametags() {
-        this.setNametagsHidden(this.areNametagsHidden);
-    }
+	@Override
+	public void resendViewableNametags() {
+		this.setNametagsHidden(this.areNametagsHidden);
+	}
 
-    @Override
-    public int getMaxWaterLevel() {
-     	return MAX_NORMALIZED_WATER_LEVEL;
+	@Override
+	public int getMaxWaterLevel() {
+		 return MAX_NORMALIZED_WATER_LEVEL;
 	}
 
 	@Override

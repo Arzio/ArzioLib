@@ -56,7 +56,7 @@ public class CDAttachment {
 	}
 	
 	public static CDAttachment getFromMaterial(CDMaterial material) {
-	    return getFromMaterial(material.asMaterial());
+		return getFromMaterial(material.asMaterial());
 	}
 	
 	public static CDAttachment getFromMaterial(Material material) {

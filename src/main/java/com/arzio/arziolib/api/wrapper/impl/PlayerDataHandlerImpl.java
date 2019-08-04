@@ -20,25 +20,25 @@ public class PlayerDataHandlerImpl implements PlayerDataHandler, Listener {
 	private Map<Player, PlayerDataImpl> playerDataMap = new ConcurrentHashMap<>();
 	
 	public PlayerDataHandlerImpl(Plugin plugin) {
-	    Bukkit.getPluginManager().registerEvents(this, plugin);
+		Bukkit.getPluginManager().registerEvents(this, plugin);
 	}
 	
 	@Override
 	public PlayerData getPlayerData(Player player) {
-	    Validate.notNull(player, "Player must not be null!");
+		Validate.notNull(player, "Player must not be null!");
 		PlayerDataImpl found = playerDataMap.get(player);
 		
-        if (found == null) {
-            found = new PlayerDataImpl(player);
-            playerDataMap.put(player, found);
-        }
+		if (found == null) {
+			found = new PlayerDataImpl(player);
+			playerDataMap.put(player, found);
+		}
 		
 		return found;
 	}
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
 	public void onPlayerQuit(PlayerQuitEvent event){
-	    playerDataMap.remove(event.getPlayer());
+		playerDataMap.remove(event.getPlayer());
 	}
 
 }

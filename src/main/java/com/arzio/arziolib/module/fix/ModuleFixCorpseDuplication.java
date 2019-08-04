@@ -18,8 +18,8 @@ import net.minecraft.server.v1_6_R3.PlayerAbilities;
 @RegisterModule(name = "fix-corpse-item-duplication")
 public class ModuleFixCorpseDuplication extends Module implements IPlayerTracker{
 	
-    private CraftingDead craftingDead;
-    
+	private CraftingDead craftingDead;
+	
 	@EventHandler
 	public void onCombatLogPacket(CDCombatlogShowTimer event) {
 		event.setCancelled(true);
@@ -27,7 +27,7 @@ public class ModuleFixCorpseDuplication extends Module implements IPlayerTracker
 
 	@Override
 	public void onEnable() {
-	    this.craftingDead = ArzioLib.getInstance().getCraftingDeadMain();
+		this.craftingDead = ArzioLib.getInstance().getCraftingDeadMain();
 		
 		// We remove the CD tracker, and then put ours
 		craftingDead.setTrackerEnabled(false);
@@ -51,35 +51,35 @@ public class ModuleFixCorpseDuplication extends Module implements IPlayerTracker
 
 	@Override
 	public void onPlayerLogin(EntityPlayer player) {
-	    try {
-	        // We trick the onPlayerLogin of CD's Tracker by making the player's gamemode
-	        // be CREATIVE only for this little amount of time.
-	        
-	        PlayerAbilities abilities = (PlayerAbilities) CDClasses.entityHumanPlayerAbilitiesField.getValue(player);
-	        
-	        boolean isCreativeMode = abilities.canInstantlyBuild;
-	        abilities.canInstantlyBuild = true;
-	        craftingDead.getPlayerTracker().onPlayerLogin(player);
-	        abilities.canInstantlyBuild = isCreativeMode;
-	    } catch (Throwable t) {
-	        t.printStackTrace();
-	    }
+		try {
+			// We trick the onPlayerLogin of CD's Tracker by making the player's gamemode
+			// be CREATIVE only for this little amount of time.
+			
+			PlayerAbilities abilities = (PlayerAbilities) CDClasses.entityHumanPlayerAbilitiesField.getValue(player);
+			
+			boolean isCreativeMode = abilities.canInstantlyBuild;
+			abilities.canInstantlyBuild = true;
+			craftingDead.getPlayerTracker().onPlayerLogin(player);
+			abilities.canInstantlyBuild = isCreativeMode;
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
 	}
 
 	@Override
 	public void onPlayerLogout(EntityPlayer player) {
 		try {
-	        // We trick the onPlayerLogin of CD's Tracker by making the player's gamemode
-	        // be CREATIVE only for this little amount of time.
-	        
-		    PlayerAbilities abilities = (PlayerAbilities) CDClasses.entityHumanPlayerAbilitiesField.getValue(player);
-		    
-	        boolean isCreativeMode = abilities.canInstantlyBuild;
-	        abilities.canInstantlyBuild = true;
-	        craftingDead.getPlayerTracker().onPlayerLogout(player);
-	        abilities.canInstantlyBuild = isCreativeMode;
+			// We trick the onPlayerLogin of CD's Tracker by making the player's gamemode
+			// be CREATIVE only for this little amount of time.
+			
+			PlayerAbilities abilities = (PlayerAbilities) CDClasses.entityHumanPlayerAbilitiesField.getValue(player);
+			
+			boolean isCreativeMode = abilities.canInstantlyBuild;
+			abilities.canInstantlyBuild = true;
+			craftingDead.getPlayerTracker().onPlayerLogout(player);
+			abilities.canInstantlyBuild = isCreativeMode;
 		} catch (Throwable t) {
-		    t.printStackTrace();
+			t.printStackTrace();
 		}
 	}
 

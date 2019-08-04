@@ -23,7 +23,7 @@ public class ModuleAddonCustomGunsAndAmmos extends Module {
 
 	@Override
 	public void onEnable() {
-        yml = new YMLFile(this.getPlugin(), "module_configuration/guns_and_ammos.yml");
+		yml = new YMLFile(this.getPlugin(), "module_configuration/guns_and_ammos.yml");
 		yml.reload();
 		
 		for (Item item : Item.byId) {
@@ -45,18 +45,18 @@ public class ModuleAddonCustomGunsAndAmmos extends Module {
 				gun.setAccuracy(yml.getValueWithDefault("guns."+gun.getName()+".accuracy", gun.getAccuracy()));
 				gun.setBodyDamage(yml.getValueWithDefault("guns."+gun.getName()+".body_damage", gun.getBodyDamage()));
 				gun.setBulletsPerRound(yml.getValueWithDefault("guns."+gun.getName()+".bullets_per_round", gun.getBulletsPerRound()));
-                gun.setCompatibleMagazines(CauldronUtils.intListToMaterialArray(
-                        yml.getValueWithDefault("guns."+gun.getName()+".compatible_ammos", 
-                                CauldronUtils.materialArrayToIntegerList(gun.getCompatibleAmmos()))));
+				gun.setCompatibleMagazines(CauldronUtils.intListToMaterialArray(
+						yml.getValueWithDefault("guns."+gun.getName()+".compatible_ammos", 
+								CauldronUtils.materialArrayToIntegerList(gun.getCompatibleAmmos()))));
 				gun.setHeadshotDamage(yml.getValueWithDefault("guns."+gun.getName()+".headshot_damage", gun.getHeadshotDamage()));
 				gun.setMaximumBulletDistance(yml.getValueWithDefault("guns."+gun.getName()+".maximum_bullet_distance", gun.getMaximumBulletDistance()));
 				gun.setMovementPenalty(yml.getValueWithDefault("guns."+gun.getName()+".movement_penalty", gun.getMovementPenalty()));
 				gun.setRecoil(yml.getValueWithDefault("guns."+gun.getName()+".recoil", gun.getRecoil()));
 				gun.setRPM(yml.getValueWithDefault("guns."+gun.getName()+".rpm", gun.getRPM()));
 				gun.setZoomLevel(yml.getValueWithDefault("guns."+gun.getName()+".zoom_level", gun.getZoomLevel()));
-                gun.setSpreadWhileAiming(yml.getValueWithDefault("guns."+gun.getName()+".spread_while_aiming", gun.canSpreadWhileAiming()));
-                gun.setCrosshair(yml.getValueWithDefault("guns."+gun.getName()+".crosshair", gun.hasCrosshair()));
-                
+				gun.setSpreadWhileAiming(yml.getValueWithDefault("guns."+gun.getName()+".spread_while_aiming", gun.canSpreadWhileAiming()));
+				gun.setCrosshair(yml.getValueWithDefault("guns."+gun.getName()+".crosshair", gun.hasCrosshair()));
+				
 			} else if (cdItem instanceof Ammo) {
 				Ammo ammo = (Ammo) cdItem;
 				
@@ -65,12 +65,12 @@ public class ModuleAddonCustomGunsAndAmmos extends Module {
 			}
 			
 			if (cdItem instanceof CDSharedItem) {
-			    CDSharedItem sharedItem = (CDSharedItem) cdItem;
-			    
-			    // Updates item stats for all players
-			    for (Player player : Bukkit.getOnlinePlayers()) {
-			        sharedItem.updateStats(player);
-			    }
+				CDSharedItem sharedItem = (CDSharedItem) cdItem;
+				
+				// Updates item stats for all players
+				for (Player player : Bukkit.getOnlinePlayers()) {
+					sharedItem.updateStats(player);
+				}
 			}
 		}
 		

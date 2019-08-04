@@ -21,7 +21,7 @@ public class ModuleAddonCorpseCustomLifespan extends Module{
 	public void onEnable() {
 		super.onEnable();
 
-        yml = new YMLFile(this.getPlugin(), "module_configuration/corpse_lifespan.yml");
+		yml = new YMLFile(this.getPlugin(), "module_configuration/corpse_lifespan.yml");
 		yml.reload();
 		
 		this.lifespan = yml.getValueWithDefault("corpse-max-lifespan-in-seconds", 240);

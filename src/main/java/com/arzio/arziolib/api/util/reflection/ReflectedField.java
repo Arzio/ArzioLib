@@ -11,15 +11,15 @@ public class ReflectedField<T> {
 	private Field field;
 	
 	public ReflectedField(ReflectedClass clazz, ContentFinder<Field> finder) {
-	    this(clazz.getReferencedClass(), finder);
+		this(clazz.getReferencedClass(), finder);
 	}
 	
 	public ReflectedField(Class<?> clazz, ContentFinder<Field> finder) {
-        try {
-            this.field = finder.find(clazz);
-        } catch (FinderException e) {
-            e.printStackTrace();
-        }
+		try {
+			this.field = finder.find(clazz);
+		} catch (FinderException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@SuppressWarnings("unchecked")

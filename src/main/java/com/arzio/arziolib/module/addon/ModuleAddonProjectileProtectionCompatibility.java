@@ -28,7 +28,7 @@ public class ModuleAddonProjectileProtectionCompatibility extends Module {
 	public void onEnable() {
 		super.onEnable();
 		
-        this.yml = new YMLFile(this.getPlugin(), "module_configuration/projectile_protection_ratio.yml");
+		this.yml = new YMLFile(this.getPlugin(), "module_configuration/projectile_protection_ratio.yml");
 		yml.reload();
 		
 		this.dataHandler = ArzioLib.getInstance().getPlayerDataHandler();
@@ -58,16 +58,16 @@ public class ModuleAddonProjectileProtectionCompatibility extends Module {
 			int totalProtectionLevel = 0;
 			
 			if (stackHat != null) {
-			    totalProtectionLevel += stackHat.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
+				totalProtectionLevel += stackHat.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
 			}
 			if (stackVest != null) {
-			    totalProtectionLevel += stackVest.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
+				totalProtectionLevel += stackVest.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
 			}
 			if (stackClothing != null) {
-			    totalProtectionLevel += stackClothing.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
+				totalProtectionLevel += stackClothing.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
 			}
 			if (this.considerBoots && stackBoots != null) {
-			    totalProtectionLevel += stackBoots.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
+				totalProtectionLevel += stackBoots.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
 			}
 			
 			double protectionPercentage = (totalProtectionLevel * projectileProtectionRatio);
@@ -81,20 +81,20 @@ public class ModuleAddonProjectileProtectionCompatibility extends Module {
 		}
 	}
 
-    public double getProjectileProtectionRatio() {
-        return projectileProtectionRatio;
-    }
+	public double getProjectileProtectionRatio() {
+		return projectileProtectionRatio;
+	}
 
-    public void setProjectileProtectionRatio(double projectileProtectionRatio) {
-        this.projectileProtectionRatio = projectileProtectionRatio;
-    }
+	public void setProjectileProtectionRatio(double projectileProtectionRatio) {
+		this.projectileProtectionRatio = projectileProtectionRatio;
+	}
 
-    public boolean shouldConsiderBoots() {
-        return considerBoots;
-    }
+	public boolean shouldConsiderBoots() {
+		return considerBoots;
+	}
 
-    public void setConsiderBoots(boolean considerBoots) {
-        this.considerBoots = considerBoots;
-    }
+	public void setConsiderBoots(boolean considerBoots) {
+		this.considerBoots = considerBoots;
+	}
 
 }

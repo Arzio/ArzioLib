@@ -19,16 +19,16 @@ public class CDSwitchSlotEvent extends PayloadPacketEvent{
 	}
 
 	public CDSpecialSlot getSlot() {
-        return slot;
-    }
+		return slot;
+	}
 
-    public ItemStack getItemInSlot() {
+	public ItemStack getItemInSlot() {
 		return ArzioLib.getInstance().getPlayerDataHandler().getPlayerData(player).getInventory().getStackInSpecialSlot(this.getSlot());
 	}
-    
-    public ItemStack getHeldItem() {
-        return this.getPlayer().getItemInHand();
-    }
+	
+	public ItemStack getHeldItem() {
+		return this.getPlayer().getItemInHand();
+	}
 	
 	@Override
 	public HandlerList getHandlers() {

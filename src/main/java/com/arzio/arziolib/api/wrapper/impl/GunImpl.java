@@ -53,8 +53,8 @@ public class GunImpl extends CDSharedItemImpl implements Gun{
 	@Override
 	public long getMillisPerRound() {
 		double maxPerSecond = this.getRPM() / 60.0D;
-	    double delayPerSecond = 1.0D / maxPerSecond;
-	    return (long) (delayPerSecond * 1000.0D);
+		double delayPerSecond = 1.0D / maxPerSecond;
+		return (long) (delayPerSecond * 1000.0D);
 	}
 
 	@Override
@@ -121,89 +121,89 @@ public class GunImpl extends CDSharedItemImpl implements Gun{
 		return foundAttachments;
 	}
 
-    @Override
-    public void setRPM(double rpm) {
-        CDClasses.itemGunRoundsPerMinute.setValue(this.getItemInstance(), (float) rpm);
-    }
+	@Override
+	public void setRPM(double rpm) {
+		CDClasses.itemGunRoundsPerMinute.setValue(this.getItemInstance(), (float) rpm);
+	}
 
-    @Override
-    public void setBulletsPerRound(int amount) {
-        CDClasses.itemGunBulletsPerRound.setValue(this.getItemInstance(), amount);
-    }
+	@Override
+	public void setBulletsPerRound(int amount) {
+		CDClasses.itemGunBulletsPerRound.setValue(this.getItemInstance(), amount);
+	}
 
-    @Override
-    public int getMaximumBulletDistance() {
-        return CDClasses.itemGunBulletDistanceField.getValue(this.getItemInstance());
-    }
+	@Override
+	public int getMaximumBulletDistance() {
+		return CDClasses.itemGunBulletDistanceField.getValue(this.getItemInstance());
+	}
 
-    @Override
-    public void setMaximumBulletDistance(int distance) {
-        CDClasses.itemGunBulletDistanceField.setValue(this.getItemInstance(), distance);
-    }
+	@Override
+	public void setMaximumBulletDistance(int distance) {
+		CDClasses.itemGunBulletDistanceField.setValue(this.getItemInstance(), distance);
+	}
 
-    @Override
-    public double getRecoil() {
-        return CDClasses.itemGunRecoilField.getValue(this.getItemInstance());
-    }
+	@Override
+	public double getRecoil() {
+		return CDClasses.itemGunRecoilField.getValue(this.getItemInstance());
+	}
 
-    @Override
-    public void setRecoil(double recoil) {
-        CDClasses.itemGunRecoilField.setValue(this.getItemInstance(), (float) recoil);
-    }
+	@Override
+	public void setRecoil(double recoil) {
+		CDClasses.itemGunRecoilField.setValue(this.getItemInstance(), (float) recoil);
+	}
 
-    @Override
-    public double getAccuracy() {
-        return CDClasses.itemGunAccuracyField.getValue(this.getItemInstance());
-    }
+	@Override
+	public double getAccuracy() {
+		return CDClasses.itemGunAccuracyField.getValue(this.getItemInstance());
+	}
 
-    @Override
-    public void setAccuracy(double accuracy) {
-        CDClasses.itemGunAccuracyField.setValue(this.getItemInstance(), (float) accuracy);
-    }
+	@Override
+	public void setAccuracy(double accuracy) {
+		CDClasses.itemGunAccuracyField.setValue(this.getItemInstance(), (float) accuracy);
+	}
 
-    @Override
-    public double getMovementPenalty() {
-        return CDClasses.itemGunMovementPenaltyField.getValue(this.getItemInstance());
-    }
+	@Override
+	public double getMovementPenalty() {
+		return CDClasses.itemGunMovementPenaltyField.getValue(this.getItemInstance());
+	}
 
-    @Override
-    public void setMovementPenalty(double amount) {
-        CDClasses.itemGunMovementPenaltyField.setValue(this.getItemInstance(), amount);
-    }
+	@Override
+	public void setMovementPenalty(double amount) {
+		CDClasses.itemGunMovementPenaltyField.setValue(this.getItemInstance(), amount);
+	}
 
-    @Override
-    public double getZoomLevel() {
-        return CDClasses.itemGunZoomLevelField.getValue(this.getItemInstance());
-    }
+	@Override
+	public double getZoomLevel() {
+		return CDClasses.itemGunZoomLevelField.getValue(this.getItemInstance());
+	}
 
-    @Override
-    public void setZoomLevel(double amount) {
-        CDClasses.itemGunZoomLevelField.setValue(this.getItemInstance(), (float) amount);
-    }
+	@Override
+	public void setZoomLevel(double amount) {
+		CDClasses.itemGunZoomLevelField.setValue(this.getItemInstance(), (float) amount);
+	}
 
-    @Override
-    public void setSoundLevel(double soundLevel) {
-        CDClasses.itemGunSoundLevel.setValue(this.getItemInstance(), (float) soundLevel);
-    }
+	@Override
+	public void setSoundLevel(double soundLevel) {
+		CDClasses.itemGunSoundLevel.setValue(this.getItemInstance(), (float) soundLevel);
+	}
 
-    @Override
-    public boolean canSpreadWhileAiming() {
-        return CDClasses.itemGunSpreadWhileAimingField.getValue(this.getItemInstance());
-    }
+	@Override
+	public boolean canSpreadWhileAiming() {
+		return CDClasses.itemGunSpreadWhileAimingField.getValue(this.getItemInstance());
+	}
 
-    @Override
-    public void setSpreadWhileAiming(boolean canSpread) {
-        CDClasses.itemGunSpreadWhileAimingField.setValue(this.getItemInstance(), canSpread);
-    }
+	@Override
+	public void setSpreadWhileAiming(boolean canSpread) {
+		CDClasses.itemGunSpreadWhileAimingField.setValue(this.getItemInstance(), canSpread);
+	}
 
-    @Override
-    public boolean hasCrosshair() {
-        return CDClasses.itemGunRenderCrosshairsField.getValue(this.getItemInstance());
-    }
+	@Override
+	public boolean hasCrosshair() {
+		return CDClasses.itemGunRenderCrosshairsField.getValue(this.getItemInstance());
+	}
 
-    @Override
-    public void setCrosshair(boolean hasCrosshair) {
-        CDClasses.itemGunRenderCrosshairsField.setValue(this.getItemInstance(), hasCrosshair);
-    }
+	@Override
+	public void setCrosshair(boolean hasCrosshair) {
+		CDClasses.itemGunRenderCrosshairsField.setValue(this.getItemInstance(), hasCrosshair);
+	}
 
 }

@@ -10,10 +10,10 @@ import com.arzio.arziolib.module.RegisterModule;
 @RegisterModule(name = "fix-gun-swap-fast-shoot")
 public class ModuleFixSwapGunFastShoot extends Module {
 
-    @EventHandler
-    public void removeGunSwap(CDSwitchSlotEvent event) {
-        event.setCancelled(true);
-        event.getPlayer().sendMessage("§cThis button is disabled due to fast-shooting bug abuse.");
-    }
+	@EventHandler
+	public void removeGunSwap(CDSwitchSlotEvent event) {
+		event.setCancelled(true);
+		event.getPlayer().sendMessage("§cThis button is disabled due to fast-shooting bug abuse.");
+	}
 
 }

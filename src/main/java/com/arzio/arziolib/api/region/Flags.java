@@ -18,60 +18,60 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 public class Flags {
-    
-    public static WorldGuardPlugin getWorldGuard() {
-        return ArzioLib.getInstance().getWorldGuard();
-    }
-    
-    public static RegionManager getRegionManager(World world) {
-        return getWorldGuard().getRegionManager(world);
-    }
+	
+	public static WorldGuardPlugin getWorldGuard() {
+		return ArzioLib.getInstance().getWorldGuard();
+	}
+	
+	public static RegionManager getRegionManager(World world) {
+		return getWorldGuard().getRegionManager(world);
+	}
 
-    public static ApplicableRegionSet getRegionSet(Location location) {
-        return getRegionManager(location.getWorld()).getApplicableRegions(location);
-    }
-    
+	public static ApplicableRegionSet getRegionSet(Location location) {
+		return getRegionManager(location.getWorld()).getApplicableRegions(location);
+	}
+	
 	public static boolean isFlagAllowed(StateFlag flag, Location location) {
 		return isFlagInState(flag, location, State.ALLOW);
 	}
 	
-    public static boolean isFlagAllowed(StateFlag flag, ApplicableRegionSet regionSet) {
-        return isFlagInState(flag, regionSet, State.ALLOW);
-    }
+	public static boolean isFlagAllowed(StateFlag flag, ApplicableRegionSet regionSet) {
+		return isFlagInState(flag, regionSet, State.ALLOW);
+	}
 	
 	public static boolean isFlagDenied(StateFlag flag, Location location) {
 		return isFlagInState(flag, location, State.DENY);
 	}
 	
-    public static boolean isFlagDenied(StateFlag flag, ApplicableRegionSet regionSet) {
-        return isFlagInState(flag, regionSet, State.DENY);
-    }
+	public static boolean isFlagDenied(StateFlag flag, ApplicableRegionSet regionSet) {
+		return isFlagInState(flag, regionSet, State.DENY);
+	}
 	
 	public static <T> T getFlagValue(Flag<T> flag, Location location) {
-	    ApplicableRegionSet set = getRegionSet(location);
+		ApplicableRegionSet set = getRegionSet(location);
 		return set == null ? null : set.getFlag(flag);
 	}
 
 	public static <T> T getFlagValue(Flag<T> flag, ProtectedRegion region) {
-	    return region.getFlag(flag);
+		return region.getFlag(flag);
 	}
 	
-    public static boolean isFlagInState(StateFlag flag, ApplicableRegionSet regionSet, State state) {
-        State currentState = regionSet.getFlag(flag);
-        return currentState == null ? false : currentState == state;
-    }
+	public static boolean isFlagInState(StateFlag flag, ApplicableRegionSet regionSet, State state) {
+		State currentState = regionSet.getFlag(flag);
+		return currentState == null ? false : currentState == state;
+	}
 	
 	public static boolean isFlagInState(StateFlag flag, Location location, State state) {
 		return getFlagValue(flag, location) == state;
 	}
 
 	public static boolean flagExists(Flag<?> flag, ProtectedRegion region) {
-        return getFlagValue(flag, region) != null;
-    }
+		return getFlagValue(flag, region) != null;
+	}
 	
-    public static boolean flagExists(Flag<?> flag, Location location) {
-        return getFlagValue(flag, location) != null;
-    }
+	public static boolean flagExists(Flag<?> flag, Location location) {
+		return getFlagValue(flag, location) != null;
+	}
 
 	public static boolean canRegionHavePvP(Location location) {
 
@@ -84,24 +84,24 @@ public class Flags {
 		}
 		
 		if (!location.getWorld().getPVP()) {
-		    return false;
+			return false;
 		}
 
 		return true;
 	}
 	
 	public static boolean isFlagRegistered(Flag<?> flag) {
-	    return getFlag(flag.getName()) != null;
+		return getFlag(flag.getName()) != null;
 	}
 	
-    public static Flag<?> getFlag(String flagName) {
-        for (Flag<?> f : DefaultFlag.flagsList) {
-            if (flagName.equalsIgnoreCase(f.getName())) {
-                return f;
-            }
-        }
-        return null;
-    }
+	public static Flag<?> getFlag(String flagName) {
+		for (Flag<?> f : DefaultFlag.flagsList) {
+			if (flagName.equalsIgnoreCase(f.getName())) {
+				return f;
+			}
+		}
+		return null;
+	}
 
 	public static void addCustomFlag(Flag<?> flag) {
 		try {

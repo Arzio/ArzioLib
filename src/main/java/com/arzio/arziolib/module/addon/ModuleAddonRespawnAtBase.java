@@ -13,14 +13,14 @@ import com.arzio.arziolib.module.RegisterModule;
 @RegisterModule(name = "addon-respawn-at-base", defaultState = false)
 public class ModuleAddonRespawnAtBase extends Module {
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    public void onRespawn(PlayerRespawnEvent event) {
-        BaseProvider provider = ArzioLib.getInstance().getBaseProvider();
-        Player player = event.getPlayer();
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	public void onRespawn(PlayerRespawnEvent event) {
+		BaseProvider provider = ArzioLib.getInstance().getBaseProvider();
+		Player player = event.getPlayer();
 
-        if (provider.hasBase(player)) {
-            event.setRespawnLocation(provider.getBaseFromPlayer(player).getLocation().clone().add(0.5D, 1D, 0.5D));
-        }
-    }
+		if (provider.hasBase(player)) {
+			event.setRespawnLocation(provider.getBaseFromPlayer(player).getLocation().clone().add(0.5D, 1D, 0.5D));
+		}
+	}
 
 }

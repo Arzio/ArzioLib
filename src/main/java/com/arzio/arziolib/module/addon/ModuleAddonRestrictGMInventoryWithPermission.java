@@ -10,16 +10,16 @@ import com.arzio.arziolib.module.RegisterModule;
 @RegisterModule(name = "addon-restrict-gm-inventory-with-permission")
 public class ModuleAddonRestrictGMInventoryWithPermission extends Module {
 
-    @EventHandler
-    public void onCreativeInventory(InventoryCreativeEvent event) {
-        HumanEntity human = event.getWhoClicked();
+	@EventHandler
+	public void onCreativeInventory(InventoryCreativeEvent event) {
+		HumanEntity human = event.getWhoClicked();
 
-        boolean hasPermission = human.hasPermission("craftingdead.restrict.gm")
-                || human.hasPermission("arziolib.restrictgm");
+		boolean hasPermission = human.hasPermission("craftingdead.restrict.gm")
+				|| human.hasPermission("arziolib.restrictgm");
 
-        if (hasPermission && !human.isOp()) {
-            event.setCancelled(true);
-        }
-    }
+		if (hasPermission && !human.isOp()) {
+			event.setCancelled(true);
+		}
+	}
 
 }

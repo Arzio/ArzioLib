@@ -12,25 +12,25 @@ import com.arzio.arziolib.api.util.CauldronUtils;
 
 public class NoDelayCommand implements CommandExecutor {
 
-    @Override
+	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (!(sender instanceof Player)) {
-		    sender.sendMessage("§cThis command can only be used by players.");
+			sender.sendMessage("§cThis command can only be used by players.");
 			return true;
 		}
-        if (!(sender.hasPermission("arziolib.nodelay"))) {
-            sender.sendMessage("§cYou do not have permission.");
-            return true;
-        }
+		if (!(sender.hasPermission("arziolib.nodelay"))) {
+			sender.sendMessage("§cYou do not have permission.");
+			return true;
+		}
 		
 		Socket socket = CauldronUtils.getPlayerSocket((Player) sender);
 		
 		try {
-		    socket.setTcpNoDelay(!socket.getTcpNoDelay());
-		    sender.sendMessage("§aChanged TCP NODELAY option to "+socket.getTcpNoDelay()+" for you.");
+			socket.setTcpNoDelay(!socket.getTcpNoDelay());
+			sender.sendMessage("§aChanged TCP NODELAY option to "+socket.getTcpNoDelay()+" for you.");
 		} catch (SocketException e) {
-		    e.printStackTrace();
-		    sender.sendMessage("§cFailed to change TCP NODELAY option for you.");
+			e.printStackTrace();
+			sender.sendMessage("§cFailed to change TCP NODELAY option for you.");
 		}
 
 		return true;

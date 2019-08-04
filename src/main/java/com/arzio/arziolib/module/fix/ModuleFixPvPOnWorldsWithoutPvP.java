@@ -14,9 +14,9 @@ public class ModuleFixPvPOnWorldsWithoutPvP extends Module {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onAttack(EntityDamageByEntityEvent event) {
 		if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
-		    if (!event.getEntity().getWorld().getPVP()) {
-		        event.setCancelled(true);
-		    }
+			if (!event.getEntity().getWorld().getPVP()) {
+				event.setCancelled(true);
+			}
 		}
 	}
 

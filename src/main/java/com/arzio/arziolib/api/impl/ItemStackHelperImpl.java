@@ -198,7 +198,7 @@ public class ItemStackHelperImpl implements ItemStackHelper {
 		
 		ItemStack stack = inventory.getStackInSpecialSlot(slot);
 		if (stack == null) {
-		    return null;
+			return null;
 		}
 		
 		AccessResult<R> result = this.accessItemInventory(new ItemInventoryNavigator<R>(stack) {

@@ -14,7 +14,7 @@ import com.arzio.arziolib.module.RegisterModule;
 @RegisterModule(name = "core-bukkit-events-for-bases")
 public class ModuleCoreBukkitEventsForBases extends Module{
 
-    private BaseProvider baseProvider = ArzioLib.getInstance().getBaseProvider();
+	private BaseProvider baseProvider = ArzioLib.getInstance().getBaseProvider();
 	
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onBaseDestroyRequest(CDRequestBaseDestroyEvent event) {

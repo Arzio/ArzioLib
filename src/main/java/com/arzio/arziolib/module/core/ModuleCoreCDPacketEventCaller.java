@@ -58,12 +58,12 @@ public class ModuleCoreCDPacketEventCaller extends Module {
 					
 					innerEvent = new CDPlayerDataSendEvent(from, event.getPlayer(), event.getData());
 					break;
-                case NAMETAG_VISIBILITY:
-                    innerEvent = new CDSendNametagsEvent(event.getPlayer(), event.getData());
-                    break;
-                case SYNC_ITEMS:
-                    innerEvent = new CDSyncItemsEvent(event.getPlayer(), event.getData());
-                    break;
+				case NAMETAG_VISIBILITY:
+					innerEvent = new CDSendNametagsEvent(event.getPlayer(), event.getData());
+					break;
+				case SYNC_ITEMS:
+					innerEvent = new CDSyncItemsEvent(event.getPlayer(), event.getData());
+					break;
 				case COMBATLOG_SHOW_TIMER:
 					innerEvent = new CDCombatlogShowTimer(event.getPlayer(), event.getData());
 					break;
@@ -153,34 +153,34 @@ public class ModuleCoreCDPacketEventCaller extends Module {
 						return;
 					}
 					
-			        boolean hitTypeIsEntity = inputStream.readBoolean();
+					boolean hitTypeIsEntity = inputStream.readBoolean();
 
-			        if (hitTypeIsEntity) {
-			        	int entity = inputStream.readInt();
+					if (hitTypeIsEntity) {
+						int entity = inputStream.readInt();
 						boolean isHeadshot = inputStream.readBoolean();
 						double hitX = inputStream.readDouble();
 						double hitY = inputStream.readDouble();
 						double hitZ = inputStream.readDouble();
-			        	
-				        Entity entityHit = ((CraftPlayer) sender).getHandle().world.getEntity(entity);
-				        
-				        if (entityHit != null) {
-				        	innerEvent = new CDBulletHitEvent(sender, heldGun, entityHit.getBukkitEntity(), new Location(entityHit.getBukkitEntity().getWorld(), hitX, hitY, hitZ), isHeadshot, dataWrapper);
-				        }
-			        } else {
-			            @SuppressWarnings("unused")
+						
+						Entity entityHit = ((CraftPlayer) sender).getHandle().world.getEntity(entity);
+						
+						if (entityHit != null) {
+							innerEvent = new CDBulletHitEvent(sender, heldGun, entityHit.getBukkitEntity(), new Location(entityHit.getBukkitEntity().getWorld(), hitX, hitY, hitZ), isHeadshot, dataWrapper);
+						}
+					} else {
+						@SuppressWarnings("unused")
 						int blockId = inputStream.readInt(); // Not used. DO NOT ERASE IT.
-			            double x = inputStream.readDouble();
-			            double y = inputStream.readDouble();
-			            double z = inputStream.readDouble();
-			            @SuppressWarnings("unused")
-			            int side = inputStream.readInt();  // Not used. DO NOT ERASE IT.
-			            double vectorX = inputStream.readDouble();
-			            double vectorY = inputStream.readDouble();
-			            double vectorZ = inputStream.readDouble();
-			            
-			            innerEvent = new CDBulletHitEvent(sender, heldGun, new Location(sender.getWorld(), vectorX, vectorY, vectorZ), sender.getWorld().getBlockAt((int) x, (int) y, (int) z), dataWrapper);
-			        }
+						double x = inputStream.readDouble();
+						double y = inputStream.readDouble();
+						double z = inputStream.readDouble();
+						@SuppressWarnings("unused")
+						int side = inputStream.readInt();  // Not used. DO NOT ERASE IT.
+						double vectorX = inputStream.readDouble();
+						double vectorY = inputStream.readDouble();
+						double vectorZ = inputStream.readDouble();
+						
+						innerEvent = new CDBulletHitEvent(sender, heldGun, new Location(sender.getWorld(), vectorX, vectorY, vectorZ), sender.getWorld().getBlockAt((int) x, (int) y, (int) z), dataWrapper);
+					}
 					
 					break;
 				case GUN_TRIGGER:
@@ -221,9 +221,9 @@ public class ModuleCoreCDPacketEventCaller extends Module {
 					CDSpecialSlot slot = null;
 					
 					if (isGun) {
-					    slot = CDSpecialSlot.GUN;
+						slot = CDSpecialSlot.GUN;
 					} else {
-					    slot = CDSpecialSlot.MELEE;
+						slot = CDSpecialSlot.MELEE;
 					}
 					
 					innerEvent = new CDSwitchSlotEvent(sender, slot, dataWrapper);
