@@ -157,12 +157,15 @@ public class ModuleCoreCDPacketEventCaller extends Module {
 
 			        if (hitTypeIsEntity) {
 			        	int entity = inputStream.readInt();
-			        	boolean isHeadshot = inputStream.readBoolean();
+						boolean isHeadshot = inputStream.readBoolean();
+						double hitX = inputStream.readDouble();
+						double hitY = inputStream.readDouble();
+						double hitZ = inputStream.readDouble();
 			        	
 				        Entity entityHit = ((CraftPlayer) sender).getHandle().world.getEntity(entity);
 				        
 				        if (entityHit != null) {
-				        	innerEvent = new CDBulletHitEvent(sender, heldGun, entityHit.getBukkitEntity(), isHeadshot, dataWrapper);
+				        	innerEvent = new CDBulletHitEvent(sender, heldGun, entityHit.getBukkitEntity(), new Location(entityHit.getBukkitEntity().getWorld(), hitX, hitY, hitZ), isHeadshot, dataWrapper);
 				        }
 			        } else {
 			            @SuppressWarnings("unused")

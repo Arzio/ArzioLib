@@ -23,12 +23,14 @@ public class CDBulletHitEvent extends GunEvent implements PostEvent {
 	private boolean isHeadshot;
 	private Block blockHit;
 	private Location exactHitLocation;
+	private Location clientHitLocation;
 	private boolean spendAmmo = true;
 	
-	public CDBulletHitEvent(Player shooter, Gun gun, Entity entityHit, boolean isHeadshot, CDPacketDataWrapper dataWrapper) {
+	public CDBulletHitEvent(Player shooter, Gun gun, Entity entityHit, Location clientHitLocation, boolean isHeadshot, CDPacketDataWrapper dataWrapper) {
 		super(shooter, gun, dataWrapper);
 		this.hitType = HitType.ENTITY;
 		this.entityHit = entityHit;
+		this.clientHitLocation = clientHitLocation;
 		this.isHeadshot = isHeadshot;
 		this.exactHitLocation = (entityHit instanceof LivingEntity && isHeadshot) ? ((LivingEntity) entityHit).getEyeLocation() : entityHit.getLocation();
 	}
@@ -38,6 +40,7 @@ public class CDBulletHitEvent extends GunEvent implements PostEvent {
 		this.hitType = HitType.BLOCK;
 		this.blockHit = blockHit;
 		this.exactHitLocation = exactHitLocation;
+		this.clientHitLocation = this.exactHitLocation;
 	}
 
 	public void setSpendAmmo(boolean willSpend) {
@@ -59,6 +62,10 @@ public class CDBulletHitEvent extends GunEvent implements PostEvent {
 	
 	public Location getExactHitLocation() {
 		return this.exactHitLocation;
+	}
+
+	public Location getClientHitLocation(){
+		return this.clientHitLocation;
 	}
 	
 	public Block getBlockHit() {
