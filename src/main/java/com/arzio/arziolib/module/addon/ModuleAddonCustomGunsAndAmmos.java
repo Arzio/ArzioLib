@@ -16,7 +16,7 @@ import com.arzio.arziolib.module.RegisterModule;
 
 import net.minecraft.server.v1_6_R3.Item;
 
-@RegisterModule(name = "addon-custom-gun-and-ammo-configurations")
+@RegisterModule(name = "addon-custom-gun-and-ammo-configurations", defaultState = false)
 public class ModuleAddonCustomGunsAndAmmos extends Module {
 
 	private YMLFile yml;
