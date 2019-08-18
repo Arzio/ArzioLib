@@ -4,11 +4,15 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_6_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_6_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_6_R3.entity.CraftPlayer;
@@ -25,6 +29,7 @@ import com.arzio.arziolib.api.util.reflection.finder.ContentFinder;
 import cpw.mods.fml.common.IPlayerTracker;
 import cpw.mods.fml.common.registry.GameRegistry;
 import guava10.com.google.common.primitives.Ints;
+import net.minecraft.server.v1_6_R3.AxisAlignedBB;
 import net.minecraft.server.v1_6_R3.Entity;
 import net.minecraft.server.v1_6_R3.EntityTypes;
 import net.minecraft.server.v1_6_R3.IInventory;
@@ -34,9 +39,42 @@ import net.minecraft.server.v1_6_R3.NBTTagCompound;
 
 public class CauldronUtils {
 
+	private static Set<Integer> noCollidableBlocks;
 	private static ReflectedField<Socket> socketField = null;
 	private static Field handleField = null;
 	
+	public static void detectNoCollidableBlocks(){
+		noCollidableBlocks = new HashSet<>();
+
+		for (net.minecraft.server.v1_6_R3.Block nmsBlock : net.minecraft.server.v1_6_R3.Block.byId){
+			if (nmsBlock != null){
+				try {
+					AxisAlignedBB axis = nmsBlock.b(null, 0, 0, 0);
+					if (axis == null){
+						noCollidableBlocks.add(nmsBlock.id);
+					}
+				} catch (Throwable t){
+					// Do nothing.
+				}
+			}
+		}
+	}
+
+	public static boolean isBlockCollidable(Block block) {
+		return isBlockCollidable(block.getType());
+	}
+
+	public static boolean isBlockCollidable(Material material){
+		return isBlockCollidable(material.getId());
+	}
+
+	public static boolean isBlockCollidable(int id){
+		if (noCollidableBlocks == null){
+			throw new IllegalStateException("The server must run detectNoCollidableBlocks() at least one time!");
+		}
+		return !noCollidableBlocks.contains(id);
+	}
+
 	public static Entity getNMSEntity(org.bukkit.entity.Entity entity) {
 		return ((CraftEntity) entity).getHandle();
 	}
