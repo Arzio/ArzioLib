@@ -124,6 +124,8 @@ public class ArzioLib extends JavaPlugin {
 	public void onEnable() {
 		instance = this;
 
+		CauldronUtils.detectNoCollidableBlocks();
+
 		this.updateChecker = new GitHubUpdateChecker(this, "https://api.github.com/repos/Arzio/ArzioLib/releases",
 				"https://github.com/Arzio/ArzioLib/releases");
 
