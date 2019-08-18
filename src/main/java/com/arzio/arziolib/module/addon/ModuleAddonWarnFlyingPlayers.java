@@ -115,7 +115,7 @@ public class ModuleAddonWarnFlyingPlayers extends Module {
 				for (int z = minZ; z < maxZ; z++) {
 					Block block = Block.byId[world.getBlockTypeIdAt(x, y, z)];
 
-					if (block != null) {
+					if (block != null && CauldronUtils.isBlockCollidable(block.id)) {
 						int blockHeightTop = y + (int) block.x();
 
 						// Block height touches the minY
