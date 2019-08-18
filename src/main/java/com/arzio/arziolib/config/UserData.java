@@ -19,6 +19,8 @@ public class UserData {
 	public static final int FLAG_WHITELIST_DISABLED = 4;
 	public static final int FLAG_SHOW_NAMETAGS = 8;
 	public static final int FLAG_EARNED_FLY_MODE_DUE_TO_WG_FLAG = 16;
+	public static final int FLAG_HAS_MOVED_SINCE_LAST_FLY_CHECK = 32;
+	public static final int FLAG_LATEST_MOVEMENT_HEIGHT_WAS_ABOVE_MC_DETECTION_THRESHOLD = 64;
 	
 	private int playerFlags;
 	
@@ -28,6 +30,8 @@ public class UserData {
 	
 	private Boolean hideParticles = false;
 	private Boolean hideClothes = false;
+
+	private int flightDetectionCounter = 0;
 
 	private double currentSoundLevel = 0D;
 	private Map<Gun, Long> lastShootMap = new HashMap<>();
@@ -110,6 +114,22 @@ public class UserData {
 	
 	public boolean hasFlag(int flag) {
 		return (this.playerFlags & flag) != 0;
+	}
+
+	public int getFlightDetectionCounter(){
+		return this.flightDetectionCounter;
+	}
+
+	public void setFlightDetectionCounter(int amount){
+		this.flightDetectionCounter = amount;
+	}
+
+	public void increaseFlightDetectionCounter(){
+		this.flightDetectionCounter++;
+	}
+
+	public void resetFlightDetectionCounter(){
+		this.setFlightDetectionCounter(0);
 	}
 	
 	public void setNextCooldownTimestamp(Gun gun, Long nextTime) {
