@@ -10,7 +10,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.UpdateChecker;
 
 /**
@@ -43,21 +42,19 @@ public class GitHubUpdateChecker implements UpdateChecker {
 	 */
 	@Override
 	public String getLatestVersionTag() {
-		return this.state == UpdateState.FAILED_TO_CHECK ? ArzioLib.getInstance().getDescription().getVersion()
+		return this.state == UpdateState.FAILED_TO_CHECK ? this.plugin.getDescription().getVersion()
 				: this.latestVersionTag;
 	}
 
 	@Override
 	public void checkUpdates(CheckMethod method) {
-		Logger logger = ArzioLib.getInstance().getLogger();
+		Logger logger = this.plugin.getLogger();
 		logger.info("Checking for "+plugin.getName()+" updates...");
 
 		Runnable runnable = new Runnable() {
 
 			@Override
 			public void run() {
-
-				Plugin plugin = ArzioLib.getInstance();
 
 				try {
 					JSONArray updates = (JSONArray) new JSONParser().parse(IOUtils.toString(new URL(apiURL)));
@@ -87,7 +84,7 @@ public class GitHubUpdateChecker implements UpdateChecker {
 
 		switch (method) {
 		case ASYNC:
-			Bukkit.getScheduler().runTaskAsynchronously(ArzioLib.getInstance(), runnable);
+			Bukkit.getScheduler().runTaskAsynchronously(this.plugin, runnable);
 			break;
 		case SYNC:
 			runnable.run();
