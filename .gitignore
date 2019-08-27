@@ -57,6 +57,9 @@ hs_err_pid*
 .idea/**/gradle.xml
 .idea/**/libraries
 
+# VS Code project folder
+/.vscode/
+
 # Gradle files
 .gradle
 
