@@ -29,7 +29,7 @@ public class ModuleAddonCreateTimingsOnLowTPS extends Module {
 
 		this.yml = new YMLFile(this.getPlugin(), "module_configuration/create-timings-on-low-tps.yml");
 		this.threshold = this.yml.getValueWithDefault("tps-threshold", 18.3D);
-		this.yml.saveDefaultFile();
+		this.yml.save();
 	}
 
 	@RepeatingTask(delay = 60L, period = 60L)
