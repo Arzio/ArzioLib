@@ -2,6 +2,7 @@ package com.arzio.arziolib.api.impl;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
@@ -135,7 +136,7 @@ public class BaseProviderImpl implements BaseProvider, Listener{
 
 	@Override
 	public Set<Base> getLoadedBasesFrom(World world) {
-		Set<Base> bases = new HashSet<>(this.dataInCache.rowMap().get(world).values());
+		Set<Base> bases = new LinkedHashSet<>(this.dataInCache.row(world).values());
 		return Collections.unmodifiableSet(bases);
 	}
 
