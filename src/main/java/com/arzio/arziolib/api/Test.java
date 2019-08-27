@@ -2,7 +2,9 @@ package com.arzio.arziolib.api;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
+import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.util.TestException;
 import com.arzio.arziolib.api.util.TestException.TestExceptionType;
 
@@ -92,6 +94,10 @@ public abstract class Test {
 		} else if (!referencedTestCase.equals(other.referencedTestCase))
 			return false;
 		return true;
+	}
+
+	public static void registerAll(Plugin plugin, Object from){
+		ArzioLib.getInstance().getTestHelper().addTestCases(plugin, from);
 	}
 	
 }

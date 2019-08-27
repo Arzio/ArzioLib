@@ -9,6 +9,7 @@ import com.arzio.arziolib.api.util.TestException;
 
 public interface TestHelper {
 	public void addTestCase(TestCase testCase);
+	public void addTestCases(Plugin plugin, Object from);
 
 	public boolean hasTestCase(String commandName);
 	public boolean hasTestCase(TestCase testCase);

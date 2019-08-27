@@ -1,15 +1,21 @@
 package com.arzio.arziolib.api.impl;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import com.arzio.arziolib.api.Test;
 import com.arzio.arziolib.api.TestCase;
+import com.arzio.arziolib.api.TestCommand;
 import com.arzio.arziolib.api.TestHelper;
 import com.arzio.arziolib.api.util.TestException;
+import com.arzio.arziolib.api.util.reflection.MethodParameters;
 
 public class TestHelperImpl implements TestHelper{
 
@@ -118,6 +124,36 @@ public class TestHelperImpl implements TestHelper{
 		for (TestCase testCase : testCases) {
 			testCase.run(tester);
 		}
+	}
+
+	@Override
+	public void addTestCases(Plugin plugin, final Object from) {
+		Validate.notNull(plugin, "Plugin must not be null!");
+		Validate.notNull(from, "Object instance must not be null!");
+
+		for (final Method method : from.getClass().getDeclaredMethods()){
+			if (method.isAnnotationPresent(TestCommand.class)){
+				TestCommand annotation = method.getAnnotation(TestCommand.class);
+				
+				TestCase testCase = new TestCase(plugin, annotation.commandName(), new Test() {
+
+					@Override
+					public void test(CommandSender tester, Player player, TestHelper helper) throws Throwable {
+						MethodParameters parameters = MethodParameters.getFrom(method);
+						parameters.setParameter(CommandSender.class, tester);
+						parameters.setParameter(Player.class, player);
+						parameters.setParameter(TestHelper.class, helper);
+
+						method.invoke(from, parameters.getValues());
+					}
+
+				});
+
+				this.addTestCase(testCase);
+			}
+			
+		}
+		
 	}
 
 }
