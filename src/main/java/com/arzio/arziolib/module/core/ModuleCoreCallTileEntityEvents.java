@@ -11,6 +11,7 @@ import org.bukkit.event.world.WorldInitEvent;
 
 import com.arzio.arziolib.api.event.TileEntityLoadEvent;
 import com.arzio.arziolib.api.event.TileEntityUnloadEvent;
+import com.arzio.arziolib.api.util.reflection.ReflectedClass;
 import com.arzio.arziolib.api.util.reflection.ReflectedField;
 import com.arzio.arziolib.api.util.reflection.finder.ContentFinder;
 import com.arzio.arziolib.module.Module;
@@ -22,6 +23,7 @@ import net.minecraft.server.v1_6_R3.World;
 @RegisterModule(name = "core-call-tile-entity-events")
 public class ModuleCoreCallTileEntityEvents extends Module{
 	
+	private ReflectedClass nmsWorldClass = new ReflectedClass("net.minecraft.world.World");
 	private ReflectedField<Set> nmsWorldTileEntityListField;
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -30,7 +32,7 @@ public class ModuleCoreCallTileEntityEvents extends Module{
 		World nmsWorld = craftWorld.getHandle();
 
 		if (nmsWorldTileEntityListField == null){
-			nmsWorldTileEntityListField = new ReflectedField<>(World.class, new ContentFinder.FieldBuilder<>().withType(Set.class).build());
+			nmsWorldTileEntityListField = new ReflectedField<>(nmsWorldClass, new ContentFinder.FieldBuilder<>().withType(Set.class).build());
 		}
 		
 		// Swaps the World's entityList ArrayList with my event-based ArrayList :DD
