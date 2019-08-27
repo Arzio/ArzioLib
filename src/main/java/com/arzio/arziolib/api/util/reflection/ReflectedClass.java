@@ -6,7 +6,7 @@ import com.arzio.arziolib.api.util.reflection.finder.ContentFinder;
 public class ReflectedClass {
 	
 	private Class<?> clazzFound;
-	
+
 	public ReflectedClass(ContentFinder<Class<?>> finder) {
 		try {
 			this.clazzFound = finder.find(null);
@@ -17,6 +17,14 @@ public class ReflectedClass {
 	
 	public ReflectedClass(Class<?> clazz) {
 		this.clazzFound = clazz;
+	}
+
+	public ReflectedClass(String clazz){
+		try {
+			this.clazzFound = Class.forName(clazz);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public Class<?> getReferencedClass() {
