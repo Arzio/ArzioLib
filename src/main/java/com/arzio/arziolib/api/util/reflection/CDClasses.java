@@ -245,6 +245,16 @@ public class CDClasses {
 			}
 
 		}
+		public static final ReflectedField<Boolean> playerDataIsAiming = new ReflectedField<>(playerDataClass, new ContentFinder.FieldBuilder<Boolean>().withValue(PLAYER_DATA_DUMMY, boolean.class, new FieldChecker<Boolean>() {
+
+			private int foundIndex = 0;
+
+			@Override
+			public boolean isCorrect(Boolean found, Field field) throws Exception {
+				return ++foundIndex == 2; // Second boolean field of the class
+			}
+		
+		}).build());
 		public static final ReflectedField<Integer> playerDataBaseXField = new ReflectedField<>(playerDataClass, new ContentFinder.FieldBuilder<Integer>().withExactValue(PLAYER_DATA_DUMMY, int.class, BASE_X_VALUE_FOR_LOOKUP).build());
 		public static final ReflectedField<Integer> playerDataBaseYField = new ReflectedField<>(playerDataClass, new ContentFinder.FieldBuilder<Integer>().withExactValue(PLAYER_DATA_DUMMY, int.class, BASE_Y_VALUE_FOR_LOOKUP).build());
 		public static final ReflectedField<Integer> playerDataBaseZField = new ReflectedField<>(playerDataClass, new ContentFinder.FieldBuilder<Integer>().withExactValue(PLAYER_DATA_DUMMY, int.class, BASE_Z_VALUE_FOR_LOOKUP).build());

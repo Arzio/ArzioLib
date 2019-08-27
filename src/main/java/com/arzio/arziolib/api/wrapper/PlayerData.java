@@ -24,4 +24,7 @@ public interface PlayerData {
 	public int getMaxWaterLevel();
 	public int getWaterLevel();
 	public void setWaterLevel(int amount);
+
+	public boolean isAiming();
+	
 }

@@ -151,4 +151,9 @@ public class PlayerDataImpl implements PlayerData{
 		return ArzioLib.getInstance().getBaseProvider().getBaseFromCenter(this.getBaseLocation());
 	}
 
+	@Override
+	public boolean isAiming() {
+		return CDClasses.playerDataIsAiming.getValue(this.getPlayerDataInstance());
+	}
+
 }
