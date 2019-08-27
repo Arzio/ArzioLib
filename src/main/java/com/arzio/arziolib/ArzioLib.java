@@ -144,6 +144,7 @@ public class ArzioLib extends JavaPlugin {
 		// Addons
 		this.moduleManager.registerModule(ModuleAddonBiomeChanger.class);
 		this.moduleManager.registerModule(ModuleAddonCorpseCustomLifespan.class);
+		this.moduleManager.registerModule(ModuleAddonCreateTimingsOnLowTPS.class);
 		this.moduleManager.registerModule(ModuleAddonCustomBaseMaterials.class);
 		this.moduleManager.registerModule(ModuleAddonCustomFlags.class);
 		this.moduleManager.registerModule(ModuleAddonCustomGunsAndAmmos.class);
