@@ -3,9 +3,12 @@ package com.arzio.arziolib.api;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.awt.Color;
+
 import com.arzio.arziolib.api.impl.ItemInventoryNavigator;
 import com.arzio.arziolib.api.util.CDAttachment;
 import com.arzio.arziolib.api.util.CDAttachmentType;
+import com.arzio.arziolib.api.util.CDGunPaint;
 import com.arzio.arziolib.api.util.CDSpecialSlot;
 import com.arzio.arziolib.api.wrapper.InventoryCDA;
 
@@ -21,6 +24,14 @@ public interface ItemStackHelper {
 	public void setGunAmmo(ItemStack gun, int amount);
 	
 	public int getGunAmmo(ItemStack gun);
+
+	public void setGunPaint(ItemStack gun, CDGunPaint paint);
+
+	public CDGunPaint getGunPaint(ItemStack gun);
+
+	public void setGunColor(ItemStack gun, Color color);
+
+	public Color getGunColor(ItemStack gun);
 	
 	public void setGunClip(ItemStack gun, ItemStack clip);
 	

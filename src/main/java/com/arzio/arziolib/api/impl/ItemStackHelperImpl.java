@@ -6,10 +6,13 @@ import org.bukkit.craftbukkit.v1_6_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.awt.Color;
+
 import com.arzio.arziolib.ArzioLib;
 import com.arzio.arziolib.api.ItemStackHelper;
 import com.arzio.arziolib.api.util.CDAttachment;
 import com.arzio.arziolib.api.util.CDAttachmentType;
+import com.arzio.arziolib.api.util.CDGunPaint;
 import com.arzio.arziolib.api.util.CDMaterial;
 import com.arzio.arziolib.api.util.CDSpecialSlot;
 import com.arzio.arziolib.api.util.CauldronUtils;
@@ -243,8 +246,66 @@ public class ItemStackHelperImpl implements ItemStackHelper {
 
 	@Override
 	public ItemStack getGunClip(ItemStack gun) {
-		net.minecraft.server.v1_6_R3.ItemStack nmsStack = (net.minecraft.server.v1_6_R3.ItemStack) CDClasses.itemGunGetClipMethod.invoke(Item.byId[CDMaterial.M4A1.getId()], CauldronUtils.getNMSStack(gun));
+		net.minecraft.server.v1_6_R3.ItemStack nmsStack = (net.minecraft.server.v1_6_R3.ItemStack) CDClasses.itemGunGetClipMethod
+				.invoke(Item.byId[CDMaterial.M4A1.getId()], CauldronUtils.getNMSStack(gun));
 		return CraftItemStack.asBukkitCopy(nmsStack);
+	}
+
+	@Override
+	public void setGunPaint(ItemStack gun, CDGunPaint paint) {
+		NBTTagCompound tag = getGunTagCompound(gun);
+		if (tag != null) {
+			if (paint != null){
+				tag.setInt("gunSkin", paint.getId());
+			} else {
+				tag.remove("gunSkin");
+			}
+		}
+	}
+
+	@Override
+	public CDGunPaint getGunPaint(ItemStack gun) {
+		NBTTagCompound tag = getGunTagCompound(gun);
+		if (tag != null) {
+			if (tag.hasKey("gunSkin")){
+				return CDGunPaint.getFromId(tag.getInt("gunSkin"));
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public void setGunColor(ItemStack gun, Color color) {
+		NBTTagCompound tag = getGunTagCompound(gun);
+		if (tag != null) {
+			if (color != null){
+				this.setGunPaint(gun, CDGunPaint.MULTI_COLOR);
+
+				tag.setInt("gunSkinR", color.getRed());
+				tag.setInt("gunSkinG", color.getGreen());
+				tag.setInt("gunSkinB", color.getBlue());
+			} else {
+				// Only removes the color if the current painting is multi-color
+				if (this.getGunPaint(gun) == CDGunPaint.MULTI_COLOR){
+					this.setGunPaint(gun, null);
+
+					tag.remove("gunSkinR");
+					tag.remove("gunSkinG");
+					tag.remove("gunSkinB");
+				}
+			}
+		}
+	}
+
+	@Override
+	public Color getGunColor(ItemStack gun) {
+		NBTTagCompound tag = getGunTagCompound(gun);
+		if (tag != null) {
+			if (this.getGunPaint(gun) == CDGunPaint.MULTI_COLOR){
+				return new Color(tag.getInt("gunSkinR"), tag.getInt("gunSkinG"), tag.getInt("gunSkinB"));
+			}
+		}
+		return null;
 	}
 
 }
