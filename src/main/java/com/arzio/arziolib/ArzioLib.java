@@ -65,7 +65,6 @@ import com.arzio.arziolib.module.addon.ModuleAddonSimpleClansNametags;
 import com.arzio.arziolib.module.addon.ModuleAddonStackableGrenades;
 import com.arzio.arziolib.module.addon.ModuleAddonStepEmeraldHeal;
 import com.arzio.arziolib.module.addon.ModuleAddonTCPNoDelay;
-import com.arzio.arziolib.module.addon.ModuleAddonWarnFlyingPlayers;
 import com.arzio.arziolib.module.addon.ModuleAddonZombieFollowGrenades;
 import com.arzio.arziolib.module.addon.ModuleAddonZombieHearGuns;
 import com.arzio.arziolib.module.addon.ModuleAddonZombieSpawnBlockBlacklist;
@@ -162,7 +161,6 @@ public class ArzioLib extends JavaPlugin {
 		this.moduleManager.registerModule(ModuleAddonStackableGrenades.class);
 		this.moduleManager.registerModule(ModuleAddonStepEmeraldHeal.class);
 		this.moduleManager.registerModule(ModuleAddonTCPNoDelay.class);
-		this.moduleManager.registerModule(ModuleAddonWarnFlyingPlayers.class);
 		this.moduleManager.registerModule(ModuleAddonZombieFollowGrenades.class);
 		this.moduleManager.registerModule(ModuleAddonZombieHearGuns.class);
 		this.moduleManager.registerModule(ModuleAddonZombieSpawnBlockBlacklist.class);
@@ -250,7 +248,7 @@ public class ArzioLib extends JavaPlugin {
 		}, 20L * 20L, 20L * 20L); // Warns admins every 20 seconds in case of load errors in modules
 		
 		ArzioLibTests.registerTests();
-		
+
 		// Runs the tests after 20 ticks.
 		// The tests should run right after the plugin load phase.
 		Bukkit.getScheduler().runTaskLater(this, new Runnable() {
