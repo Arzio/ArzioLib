@@ -1,6 +1,7 @@
 package com.arzio.arziolib.module.core;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_6_R3.CraftWorld;
@@ -10,6 +11,8 @@ import org.bukkit.event.world.WorldInitEvent;
 
 import com.arzio.arziolib.api.event.TileEntityLoadEvent;
 import com.arzio.arziolib.api.event.TileEntityUnloadEvent;
+import com.arzio.arziolib.api.util.reflection.ReflectedField;
+import com.arzio.arziolib.api.util.reflection.finder.ContentFinder;
 import com.arzio.arziolib.module.Module;
 import com.arzio.arziolib.module.RegisterModule;
 
@@ -19,13 +22,19 @@ import net.minecraft.server.v1_6_R3.World;
 @RegisterModule(name = "core-call-tile-entity-events")
 public class ModuleCoreCallTileEntityEvents extends Module{
 	
+	private ReflectedField<Set> nmsWorldTileEntityListField;
+
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onWorldInit(WorldInitEvent event) {
 		CraftWorld craftWorld = (CraftWorld) event.getWorld();
 		World nmsWorld = craftWorld.getHandle();
+
+		if (nmsWorldTileEntityListField == null){
+			nmsWorldTileEntityListField = new ReflectedField<>(World.class, new ContentFinder.FieldBuilder<>().withType(Set.class).build());
+		}
 		
 		// Swaps the World's entityList ArrayList with my event-based ArrayList :DD
-		nmsWorld.tileEntityList = new TileEntityEventSet(nmsWorld);
+		nmsWorldTileEntityListField.setValue(nmsWorld, new TileEntityEventSet(nmsWorld));
 	}
 	
 	public static class TileEntityEventSet extends HashSet<TileEntity> {
