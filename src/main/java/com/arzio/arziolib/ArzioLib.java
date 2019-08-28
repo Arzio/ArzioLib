@@ -72,7 +72,6 @@ import com.arzio.arziolib.module.core.ModuleCoreBukkitEventsForBases;
 import com.arzio.arziolib.module.core.ModuleCoreCDPacketEventCaller;
 import com.arzio.arziolib.module.core.ModuleCoreCallCDLootDropEvent;
 import com.arzio.arziolib.module.core.ModuleCoreCallEntityJoinWorldEvent;
-import com.arzio.arziolib.module.core.ModuleCoreCallTileEntityEvents;
 import com.arzio.arziolib.module.core.ModuleCoreNetworkHandler;
 import com.arzio.arziolib.module.core.ModuleCoreWorldGuardRegionEvents;
 import com.arzio.arziolib.module.fix.ModuleFixArmorBreaking;
@@ -174,7 +173,6 @@ public class ArzioLib extends JavaPlugin {
 		this.moduleManager.registerModule(ModuleCoreBukkitEventsForBases.class);
 		this.moduleManager.registerModule(ModuleCoreCallCDLootDropEvent.class);
 		this.moduleManager.registerModule(ModuleCoreCallEntityJoinWorldEvent.class);
-		this.moduleManager.registerModule(ModuleCoreCallTileEntityEvents.class);
 		this.moduleManager.registerModule(ModuleCoreCDPacketEventCaller.class);
 		this.moduleManager.registerModule(ModuleCoreNetworkHandler.class);
 		this.moduleManager.registerModule(ModuleCoreWorldGuardRegionEvents.class);
