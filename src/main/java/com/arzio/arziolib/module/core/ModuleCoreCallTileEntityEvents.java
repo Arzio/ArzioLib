@@ -1,6 +1,8 @@
 package com.arzio.arziolib.module.core;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
@@ -23,8 +25,7 @@ import net.minecraft.server.v1_6_R3.World;
 @RegisterModule(name = "core-call-tile-entity-events")
 public class ModuleCoreCallTileEntityEvents extends Module{
 	
-	private ReflectedClass nmsWorldClass = new ReflectedClass("net.minecraft.world.World");
-	private ReflectedField<Set> nmsWorldTileEntityListField;
+	private ReflectedField<List<?>> nmsWorldTileEntityListField;
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onWorldInit(WorldInitEvent event) {
@@ -32,14 +33,14 @@ public class ModuleCoreCallTileEntityEvents extends Module{
 		World nmsWorld = craftWorld.getHandle();
 
 		if (nmsWorldTileEntityListField == null){
-			nmsWorldTileEntityListField = new ReflectedField<>(nmsWorldClass, new ContentFinder.FieldBuilder<>().withType(Set.class).build());
+			nmsWorldTileEntityListField = new ReflectedField<>(World.class, new ContentFinder.FieldBuilder<>().withRegexName("field\\_73009\\_h").build());
 		}
-		
+
 		// Swaps the World's entityList ArrayList with my event-based ArrayList :DD
 		nmsWorldTileEntityListField.setValue(nmsWorld, new TileEntityEventSet(nmsWorld));
 	}
 	
-	public static class TileEntityEventSet extends HashSet<TileEntity> {
+	public static class TileEntityEventSet extends ArrayList<TileEntity> {
 		private static final long serialVersionUID = 6551028671379463300L;
 		
 		private final World nmsWorld;
