@@ -5,3 +5,7 @@ This plugin still needs more documentation, including a better README file.
 If you want to help with it, you are welcome.
 
 Check for releases at the [releases page](https://github.com/Arzio/ArzioLib/releases).
+
+## How to download the dependencies
+- Clone or download this repository
+- Run `gradlew downloadJarFiles` and wait until it is done
