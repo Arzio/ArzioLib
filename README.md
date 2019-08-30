@@ -10,6 +10,7 @@ Check for releases at the [releases page](https://github.com/Arzio/ArzioLib/rele
 - Clone or download this repository
 - Open your shell (or cmd) and navigate to the same place as the build.gradle is located
 - Run `gradlew downloadFiles` and wait until it is done
+- The downloaded files will be located at `/build/downloaded-files/` folder
 
 ## How to build
 - Clone or download this repository
