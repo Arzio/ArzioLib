@@ -8,4 +8,11 @@ Check for releases at the [releases page](https://github.com/Arzio/ArzioLib/rele
 
 ## How to download the dependencies
 - Clone or download this repository
+- Open your shell (or cmd) and navigate to the same place as the build.gradle is located
 - Run `gradlew downloadFiles` and wait until it is done
+
+## How to build
+- Clone or download this repository
+- Open your shell (or cmd) and navigate to the same place as the build.gradle is located
+- Run `gradlew build` and wait until it is done
+- The jar file will be located at `/build/libs/` folder
