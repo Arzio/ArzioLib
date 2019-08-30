@@ -1,4 +1,7 @@
-apply plugin: 'java'
+plugins {
+	id "java"
+    id "de.undercouch.download" version "4.0.0"
+}
 
 // This project MUST be compiled with Java 1.7
 sourceCompatibility = 1.7
@@ -8,48 +11,64 @@ repositories {
 	mavenCentral()
 }
 
-compileJava {
-    options.encoding = 'UTF-8'
+ext {
+    downloadedJarsFolder = new File(buildDir, 'downloaded-jars')
+	downloadedZipsFolder = new File(buildDir, 'downloaded-zips')
 }
 
-def downloadedFile = { name, url ->
-	File file = new File("$buildDir/download/${name}");
+task deleteDownloads(type: Delete) {
+	delete downloadedJarsFolder, downloadedZipsFolder
+}
 
-    if (!file.exists()) {
-    	file.parentFile.mkdirs()
-    	println "Downloading ${name}"
-        ant.get(src: url, dest: file)
+task downloadZipFiles(type: Download) {
+	doFirst {
+		mkdir downloadedZipsFolder
+	}
+    src([
+		'https://media.forgecdn.net/files/720/514/WorldGuard_Custom_Flags.zip',
+		'https://media.forgecdn.net/files/758/474/Essentials.zip'
+	])
+    dest downloadedZipsFolder
+	overwrite false
+	
+	// Unzips the files
+	doLast {
+		fileTree(dir: downloadedZipsFolder).include('*.zip').each { zipFile ->
+			copy {
+				from zipTree(zipFile)
+				into downloadedZipsFolder      
+			}
+		}
+	}
+}
+
+task downloadJarFiles(dependsOn: downloadZipFiles, type: Download) {
+	doFirst {
+        mkdir downloadedJarsFolder
     }
-    
-    Object result = file.absolutePath;
-    
-    if ("${name}".contains(".zip")){
-    	println "Deleting ${name} cache folder"
-    	File destiny = new File("$buildDir/download/${name}-EXTRACTED/");
-    	destiny.delete(); // Deletes the extraction cache folder
-    	
-    	println "Unzipping ${name}"
-    	ant.unzip(src: file, dest: destiny)
-    	result = fileTree(dir: destiny, include: "**/*.jar")
-    }
-    
-    files(result)
+    src([
+        'http://central.maven.org/maven2/org/ow2/asm/asm-all/4.1/asm-all-4.1.jar',
+        'https://minecraft.maeyanie.com/cauldron/cauldron-1.6.4-1.965.21.204-server.jar',
+		'https://cdn.getbukkit.org/craftbukkit/craftbukkit-1.6.4-R2.0.jar',
+		'https://media.forgecdn.net/files/614/479/SimpleClans-2.4.1.jar',
+		'https://media.forgecdn.net/files/719/257/worldguard-5.8.jar',
+		'https://media.forgecdn.net/files/755/43/AuthMe.jar',
+		'https://media.forgecdn.net/files/707/659/PlotMe.jar',
+		'https://media.forgecdn.net/files/785/673/ProtocolLib-3.3.1.jar',
+		'https://media.forgecdn.net/files/739/931/worldedit-5.5.8.jar'
+
+    ])
+    dest downloadedJarsFolder
+	overwrite false
 }
 
 dependencies {
-	compile downloadedFile('spigot-1.6.4-R2.1-SNAPSHOT.jar', 'https://cdn.getbukkit.org/spigot/spigot-1.6.4-R2.1-SNAPSHOT.jar')
-	compile downloadedFile('WorldGuard-5.8.jar', 'https://dev.bukkit.org/projects/worldguard/files/719257/download')
-	compile downloadedFile('AuthMe-3.1.jar', 'https://dev.bukkit.org/projects/authme-reloaded/files/755043/download')
-	compile downloadedFile('PlotMe-0.13b.jar', 'https://dev.bukkit.org/projects/plotme/files/707659/download')
-	compile downloadedFile('WGCustomFlags-1.6.zip', 'https://dev.bukkit.org/projects/worldguard-custom-flags/files/720514/download')
-	compile downloadedFile('ProtocolLib-3.3.1.jar', 'https://dev.bukkit.org/projects/protocollib/files/785673/download')
-	compile downloadedFile('WorldEdit-5.5.8.jar', 'https://dev.bukkit.org/projects/worldedit/files/739931/download')
-	compile downloadedFile('craftbukkit-1.6.4-R2.0.jar', 'https://cdn.getbukkit.org/craftbukkit/craftbukkit-1.6.4-R2.0.jar')
-	compile downloadedFile('cauldron-1.6.4-1.965.21.204-server.jar', 'https://minecraft.maeyanie.com/cauldron/cauldron-1.6.4-1.965.21.204-server.jar')
-	compile downloadedFile('asm-all-4.1.jar', 'http://central.maven.org/maven2/org/ow2/asm/asm-all/4.1/asm-all-4.1.jar')
-	compile downloadedFile('SimpleClans-Legacy-2.4.1.jar', 'https://dev.bukkit.org/projects/simpleclans/files/614479/download')
-	compile downloadedFile('Essentials-2.12.2.zip', 'https://dev.bukkit.org/projects/essentials/files/758474/download')
+	implementation fileTree(dir: downloadedJarsFolder, include: ['*.jar'])
+	implementation fileTree(dir: downloadedZipsFolder, include: ['*.jar'])
 }
+
+compileJava.options.encoding = 'UTF-8'
+compileJava.dependsOn(downloadJarFiles)
 
 processResources {
     // Replaces the PROJECT_VERSION tag inside of yml resources by the project version
