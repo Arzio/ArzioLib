@@ -8,4 +8,4 @@ Check for releases at the [releases page](https://github.com/Arzio/ArzioLib/rele
 
 ## How to download the dependencies
 - Clone or download this repository
-- Run `gradlew downloadJarFiles` and wait until it is done
+- Run `gradlew downloadFiles` and wait until it is done
