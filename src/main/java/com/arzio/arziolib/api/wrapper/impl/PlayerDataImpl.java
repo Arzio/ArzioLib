@@ -6,7 +6,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import com.arzio.arziolib.ArzioLib;
-import com.arzio.arziolib.api.util.CDBaseMaterial;
 import com.arzio.arziolib.api.util.CDPacketHelper;
 import com.arzio.arziolib.api.util.reflection.CDClasses;
 import com.arzio.arziolib.api.wrapper.Base;
@@ -78,9 +77,14 @@ public class PlayerDataImpl implements PlayerData{
 
 	@Override
 	public Location getBaseLocation() {
+		// This implementation tries to find the base in every world
 		for (World world : Bukkit.getServer().getWorlds()) {
-			if (CDBaseMaterial.isCenter(world.getBlockAt(this.getBaseX(), this.getBaseY(), this.getBaseZ()))) {
-				return new Location(world, this.getBaseX(), this.getBaseY(), this.getBaseZ());
+			Location possibleLocation = new Location(world, this.getBaseX(), this.getBaseY(), this.getBaseZ());
+			Base baseFound = ArzioLib.getInstance().getBaseProvider().getBaseFromCenter(possibleLocation);
+
+			// The base owner must be THIS player.
+			if (baseFound != null && baseFound.isOwner(this.getPlayer())){
+				return possibleLocation;
 			}
 		}
 		return null;
@@ -148,8 +152,10 @@ public class PlayerDataImpl implements PlayerData{
 
 	@Override
 	public Base getBase() {
-		if (this.hasBase()){
-			return ArzioLib.getInstance().getBaseProvider().getBaseFromCenter(this.getBaseLocation());
+		Location baseLocation = this.getBaseLocation();
+
+		if (baseLocation != null){
+			return ArzioLib.getInstance().getBaseProvider().getBaseFromCenter(baseLocation);
 		}
 		return null;
 	}
