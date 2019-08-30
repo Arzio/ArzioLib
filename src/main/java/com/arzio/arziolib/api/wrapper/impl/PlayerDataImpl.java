@@ -148,7 +148,10 @@ public class PlayerDataImpl implements PlayerData{
 
 	@Override
 	public Base getBase() {
-		return ArzioLib.getInstance().getBaseProvider().getBaseFromCenter(this.getBaseLocation());
+		if (this.hasBase()){
+			return ArzioLib.getInstance().getBaseProvider().getBaseFromCenter(this.getBaseLocation());
+		}
+		return null;
 	}
 
 	@Override
