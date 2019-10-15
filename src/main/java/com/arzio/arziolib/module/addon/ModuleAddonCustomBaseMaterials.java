@@ -8,7 +8,7 @@ import com.arzio.arziolib.config.YMLFile.ConfigurationVisitor;
 import com.arzio.arziolib.module.Module;
 import com.arzio.arziolib.module.RegisterModule;
 
-@RegisterModule(name = "addon-custom-base-materials")
+@RegisterModule(name = "addon-custom-base-materials", defaultState = false)
 public class ModuleAddonCustomBaseMaterials extends Module{
 
 	private YMLFile yml;
