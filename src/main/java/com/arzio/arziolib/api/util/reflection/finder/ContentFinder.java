@@ -42,7 +42,7 @@ public interface ContentFinder<F> {
 				public Method find(Class<?> from) throws FinderException{
 					Method found = ReflectionHelper.findMethodWithTypes(from, regex, returnType, types);
 					if (found == null) {
-						throw new FinderException("The method cannot the be found!");
+						throw new FinderException("The method cannot the be found on class "+from.getName()+"!");
 					}
 					return found;
 				}
@@ -95,7 +95,7 @@ public interface ContentFinder<F> {
 				public Field find(Class<?> from) throws FinderException{
 					Field found = ReflectionHelper.findValueWithTypeAndFilter(instance, from, type, checker, regex);
 					if (found == null) {
-						throw new FinderException("The field could not be found!");
+						throw new FinderException("The field could not be found on class "+from.getName()+"!");
 					}
 					return found;
 				}
