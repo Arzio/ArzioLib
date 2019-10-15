@@ -8,7 +8,7 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 group 'com.arzio'
-version = '1.7.15'
+version = '1.8'
 
 repositories {
 	mavenCentral()
