@@ -93,7 +93,7 @@ public class ArzioModuleManager implements ModuleManager{
 					this.toggleModule(module.getModule().getClass(), type);
 				}
 			} catch (Throwable t) {
-				plugin.getLogger().log(Level.SEVERE, "There was an error while toggling module "+module.getClass().getSimpleName()+" with action "+type.name(), t);
+				plugin.getLogger().log(Level.SEVERE, "There was an error while toggling module "+module.getModule().getClass().getSimpleName()+" with action "+type.name(), t);
 			}
 		}
 	}
