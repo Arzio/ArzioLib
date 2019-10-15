@@ -28,7 +28,7 @@ public enum CDPacketType {
 	
 	CDPacketType(ReflectedClass reflectedClass){
 		if (reflectedClass != null) {
-			this.id = (int) CDClasses.networkManagerGetPacketIdFromClass.invoke(null, reflectedClass.getReferencedClass());
+			this.id = (int) CDClasses.packetRegistryGetPacketIdFromClass.invoke(null, reflectedClass.getReferencedClass());
 		}
 	}
 	

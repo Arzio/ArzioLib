@@ -323,8 +323,8 @@ public class CDClasses {
 	
 	public static final ReflectedClass itemHatClass = new ReflectedClass(NameClassFinder.find("ItemHat"));
 	
-	public static final ReflectedClass networkManagerClass = new ReflectedClass(NameClassFinder.find("NetworkManager"));
-		public static final ReflectedMethod networkManagerGetPacketIdFromClass = new ReflectedMethod(networkManagerClass, new ContentFinder.MethodBuilder().withReturnType(int.class).withParameterTypes(Class.class).build());
+	public static final ReflectedClass packetRegistryClass = new ReflectedClass(NameClassFinder.find("PacketRegistry"));
+		public static final ReflectedMethod packetRegistryGetPacketIdFromClass = new ReflectedMethod(packetRegistryClass, new ContentFinder.MethodBuilder().withReturnType(int.class).withParameterTypes(Class.class).build());
 	
 	
 	public static Class<?> getClassBySourceFileName(String name) throws ClassNotFoundException{

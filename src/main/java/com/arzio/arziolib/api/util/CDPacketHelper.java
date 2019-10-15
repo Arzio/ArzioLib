@@ -39,8 +39,8 @@ public class CDPacketHelper {
 		
 		try (ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 				DataOutputStream data = new DataOutputStream(bytes)){
-			
-			int packetId = (int) CDClasses.networkManagerGetPacketIdFromClass.invoke(null, CDClasses.packetNametagVisibilityClass.getReferencedClass());
+
+			int packetId = (int) CDClasses.packetRegistryGetPacketIdFromClass.invoke(null, CDClasses.packetNametagVisibilityClass.getReferencedClass());
 			
 			data.write(packetId);
 			data.writeBoolean(isHidden);
