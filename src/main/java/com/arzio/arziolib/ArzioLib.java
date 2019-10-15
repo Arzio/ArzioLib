@@ -21,11 +21,9 @@ import com.arzio.arziolib.api.impl.TestHelperImpl;
 import com.arzio.arziolib.api.util.CauldronUtils;
 import com.arzio.arziolib.api.util.TestException;
 import com.arzio.arziolib.api.util.reflection.ReflectionHelper;
-import com.arzio.arziolib.api.wrapper.CraftingDead;
 import com.arzio.arziolib.api.wrapper.ItemProvider;
 import com.arzio.arziolib.api.wrapper.LootProvider;
 import com.arzio.arziolib.api.wrapper.PlayerDataHandler;
-import com.arzio.arziolib.api.wrapper.impl.CraftingDeadMainImpl;
 import com.arzio.arziolib.api.wrapper.impl.ItemProviderImpl;
 import com.arzio.arziolib.api.wrapper.impl.LootProviderImpl;
 import com.arzio.arziolib.api.wrapper.impl.PlayerDataHandlerImpl;
@@ -75,7 +73,6 @@ import com.arzio.arziolib.module.core.ModuleCoreCallEntityJoinWorldEvent;
 import com.arzio.arziolib.module.core.ModuleCoreNetworkHandler;
 import com.arzio.arziolib.module.core.ModuleCoreWorldGuardRegionEvents;
 import com.arzio.arziolib.module.fix.ModuleFixArmorBreaking;
-import com.arzio.arziolib.module.fix.ModuleFixCorpseDuplication;
 import com.arzio.arziolib.module.fix.ModuleFixDamageSourceDetection;
 import com.arzio.arziolib.module.fix.ModuleFixDeathDropsCompatibility;
 import com.arzio.arziolib.module.fix.ModuleFixGunDamageOnServerFreeze;
@@ -108,7 +105,6 @@ public class ArzioLib extends JavaPlugin {
 	private LootProvider lootProvider;
 
 	// CD Wrappers
-	private CraftingDead craftingDead;
 	private ItemProvider itemProvider;
 
 	// Forge-Bukkit compatible listener
@@ -132,7 +128,6 @@ public class ArzioLib extends JavaPlugin {
 		this.playerDataHandler = new PlayerDataHandlerImpl(this);
 		this.forgeBukkitEventManager = new ForgeBukkitEventManagerImpl(this);
 		this.itemProvider = new ItemProviderImpl();
-		this.craftingDead = new CraftingDeadMainImpl();
 		this.itemStackHelper = new ItemStackHelperImpl();
 		this.baseProvider = new BaseProviderImpl();
 		this.lootProvider = new LootProviderImpl();
@@ -179,7 +174,6 @@ public class ArzioLib extends JavaPlugin {
 
 		// Fixes
 		this.moduleManager.registerModule(ModuleFixArmorBreaking.class);
-		this.moduleManager.registerModule(ModuleFixCorpseDuplication.class);
 		this.moduleManager.registerModule(ModuleFixDamageSourceDetection.class);
 		this.moduleManager.registerModule(ModuleFixDeathDropsCompatibility.class);
 		this.moduleManager.registerModule(ModuleFixGunDamageOnServerFreeze.class);
@@ -315,10 +309,6 @@ public class ArzioLib extends JavaPlugin {
 
 	public ItemProvider getItemProvider() {
 		return this.itemProvider;
-	}
-
-	public CraftingDead getCraftingDeadMain() {
-		return this.craftingDead;
 	}
 
 	public ItemStackHelper getItemStackHelper() {

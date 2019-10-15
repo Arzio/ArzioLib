@@ -92,11 +92,14 @@ public class CDClasses {
 		
 	public static final ReflectedClass tileEntityBaseCenterClass = new ReflectedClass(NameClassFinder.find("TileEntityBaseCenter"));
 	
-	public static final ReflectedClass commonPlayerTrackerClass = new ReflectedClass(NameClassFinder.find("CommonPlayerTracker"));
+	// Removed in CD 1.3.2
+	//public static final ReflectedClass commonPlayerTrackerClass = new ReflectedClass(NameClassFinder.find("CommonPlayerTracker"));
 	
 	public static final ReflectedClass craftingDeadMainClass = new ReflectedClass(NameClassFinder.find("CraftingDead", "CDOrigins"));
 		public static final ReflectedField<Object> craftingDeadMainInstanceField = new ReflectedField<>(craftingDeadMainClass, new ContentFinder.FieldBuilder<>().withType(craftingDeadMainClass.getReferencedClass()).build());
-		public static final ReflectedField<Object> craftingDeadMainCommonPlayerTrackerField = new ReflectedField<>(craftingDeadMainClass, new ContentFinder.FieldBuilder<>().withType(commonPlayerTrackerClass.getReferencedClass()).build());
+		
+		// Removed in CD 1.3.2
+		//public static final ReflectedField<Object> craftingDeadMainCommonPlayerTrackerField = new ReflectedField<>(craftingDeadMainClass, new ContentFinder.FieldBuilder<>().withType(commonPlayerTrackerClass.getReferencedClass()).build());
 		
 	public static final ReflectedClass blockBaseCenterClass = new ReflectedClass(NameClassFinder.find("BlockBaseCenter"));
 		public static final ReflectedMethod blockBaseCenterDestroy = new ReflectedMethod(blockBaseCenterClass, new ContentFinder.MethodBuilder().withParameterTypes(new Class<?>[] { net.minecraft.server.v1_6_R3.World.class, Integer.TYPE, Integer.TYPE, Integer.TYPE, CDClasses.entityPlayerClass.getReferencedClass() }).build());
