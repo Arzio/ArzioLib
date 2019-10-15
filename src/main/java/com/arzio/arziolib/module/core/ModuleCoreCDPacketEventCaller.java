@@ -64,9 +64,12 @@ public class ModuleCoreCDPacketEventCaller extends Module {
 				case SYNC_ITEMS:
 					innerEvent = new CDSyncItemsEvent(event.getPlayer(), event.getData());
 					break;
-				case COMBATLOG_SHOW_TIMER:
-					innerEvent = new CDCombatlogShowTimer(event.getPlayer(), event.getData());
-					break;
+				//
+				// Removed in CD 1.3.2
+				//
+				// case COMBATLOG_SHOW_TIMER:
+				// 	innerEvent = new CDCombatlogShowTimer(event.getPlayer(), event.getData());
+				// 	break;
 				default:
 					break;
 			}

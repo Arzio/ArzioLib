@@ -290,7 +290,10 @@ public class CDClasses {
 	public static final ReflectedClass packetBulletCollisionClass = new ReflectedClass(NameClassFinder.find("CDAPacketBulletCollision"));
 	public static final ReflectedClass packetPlayerDataToPlayerClass = new ReflectedClass(NameClassFinder.find("CDAPacketPlayerDataToPlayer"));
 	public static final ReflectedClass packetFTTriggerClass = new ReflectedClass(NameClassFinder.find("CDAPacketFTTrigger"));
-	public static final ReflectedClass packetACLCombatClass = new ReflectedClass(NameClassFinder.find("CDAPacketACLInCombat"));
+	
+	// Removed in CD 1.3.2
+	//public static final ReflectedClass packetACLCombatClass = new ReflectedClass(NameClassFinder.find("CDAPacketACLInCombat"));
+	
 	public static final ReflectedClass packetSyncItemsClass = new ReflectedClass(NameClassFinder.find("CDAPacketSyncItems"));
 		public static final ReflectedMethod packetSyncItemsBuildItemsMethod = new ReflectedMethod(packetSyncItemsClass, new ContentFinder.MethodBuilder().withParameterTypes(List.class).withReturnType(Packet.class).build());
 	public static final ReflectedClass packetNametagVisibilityClass = new ReflectedClass(NameClassFinder.find("CDAPacketNametagVisibility"));

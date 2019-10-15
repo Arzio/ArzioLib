@@ -16,7 +16,10 @@ public enum CDPacketType {
 	GUN_BULLET_HIT(packetBulletCollisionClass),
 	PLAYER_DATA(packetPlayerDataToPlayerClass),
 	FLAMETHROWER_TRIGGER(packetFTTriggerClass),
-	COMBATLOG_SHOW_TIMER(packetACLCombatClass),
+	
+	// Removed in CD 1.3.2
+	//COMBATLOG_SHOW_TIMER(packetACLCombatClass),
+	
 	SYNC_ITEMS(packetSyncItemsClass),
 	NAMETAG_VISIBILITY(packetNametagVisibilityClass),
 	UNDEFINED(null);
