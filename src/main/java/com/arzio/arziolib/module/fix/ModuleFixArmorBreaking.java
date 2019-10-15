@@ -8,20 +8,23 @@ import com.arzio.arziolib.api.event.packet.CDBulletHitEvent;
 import com.arzio.arziolib.module.Module;
 import com.arzio.arziolib.module.RegisterModule;
 
+/**
+ * Fixes the hidden armor durability when receiving bullet damage.
+ * 
+ * @param event
+ */
+
 @RegisterModule(name = "fix-armor-breaking")
-public class ModuleFixArmorBreaking extends Module{
-	/**
-	 * Fixes the hidden armor durability when receiving bullet damage.
-	 * @param event
-	 */
+public class ModuleFixArmorBreaking extends Module {
+
 	@EventHandler
 	public void armorBreakingFix(CDBulletHitEvent event) {
 		if (!(event.getEntityHit() instanceof Player)) {
 			return;
 		}
-		
+
 		Player player = (Player) event.getEntityHit();
-		
+
 		ItemStack stackHelmet = player.getEquipment().getHelmet();
 		if (stackHelmet != null) {
 			stackHelmet.setDurability((short) 1);
